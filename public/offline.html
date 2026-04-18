@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ff6a1c">
+    <title>Offline | Dawud Muhammed</title>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(255, 106, 28, 0.18), transparent 42%),
+                radial-gradient(circle at 85% 0%, rgba(255, 181, 102, 0.14), transparent 35%),
+                linear-gradient(160deg, #0b1220 0%, #111827 100%);
+            color: #e5e7eb;
+        }
+
+        .card {
+            width: min(540px, 100%);
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            border-radius: 28px;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 25px 60px -35px rgba(15, 23, 42, 0.8);
+        }
+
+        .badge {
+            display: inline-flex;
+            border-radius: 999px;
+            border: 1px solid rgba(251, 146, 60, 0.38);
+            background: rgba(249, 115, 22, 0.16);
+            color: #fed7aa;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 6px 12px;
+        }
+
+        h1 {
+            margin: 14px 0 12px;
+            font-family: "Sora", system-ui, -apple-system, sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.1rem);
+            line-height: 1.2;
+            color: #fff;
+        }
+
+        p {
+            margin: 0;
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+
+        a {
+            display: inline-flex;
+            margin-top: 18px;
+            text-decoration: none;
+            border-radius: 999px;
+            border: 1px solid rgba(251, 146, 60, 0.45);
+            color: #fff;
+            background: linear-gradient(120deg, #fb923c, #f97316);
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <span class="badge">Offline Mode</span>
+        <h1>You are offline right now.</h1>
+        <p>This page is cached so you can keep using key parts of the portfolio without a network connection. Reconnect to sync fresh content.</p>
+        <a href="/">Retry Home</a>
+    </main>
+</body>
+</html>

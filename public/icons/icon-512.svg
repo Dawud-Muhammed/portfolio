@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="DM app icon">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8a3d"/>
+      <stop offset="100%" stop-color="#ff6a1c"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="#0f172a"/>
+  <rect x="34" y="34" width="444" height="444" rx="92" fill="url(#g)" opacity="0.18"/>
+  <text x="50%" y="56%" text-anchor="middle" fill="#ffffff" font-size="196" font-family="Sora, Arial, sans-serif" font-weight="700">DM</text>
+</svg>

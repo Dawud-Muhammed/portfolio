@@ -1,10 +1,67 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    @php
+        $defaultTitle = (string) config('seo.default_name', config('app.name', 'Portfolio'));
+        $defaultDescription = (string) config('seo.default_description', 'High-end Laravel portfolio hero section with Alpine animations.');
+        $defaultImage = (string) config('seo.default_image', 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80');
+        $defaultUrl = (string) config('seo.default_url', config('app.url'));
+
+        $pageTitle = trim($__env->yieldContent('page_title', $defaultTitle));
+        $pageDescription = trim($__env->yieldContent('meta_description', $defaultDescription));
+        $canonicalUrl = trim($__env->yieldContent('canonical_url', url()->current()));
+
+        $ogTitle = trim($__env->yieldContent('og_title', $pageTitle));
+        $ogDescription = trim($__env->yieldContent('og_description', $pageDescription));
+        $ogImage = trim($__env->yieldContent('og_image', $defaultImage));
+        $ogUrl = trim($__env->yieldContent('og_url', $canonicalUrl));
+        $ogType = trim($__env->yieldContent('og_type', request()->routeIs('home') ? 'website' : 'article'));
+
+        $twitterCard = trim($__env->yieldContent('twitter_card', 'summary_large_image'));
+        $twitterTitle = trim($__env->yieldContent('twitter_title', $pageTitle));
+        $twitterDescription = trim($__env->yieldContent('twitter_description', $pageDescription));
+        $twitterImage = trim($__env->yieldContent('twitter_image', $ogImage));
+
+        $schema = request()->routeIs('home')
+            ? [
+                '@context' => 'https://schema.org',
+                '@type' => 'Person',
+                'name' => (string) config('seo.default_name', 'Portfolio Owner'),
+                'jobTitle' => (string) config('seo.job_title', 'Laravel Developer'),
+                'url' => $defaultUrl,
+                'sameAs' => array_values(array_filter([
+                    config('seo.social.github'),
+                    config('seo.social.linkedin'),
+                ])),
+            ]
+            : [
+                '@context' => 'https://schema.org',
+                '@type' => 'WebPage',
+                'name' => $pageTitle,
+                'description' => $pageDescription,
+                'url' => $canonicalUrl,
+            ];
+    @endphp
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ trim($__env->yieldContent('meta_description', 'High-end Laravel portfolio hero section with Alpine animations.')) }}">
-    <title>{{ trim($__env->yieldContent('page_title', config('app.name', 'Portfolio'))) }}</title>
+    <meta name="theme-color" content="#ff6a1c">
+    <meta name="description" content="{{ $pageDescription }}">
+    <title>{{ $pageTitle }}</title>
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+
+    <meta property="og:title" content="{{ $ogTitle }}">
+    <meta property="og:description" content="{{ $ogDescription }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:url" content="{{ $ogUrl }}">
+    <meta property="og:type" content="{{ $ogType }}">
+
+    <meta name="twitter:card" content="{{ $twitterCard }}">
+    <meta name="twitter:title" content="{{ $twitterTitle }}">
+    <meta name="twitter:description" content="{{ $twitterDescription }}">
+    <meta name="twitter:image" content="{{ $twitterImage }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +73,8 @@
             --font-body: 'Space Grotesk', sans-serif;
         }
     </style>
+
+    <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

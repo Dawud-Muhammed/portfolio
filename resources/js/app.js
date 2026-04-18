@@ -436,3 +436,11 @@ window.blogReadingProgress = () => ({
 
 window.Alpine = Alpine;
 Alpine.start();
+
+if ('serviceWorker' in navigator) {
+	window.addEventListener('load', () => {
+		navigator.serviceWorker.register('/sw.js').catch(() => {
+			// Service worker registration failure should not break app usage.
+		});
+	});
+}
