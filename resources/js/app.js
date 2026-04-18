@@ -485,6 +485,84 @@ window.testimonialsCarousel = (testimonials) => ({
 	},
 });
 
+window.navController = () => ({
+	sections: ['about', 'skills', 'projects', 'testimonials', 'contact'],
+	activeSection: 'about',
+	isDrawerOpen: false,
+	isNavVisible: true,
+	lastScrollY: 0,
+	observer: null,
+	init() {
+		this.lastScrollY = window.scrollY;
+
+		const handleScroll = () => {
+			const currentScrollY = window.scrollY;
+
+			if (currentScrollY < 80) {
+				this.isNavVisible = true;
+			} else {
+				this.isNavVisible = currentScrollY < this.lastScrollY;
+			}
+
+			this.lastScrollY = currentScrollY;
+		};
+
+		window.addEventListener('scroll', handleScroll, { passive: true });
+
+		if ('IntersectionObserver' in window) {
+			this.observer = new IntersectionObserver(
+				(entries) => {
+					const visibleEntries = entries
+						.filter((entry) => entry.isIntersecting)
+						.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+					if (visibleEntries.length > 0) {
+						this.activeSection = visibleEntries[0].target.id;
+					}
+				},
+				{
+					threshold: [0.2, 0.35, 0.5, 0.75],
+					rootMargin: '-20% 0px -55% 0px',
+				}
+			);
+
+			this.sections.forEach((sectionId) => {
+				const element = document.getElementById(sectionId);
+				if (element) {
+					this.observer.observe(element);
+				}
+			});
+		}
+
+		const handleResize = () => {
+			if (window.innerWidth >= 768) {
+				this.isDrawerOpen = false;
+			}
+		};
+
+		window.addEventListener('resize', handleResize);
+
+		this.$el.addEventListener(
+			'alpine:destroy',
+			() => {
+				window.removeEventListener('scroll', handleScroll);
+				window.removeEventListener('resize', handleResize);
+
+				if (this.observer) {
+					this.observer.disconnect();
+				}
+			},
+			{ once: true }
+		);
+	},
+	toggleDrawer() {
+		this.isDrawerOpen = !this.isDrawerOpen;
+	},
+	closeDrawer() {
+		this.isDrawerOpen = false;
+	},
+});
+
 window.Alpine = Alpine;
 Alpine.start();
 

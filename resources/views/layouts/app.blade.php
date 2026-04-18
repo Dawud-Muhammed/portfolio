@@ -83,7 +83,9 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body x-data="themeController()" x-init="init()" class="min-h-screen bg-bg text-fg antialiased">
+<body x-data="themeController()" x-init="init()" @theme-toggle-request.window="toggleTheme()" class="min-h-screen bg-bg text-fg antialiased">
+    @include('partials.nav')
+
     <x-hero
         :name="trim($__env->yieldContent('hero_name', 'Dawud Muhammed'))"
         :title="trim($__env->yieldContent('hero_title', 'Laravel Developer'))"
