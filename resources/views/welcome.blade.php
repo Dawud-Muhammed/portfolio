@@ -35,38 +35,17 @@
 
     @include('partials.about')
 
-    <main x-data="lazySections()" x-init="initObservers($refs)">
-        <section id="skills-lazy" data-lazy-section="skills" x-ref="skills" class="mx-auto w-full max-w-7xl px-6">
-            <template x-if="loaded.skills">
-                <div>
-                    @include('partials.skills')
-                </div>
-            </template>
-            <div x-show="!loaded.skills" class="rounded-3xl border border-slate-200/70 bg-white/75 p-8 text-sm text-slate-500">
-                Loading skills section...
-            </div>
+    <main>
+        <section class="mx-auto w-full max-w-7xl px-6">
+            @include('partials.skills')
         </section>
 
-        <section id="projects-lazy" data-lazy-section="projects" x-ref="projects" class="mx-auto w-full max-w-7xl px-6">
-            <template x-if="loaded.projects">
-                <div>
-                    <x-projects />
-                </div>
-            </template>
-            <div x-show="!loaded.projects" class="rounded-3xl border border-slate-200/70 bg-white/75 p-8 text-sm text-slate-500">
-                Loading projects section...
-            </div>
+        <section class="mx-auto w-full max-w-7xl px-6">
+            <x-projects />
         </section>
 
-        <section id="contact-lazy" data-lazy-section="contact" x-ref="contact" class="mx-auto w-full max-w-7xl px-6">
-            <template x-if="loaded.contact">
-                <div>
-                    <x-contact />
-                </div>
-            </template>
-            <div x-show="!loaded.contact" class="rounded-3xl border border-slate-200/70 bg-white/75 p-8 text-sm text-slate-500">
-                Loading contact section...
-            </div>
+        <section class="mx-auto w-full max-w-7xl px-6">
+            <x-contact />
         </section>
     </main>
 @endsection

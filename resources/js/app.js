@@ -361,5 +361,49 @@ window.contactForm = () => ({
 	},
 });
 
+window.scrollToTop = () => ({
+	isVisible: false,
+	threshold: 300,
+	isTopVisible: true,
+	observer: null,
+	init() {
+		const updateVisibility = () => {
+			this.isVisible = window.scrollY > this.threshold && !this.isTopVisible;
+		};
+
+		if ('IntersectionObserver' in window && this.$refs.topSentinel) {
+			this.observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						this.isTopVisible = entry.isIntersecting;
+						updateVisibility();
+					});
+				},
+				{ threshold: 0 }
+			);
+
+			this.observer.observe(this.$refs.topSentinel);
+		}
+
+		window.addEventListener('scroll', updateVisibility, { passive: true });
+		this.$watch('isTopVisible', updateVisibility);
+		updateVisibility();
+
+		this.$el.addEventListener(
+			'alpine:destroy',
+			() => {
+				window.removeEventListener('scroll', updateVisibility);
+				if (this.observer) {
+					this.observer.disconnect();
+				}
+			},
+			{ once: true }
+		);
+	},
+	scrollToTop() {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	},
+});
+
 window.Alpine = Alpine;
 Alpine.start();
