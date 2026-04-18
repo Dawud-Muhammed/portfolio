@@ -44,9 +44,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('contact-form', function (Request $request): Limit {
-            $maxAttempts = (int) config('contact.rate_limit.per_minute', 5);
-
-            return Limit::perMinute($maxAttempts)
+            return Limit::perMinute(5)
                 ->by((string) $request->ip())
                 ->response(function () {
                     return response()->json([

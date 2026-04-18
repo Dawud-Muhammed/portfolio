@@ -239,6 +239,7 @@ window.contactForm = () => ({
 		email: '',
 		subject: '',
 		message: '',
+		website: '',
 	},
 	errors: {},
 	isSubmitting: false,
@@ -312,11 +313,14 @@ window.contactForm = () => ({
 		this.isSubmitting = true;
 
 		try {
+			const csrfToken = document.head.querySelector('meta[name=csrf-token]')?.content ?? '';
+
 			const response = await fetch('/api/v1/contact', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 					'Accept': 'application/json',
+					'X-CSRF-TOKEN': csrfToken,
 				},
 				body: JSON.stringify(this.form),
 			});
@@ -344,6 +348,7 @@ window.contactForm = () => ({
 				email: '',
 				subject: '',
 				message: '',
+				website: '',
 			};
 
 			this.status = {

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreContactRequest extends FormRequest
 {
@@ -21,6 +22,7 @@ class StoreContactRequest extends FormRequest
             'email' => ['required', 'email:rfc,dns', 'max:160'],
             'subject' => ['nullable', 'string', 'max:160'],
             'message' => ['required', 'string', 'min:12', 'max:3000'],
+            'website' => [Rule::prohibitedIf(fn () => filled($this->input('website')))],
         ];
     }
 
