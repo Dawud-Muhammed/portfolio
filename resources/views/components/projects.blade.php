@@ -2,6 +2,7 @@
     'projects' => [
         [
             'title' => 'Car Rental Platform',
+            'slug' => 'car-rental-platform',
             'description' => 'A booking-focused car rental system with role-aware dashboards, reservation workflows, and fleet availability management.',
             'image' => 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80',
             'stack' => ['Laravel', 'PHP', 'MySQL', 'Tailwind'],
@@ -12,6 +13,7 @@
         ],
         [
             'title' => 'Support Desk App',
+            'slug' => 'support-desk-app',
             'description' => 'A streamlined customer support app with ticket pipelines, status automation, and internal team collaboration.',
             'image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
             'stack' => ['Laravel', 'PHP', 'Alpine.js', 'REST API'],
@@ -22,6 +24,7 @@
         ],
         [
             'title' => 'Property Listing Suite',
+            'slug' => 'property-listing-suite',
             'description' => 'A modern real-estate listing experience with media galleries, search filters, and agent inquiry management.',
             'image' => 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
             'stack' => ['PHP', 'Laravel', 'Blade', 'Vite'],
@@ -32,6 +35,7 @@
         ],
         [
             'title' => 'School Management Portal',
+            'slug' => 'school-management-portal',
             'description' => 'A centralized school portal for attendance, assessments, announcements, and parent communication.',
             'image' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80',
             'stack' => ['Laravel', 'PHP', 'MySQL', 'Alpine.js'],
@@ -42,6 +46,7 @@
         ],
         [
             'title' => 'Inventory Tracker',
+            'slug' => 'inventory-tracker',
             'description' => 'A stock control system with movement logs, low-stock alerts, and exportable reporting.',
             'image' => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
             'stack' => ['PHP', 'Laravel', 'Queue Jobs', 'Blade'],
@@ -52,6 +57,7 @@
         ],
         [
             'title' => 'Portfolio CMS Engine',
+            'slug' => 'portfolio-cms-engine',
             'description' => 'A headless-ready content module for portfolio pages, case studies, and dynamic service blocks.',
             'image' => 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1200&q=80',
             'stack' => ['Laravel', 'PHP', 'Alpine.js', 'Tailwind'],
@@ -138,6 +144,15 @@
                     <div class="project-reveal max-h-0 overflow-hidden text-sm text-slate-600 transition-all duration-300 group-hover:max-h-24">
                         <p class="pt-1">{{ $project['details'] }}</p>
                     </div>
+
+                    @if (!empty($project['slug']))
+                        <a
+                            href="{{ route('projects.show', $project['slug']) }}"
+                            class="inline-flex items-center rounded-full border border-orange-300/80 bg-orange-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-orange-700 transition hover:bg-orange-500 hover:text-white"
+                        >
+                            View Case Study
+                        </a>
+                    @endif
 
                     <div class="flex items-center gap-3 pt-1 text-xs font-semibold uppercase tracking-[0.16em]">
                         <a href="{{ $project['github'] }}" target="_blank" rel="noopener noreferrer" class="rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-orange-300 hover:text-orange-700">

@@ -41,7 +41,7 @@
         </section>
 
         <section class="mx-auto w-full max-w-7xl px-6">
-            <x-projects />
+            <x-projects :projects="$projects" />
         </section>
 
         <section class="mx-auto w-full max-w-7xl px-6">
