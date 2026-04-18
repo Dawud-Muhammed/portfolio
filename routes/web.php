@@ -8,8 +8,13 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RobotsController;
+use App\Http\Controllers\SitemapController;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/sitemap.xml', [SitemapController::class, 'show'])->name('sitemap.show');
+Route::get('/robots.txt', [RobotsController::class, 'show'])->name('robots.show');
 
 Route::get('/', function () {
     $projects = Project::query()
