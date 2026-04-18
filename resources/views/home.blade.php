@@ -12,5 +12,6 @@
     @include('partials.about')
     @include('partials.skills')
     <x-projects />
+    @include('partials.testimonials')
     <x-contact />
 @endsection

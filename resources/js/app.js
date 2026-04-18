@@ -434,6 +434,48 @@ window.blogReadingProgress = () => ({
 	},
 });
 
+window.testimonialsCarousel = (testimonials) => ({
+	testimonials,
+	currentIndex: 0,
+	autoAdvanceId: null,
+	prefersReducedMotion: false,
+	get currentTestimonial() {
+		return this.testimonials[this.currentIndex] ?? this.testimonials[0] ?? null;
+	},
+	init() {
+		this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		if (!this.prefersReducedMotion && this.testimonials.length > 1) {
+			this.autoAdvanceId = window.setInterval(() => {
+				this.next();
+			}, 5000);
+		}
+
+		this.$el.addEventListener(
+			'alpine:destroy',
+			() => {
+				if (this.autoAdvanceId) {
+					window.clearInterval(this.autoAdvanceId);
+				}
+			},
+			{ once: true }
+		);
+	},
+	goTo(index) {
+		if (!this.testimonials.length) {
+			return;
+		}
+
+		this.currentIndex = (index + this.testimonials.length) % this.testimonials.length;
+	},
+	next() {
+		this.goTo(this.currentIndex + 1);
+	},
+	previous() {
+		this.goTo(this.currentIndex - 1);
+	},
+});
+
 window.Alpine = Alpine;
 Alpine.start();
 
