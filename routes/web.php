@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Project;
@@ -33,4 +34,6 @@ Route::get('/projects', function () {
     return redirect()->to(route('home').'#projects');
 })->name('projects.index');
 Route::get('/projects/{slug}', [ProjectController::class, 'show'])->name('projects.show');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::resource('contacts', ContactController::class)->only(['index', 'store', 'show']);

@@ -19,6 +19,10 @@
                     {{ $link['label'] }}
                 </a>
             @endforeach
+
+            <a href="{{ route('blog.index') }}" class="transition hover:text-orange-600">
+                Blog
+            </a>
         </nav>
     </div>
 </footer>

@@ -196,6 +196,10 @@
 }
 
 @layer utilities {
+    .shadow-premium {
+        box-shadow: 0 24px 56px -34px rgb(15 23 42 / 0.58), 0 0 0 1px rgb(148 163 184 / 0.18);
+    }
+
     .animate-fade-up {
         animation: fade-up 0.8s ease-out both;
     }

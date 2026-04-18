@@ -405,5 +405,34 @@ window.scrollToTop = () => ({
 	},
 });
 
+window.blogReadingProgress = () => ({
+	progress: 0,
+	init() {
+		const update = () => {
+			const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+			if (documentHeight <= 0) {
+				this.progress = 0;
+				return;
+			}
+
+			const nextProgress = (window.scrollY / documentHeight) * 100;
+			this.progress = Math.max(0, Math.min(100, Math.round(nextProgress)));
+		};
+
+		window.addEventListener('scroll', update, { passive: true });
+		window.addEventListener('resize', update);
+		update();
+
+		this.$el.addEventListener(
+			'alpine:destroy',
+			() => {
+				window.removeEventListener('scroll', update);
+				window.removeEventListener('resize', update);
+			},
+			{ once: true }
+		);
+	},
+});
+
 window.Alpine = Alpine;
 Alpine.start();
