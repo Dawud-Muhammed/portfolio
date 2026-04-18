@@ -41,6 +41,16 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
+## Analytics
+
+This portfolio uses Plausible Analytics in a privacy-friendly, GDPR-conscious way.
+
+1. Set `PLAUSIBLE_DOMAIN` in your environment file to your production domain.
+2. Add your domain inside [config/services.php](config/services.php) via the Plausible service entry.
+3. The tracking script only loads when the app is running in the production environment and `PLAUSIBLE_DOMAIN` is set.
+4. Contact form submissions emit a custom `contact-form-sent` event when Plausible is available.
+5. No cookies or consent banner are required for the default Plausible setup used here.
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).

@@ -76,6 +76,10 @@
 
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 
+    @if (app()->environment('production') && filled(config('services.plausible.domain')))
+        <script defer data-domain="{{ config('services.plausible.domain') }}" src="https://plausible.io/js/script.js"></script>
+    @endif
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body x-data="themeController()" x-init="init()" class="min-h-screen bg-bg text-fg antialiased">

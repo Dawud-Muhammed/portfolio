@@ -350,6 +350,10 @@ window.contactForm = () => ({
 				message: payload.message || 'Message sent successfully.',
 				ok: true,
 			};
+
+			if (typeof plausible !== 'undefined') {
+				plausible('contact-form-sent');
+			}
 		} catch {
 			this.status = {
 				message: 'A network error occurred. Please try again.',
