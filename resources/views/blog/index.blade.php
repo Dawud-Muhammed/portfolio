@@ -2,9 +2,9 @@
 
 @section('page_title', 'Blog | Insights and Build Notes')
 @section('meta_description', 'Articles on Laravel architecture, product design, and Alpine.js interaction patterns.')
-@section('hero_name', 'Journal')
-@section('hero_title', 'Engineering and Product Notes')
-@section('hero_cv_url', route('home'))
+@section('hero_name', 'Dawud Muhammed')
+@section('hero_title', 'Laravel Developer')
+@section('hero_cv_url', '#')
 @section('hero_background', 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=1600&q=80')
 
 @section('content')

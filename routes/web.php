@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProjectController;
@@ -37,3 +42,22 @@ Route::get('/projects/{slug}', [ProjectController::class, 'show'])->name('projec
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::resource('contacts', ContactController::class)->only(['index', 'store', 'show']);
+
+Route::middleware('guest')->group(function (): void {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
+});
+
+Route::middleware('auth')->group(function (): void {
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function (): void {
+    Route::get('/', DashboardController::class)->name('dashboard');
+
+    Route::resource('projects', AdminProjectController::class)->except(['show']);
+    Route::resource('posts', AdminPostController::class)->except(['show']);
+
+    Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
+    Route::patch('contacts/{contact}/read', [AdminContactController::class, 'markRead'])->name('contacts.read');
+});
