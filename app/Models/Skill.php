@@ -2,32 +2,29 @@
 
 namespace App\Models;
 
+use App\Enums\SkillCategory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Skill extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'slug',
+        'skill_id',
+        'name',
+        'level',
+        'years',
         'description',
-        'details',
-        'stack',
-        'filters',
-        'image',
-        'github_url',
-        'demo_url',
-        'is_featured',
+        'category',
         'published_at',
     ];
 
     protected $casts = [
-        'stack' => 'array',
-        'filters' => 'array',
-        'is_featured' => 'boolean',
+        'level' => 'integer',
+        'years' => 'integer',
+        'category' => SkillCategory::class,
         'published_at' => 'datetime',
     ];
 

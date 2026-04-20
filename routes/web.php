@@ -11,6 +11,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Models\Project;
+use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'show'])->name('sitemap.show');
@@ -29,7 +30,7 @@ Route::get('/', function () {
             'description' => $project->description,
             'image' => $project->image,
             'stack' => $project->stack,
-            'filters' => ['Laravel', 'PHP'],
+            'filters' => $project->filters ?? ['Laravel', 'PHP'],
             'github' => $project->github_url,
             'demo' => $project->demo_url,
             'details' => $project->details,
@@ -37,7 +38,25 @@ Route::get('/', function () {
         ->values()
         ->all();
 
-    return view('welcome', ['projects' => $projects]);
+    $skills = Skill::query()
+        ->published()
+        ->orderByDesc('level')
+        ->get()
+        ->map(fn (Skill $skill): array => [
+            'id' => $skill->skill_id,
+            'name' => $skill->name,
+            'level' => $skill->level,
+            'years' => $skill->years,
+            'description' => $skill->description,
+            'category' => $skill->category,
+        ])
+        ->values()
+        ->all();
+
+    return view('welcome', [
+        'projects' => $projects,
+        'skills' => $skills,
+    ]);
 })->name('home');
 
 Route::get('/projects', function () {

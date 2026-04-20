@@ -1,56 +1,7 @@
 @php
     use App\Enums\SkillCategory;
 
-    $skills = [
-        [
-            'id' => 'laravel-13',
-            'name' => 'Laravel 13',
-            'level' => 95,
-            'years' => 5,
-            'description' => 'Architecting robust APIs, queues, policies, and modular service layers for production applications.',
-            'category' => SkillCategory::Backend,
-        ],
-        [
-            'id' => 'php-84',
-            'name' => 'PHP',
-            'level' => 92,
-            'years' => 6,
-            'description' => 'Writing maintainable, testable business logic with strong domain modeling and performance-aware patterns.',
-            'category' => SkillCategory::Backend,
-        ],
-        [
-            'id' => 'blade-alpine',
-            'name' => 'Blade + Alpine.js',
-            'level' => 88,
-            'years' => 4,
-            'description' => 'Building responsive, high-fidelity interfaces with lean interactivity and smooth progressive enhancement.',
-            'category' => SkillCategory::Frontend,
-        ],
-        [
-            'id' => 'mysql',
-            'name' => 'MySQL',
-            'level' => 85,
-            'years' => 5,
-            'description' => 'Designing indexes, schema migrations, and efficient query strategies for data-heavy workloads.',
-            'category' => SkillCategory::Data,
-        ],
-        [
-            'id' => 'redis-queue',
-            'name' => 'Redis + Queues',
-            'level' => 84,
-            'years' => 4,
-            'description' => 'Implementing asynchronous pipelines, background processing, and resilient retry policies.',
-            'category' => SkillCategory::Tooling,
-        ],
-        [
-            'id' => 'vite-tailwind',
-            'name' => 'Vite + Tailwind',
-            'level' => 90,
-            'years' => 4,
-            'description' => 'Shipping polished frontends with rapid iteration, optimized bundles, and cohesive design systems.',
-            'category' => SkillCategory::Frontend,
-        ],
-    ];
+    $skills = collect($skills ?? []);
 
     $categories = collect(SkillCategory::cases())
         ->map(fn (SkillCategory $category) => [
@@ -60,20 +11,22 @@
         ])
         ->values();
 
-    $skillPayload = collect($skills)
+    $skillPayload = $skills
         ->map(fn (array $skill) => [
             'id' => $skill['id'],
             'name' => $skill['name'],
             'level' => $skill['level'],
             'years' => $skill['years'],
             'description' => $skill['description'],
-            'category' => $skill['category']->value,
-            'categoryLabel' => $skill['category']->label(),
+            'category' => $skill['category'] instanceof SkillCategory ? $skill['category']->value : (string) $skill['category'],
+            'categoryLabel' => ($skill['category'] instanceof SkillCategory
+                ? $skill['category']
+                : SkillCategory::tryFrom((string) $skill['category']))?->label() ?? SkillCategory::Backend->label(),
         ])
         ->values();
 
-    $maxExperience = collect($skills)->max('years');
-    $averageProficiency = (int) round(collect($skills)->avg('level'));
+    $maxExperience = (int) ($skills->max('years') ?? 0);
+    $averageProficiency = (int) round((float) ($skills->avg('level') ?? 0));
 @endphp
 
 <section

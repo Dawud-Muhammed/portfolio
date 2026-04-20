@@ -13,7 +13,7 @@
 
     <main>
         <section class="mx-auto w-full max-w-7xl px-6">
-            @include('partials.skills')
+            @include('partials.skills', ['skills' => $skills])
         </section>
 
         <section class="mx-auto w-full max-w-7xl px-6">
