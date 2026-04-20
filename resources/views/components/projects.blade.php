@@ -1,5 +1,9 @@
 @props(['projects' => []])
 
+@php
+    $projectWebp = fn (string $image): string => preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $image);
+@endphp
+
 <section
     id="projects"
     class="mx-auto w-full max-w-7xl px-6 py-20"
@@ -44,13 +48,18 @@
                 style="transition-delay: {{ 80 + ($index * 90) }}ms;"
             >
                 <div class="relative overflow-hidden">
-                    <img
-                        src="{{ $project['image'] }}"
-                        alt="Preview image for {{ $project['title'] }}"
-                        class="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
-                        loading="lazy"
-                        decoding="async"
-                    >
+                    <picture>
+                        <source srcset="{{ $projectWebp($project['image']) }}" type="image/webp">
+                        <img
+                            src="{{ $project['image'] }}"
+                            alt="Preview image for {{ $project['title'] }}"
+                            class="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                            width="1200"
+                            height="800"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    </picture>
                     <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-60"></div>
                 </div>
 

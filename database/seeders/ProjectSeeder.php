@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Project;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectSeeder extends Seeder
 {
@@ -20,7 +21,7 @@ class ProjectSeeder extends Seeder
                 'details' => 'Includes secure auth, admin fleet controls, dynamic pricing, and booking lifecycle tracking.',
                 'stack' => ['Laravel', 'PHP', 'MySQL', 'Tailwind'],
                 'filters' => ['Laravel', 'PHP'],
-                'image' => 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80',
+                'image' => Storage::url('images/photo-1492144534655-ae79c964c9d7.jpg'),
                 'github_url' => 'https://github.com/your-username/car-rental-platform',
                 'demo_url' => 'https://example.com/car-rental-demo',
                 'is_featured' => true,
@@ -33,7 +34,7 @@ class ProjectSeeder extends Seeder
                 'details' => 'Features SLA labels, threaded replies, assignment queues, and metrics-ready API endpoints.',
                 'stack' => ['Laravel', 'PHP', 'Alpine.js', 'REST API'],
                 'filters' => ['Laravel', 'PHP'],
-                'image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
+                'image' => Storage::url('images/photo-1517248135467-4c7edcad34c4.jpg'),
                 'github_url' => 'https://github.com/your-username/support-desk-app',
                 'demo_url' => 'https://example.com/support-desk-demo',
                 'is_featured' => true,
@@ -46,7 +47,7 @@ class ProjectSeeder extends Seeder
                 'details' => 'Optimized for fast browsing and conversion-driven detail pages with clean semantic markup.',
                 'stack' => ['PHP', 'Laravel', 'Blade', 'Vite'],
                 'filters' => ['Laravel', 'PHP'],
-                'image' => 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
+                'image' => Storage::url('images/photo-1560518883-ce09059eeffa.jpg'),
                 'github_url' => 'https://github.com/your-username/property-listing-suite',
                 'demo_url' => 'https://example.com/property-listing-demo',
                 'is_featured' => true,
@@ -59,7 +60,7 @@ class ProjectSeeder extends Seeder
                 'details' => 'Provides role-based dashboards for admins, teachers, students, and guardians.',
                 'stack' => ['Laravel', 'PHP', 'MySQL', 'Alpine.js'],
                 'filters' => ['Laravel', 'PHP'],
-                'image' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80',
+                'image' => Storage::url('images/photo-1503676260728-1c00da094a0b.jpg'),
                 'github_url' => 'https://github.com/your-username/school-management-portal',
                 'demo_url' => 'https://example.com/school-portal-demo',
                 'is_featured' => true,
@@ -72,7 +73,7 @@ class ProjectSeeder extends Seeder
                 'details' => 'Supports warehouse workflows, supplier records, and audit-friendly stock histories.',
                 'stack' => ['PHP', 'Laravel', 'Queue Jobs', 'Blade'],
                 'filters' => ['Laravel', 'PHP'],
-                'image' => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
+                'image' => Storage::url('images/photo-1586528116311-ad8dd3c8310d.jpg'),
                 'github_url' => 'https://github.com/your-username/inventory-tracker',
                 'demo_url' => 'https://example.com/inventory-demo',
                 'is_featured' => true,
@@ -85,7 +86,7 @@ class ProjectSeeder extends Seeder
                 'details' => 'Enables modular content editing and publication flows for multi-section landing pages.',
                 'stack' => ['Laravel', 'PHP', 'Alpine.js', 'Tailwind'],
                 'filters' => ['Laravel', 'PHP'],
-                'image' => 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1200&q=80',
+                'image' => Storage::url('images/photo-1461749280684-dccba630e2f6.jpg'),
                 'github_url' => 'https://github.com/your-username/portfolio-cms-engine',
                 'demo_url' => 'https://example.com/portfolio-cms-demo',
                 'is_featured' => true,

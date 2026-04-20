@@ -9,7 +9,7 @@ return [
     ),
     'default_image' => env(
         'SEO_DEFAULT_IMAGE',
-        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80'
+        '/storage/images/photo-1518770660439-4636190af475.jpg'
     ),
     'default_url' => env('SEO_DEFAULT_URL', env('APP_URL', 'http://localhost')),
     'social' => [

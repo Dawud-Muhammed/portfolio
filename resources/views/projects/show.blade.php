@@ -7,6 +7,10 @@
 @section('hero_cv_url', route('home').'#projects')
 @section('hero_background', $project->image)
 
+@php
+    $projectHeroWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $project->image);
+@endphp
+
 @section('content')
     <main class="mx-auto w-full max-w-6xl px-6 pb-20 pt-10" aria-labelledby="project-title">
         <div
@@ -24,13 +28,19 @@
 
             <article class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.55)] backdrop-blur-sm">
                 <div class="relative overflow-hidden">
-                    <img
-                        src="{{ $project->image }}"
-                        alt="Hero image for {{ $project->title }}"
-                        class="h-64 w-full object-cover md:h-80"
-                        loading="eager"
-                        decoding="async"
-                    >
+                    <picture>
+                        <source srcset="{{ $projectHeroWebp }}" type="image/webp">
+                        <img
+                            src="{{ $project->image }}"
+                            alt="Hero image for {{ $project->title }}"
+                            class="h-64 w-full object-cover md:h-80"
+                            width="1600"
+                            height="900"
+                            loading="eager"
+                            fetchpriority="high"
+                            decoding="async"
+                        >
+                    </picture>
                     <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-900/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6">
                         <h1 id="project-title" class="text-3xl font-semibold tracking-tight text-white md:text-4xl" style="font-family: var(--font-display);">

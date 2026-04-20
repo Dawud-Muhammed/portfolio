@@ -2,21 +2,31 @@
     'name' => 'Dawud Muhammed',
     'title' => 'Laravel Developer',
     'cvUrl' => '#',
-    'backgroundImage' => 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80',
+    'backgroundImage' => '/storage/images/photo-1518770660439-4636190af475.jpg',
 ])
+
+@php
+    $backgroundImageWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $backgroundImage);
+@endphp
 
 <section
     aria-labelledby="hero-heading"
     class="hero-shell relative isolate flex min-h-[92vh] w-full items-center overflow-hidden lg:min-h-screen"
     x-data="heroTypewriter(@js($name), @js($title))"
 >
-    <img
-        src="{{ $backgroundImage }}"
-        alt="Futuristic coding workstation with glowing monitors in a dark studio"
-        class="absolute inset-0 h-full w-full object-cover"
-        loading="eager"
-        decoding="async"
-    >
+    <picture class="absolute inset-0 block h-full w-full">
+        <source srcset="{{ $backgroundImageWebp }}" type="image/webp">
+        <img
+            src="{{ $backgroundImage }}"
+            alt="Futuristic coding workstation with glowing monitors in a dark studio"
+            class="absolute inset-0 h-full w-full object-cover"
+            width="1600"
+            height="900"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+        >
+    </picture>
 
     <div aria-hidden="true" class="absolute inset-0 bg-black/70"></div>
     <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-r from-[#ff5e10]/35 via-[#f97316]/20 to-transparent"></div>

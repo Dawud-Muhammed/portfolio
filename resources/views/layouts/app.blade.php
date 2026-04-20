@@ -2,9 +2,11 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     @php
+        use Illuminate\Support\Facades\Storage;
+
         $defaultTitle = (string) config('seo.default_name', config('app.name', 'Portfolio'));
         $defaultDescription = (string) config('seo.default_description', 'High-end Laravel portfolio hero section with Alpine animations.');
-        $defaultImage = (string) config('seo.default_image', 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80');
+        $defaultImage = (string) config('seo.default_image', Storage::url('images/photo-1518770660439-4636190af475.jpg'));
         $defaultUrl = (string) config('seo.default_url', config('app.url'));
 
         $pageTitle = trim($__env->yieldContent('page_title', $defaultTitle));
@@ -90,7 +92,7 @@
         :name="trim($__env->yieldContent('hero_name', 'Dawud Muhammed'))"
         :title="trim($__env->yieldContent('hero_title', 'Laravel Developer'))"
         :cv-url="trim($__env->yieldContent('hero_cv_url', '#'))"
-        :background-image="trim($__env->yieldContent('hero_background', 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80'))"
+        :background-image="trim($__env->yieldContent('hero_background', Storage::url('images/photo-1518770660439-4636190af475.jpg')))"
     />
 
     @yield('content')

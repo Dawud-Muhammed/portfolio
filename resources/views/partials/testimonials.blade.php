@@ -1,28 +1,30 @@
 @php
+    use Illuminate\Support\Facades\Storage;
+
     $testimonials = [
         [
             'quote' => 'The work felt considered from the first wireframe to the final deployment. The result was fast, refined, and easy for the team to maintain.',
             'author' => 'Amina Rahman',
             'role' => 'Product Manager, Northstar Studio',
-            'avatar' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&q=80',
+            'avatar' => Storage::url('images/photo-1494790108377-be9c29b29330.jpg'),
         ],
         [
             'quote' => 'Technical decisions were explained clearly and delivered with discipline. The entire process felt calm, structured, and high-trust.',
             'author' => 'Daniel Okafor',
             'role' => 'Founder, FrameShift Labs',
-            'avatar' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&q=80',
+            'avatar' => Storage::url('images/photo-1500648767791-00dcc994a43e.jpg'),
         ],
         [
             'quote' => 'The interface looked premium without sacrificing usability. It was exactly the balance we wanted for a client-facing portfolio experience.',
             'author' => 'Sofia Mensah',
             'role' => 'Design Lead, Copper & Co.',
-            'avatar' => 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=256&q=80',
+            'avatar' => Storage::url('images/photo-1438761681033-6461ffad8d80.jpg'),
         ],
         [
             'quote' => 'Performance, structure, and polish all landed at a level that made the project feel production-ready from day one.',
             'author' => 'Michael Chen',
             'role' => 'Engineering Manager, Atlas Digital',
-            'avatar' => 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=256&q=80',
+            'avatar' => Storage::url('images/photo-1506794778202-cad84cf45f1d.jpg'),
         ],
         [
             'quote' => 'The collaboration was concise and effective. Every iteration moved the product closer to what the business actually needed.',
@@ -88,6 +90,8 @@
                                                 :src="testimonial.avatar"
                                                 :alt="`${testimonial.author} avatar`"
                                                 class="h-14 w-14 rounded-full border-2 border-orange-300/60 object-cover"
+                                                width="56"
+                                                height="56"
                                                 loading="lazy"
                                                 decoding="async"
                                             >

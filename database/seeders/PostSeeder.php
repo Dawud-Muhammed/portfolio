@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Post;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class PostSeeder extends Seeder
 {
@@ -28,7 +29,7 @@ Finally, we look at schema decisions that support future reporting and product i
 
 If you can predict where complexity will land, you can build systems that scale without sacrificing clarity.
 TEXT,
-                'cover_image' => 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1600&q=80',
+                'cover_image' => Storage::url('images/photo-1555066931-4365d14bab8c.jpg'),
                 'published_at' => now()->subDays(14),
                 'reading_time_minutes' => 7,
             ],
@@ -47,7 +48,7 @@ Typography and spacing also do real work. When headings, body rhythm, and call-t
 
 A premium page is not about adding more sections. It is about reducing friction between story and trust.
 TEXT,
-                'cover_image' => 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1600&q=80',
+                'cover_image' => Storage::url('images/photo-1467232004584-a241de8bcf5d.jpg'),
                 'published_at' => now()->subDays(9),
                 'reading_time_minutes' => 5,
             ],
@@ -66,7 +67,7 @@ For scroll effects, IntersectionObserver gives better performance than constantl
 
 The result is a frontend that feels dynamic while preserving server-rendered simplicity.
 TEXT,
-                'cover_image' => 'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?auto=format&fit=crop&w=1600&q=80',
+                'cover_image' => Storage::url('images/photo-1517180102446-f3ece451e9d8.jpg'),
                 'published_at' => now()->subDays(4),
                 'reading_time_minutes' => 6,
             ],

@@ -1,3 +1,10 @@
+@php
+    use Illuminate\Support\Facades\Storage;
+
+    $aboutImage = trim($__env->yieldContent('about_profile_image', Storage::url('images/photo-1542831371-29b0f74f9713.jpg')));
+    $aboutImageWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $aboutImage);
+@endphp
+
 <section
     id="about"
     class="mx-auto w-full max-w-7xl px-6 py-20"
@@ -10,13 +17,18 @@
         <div class="relative mx-auto w-full max-w-xs">
             <div aria-hidden="true" class="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-blue-400/25 to-emerald-400/25 blur-lg"></div>
             <figure class="relative overflow-hidden rounded-[1.75rem] border border-cyan-300/60 bg-white/90 p-3">
-                <img
-                    src="{{ trim($__env->yieldContent('about_profile_image', 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=900&q=80')) }}"
-                    alt="{{ trim($__env->yieldContent('about_profile_alt', 'Profile portrait of Dawud Muhammed')) }}"
-                    class="h-[360px] w-full rounded-2xl object-cover"
-                    loading="lazy"
-                    decoding="async"
-                >
+                <picture>
+                    <source srcset="{{ $aboutImageWebp }}" type="image/webp">
+                    <img
+                        src="{{ $aboutImage }}"
+                        alt="{{ trim($__env->yieldContent('about_profile_alt', 'Profile portrait of Dawud Muhammed')) }}"
+                        class="h-[360px] w-full rounded-2xl object-cover"
+                        width="900"
+                        height="1200"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                </picture>
                 <figcaption class="sr-only">Profile image</figcaption>
             </figure>
         </div>

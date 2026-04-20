@@ -5,7 +5,7 @@
 @section('hero_name', 'Dawud Muhammed')
 @section('hero_title', 'Laravel Developer')
 @section('hero_cv_url', '#')
-@section('hero_background', 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=1600&q=80')
+@section('hero_background', \Illuminate\Support\Facades\Storage::url('images/photo-1484417894907-623942c8ee29.jpg'))
 
 @section('content')
     <main class="mx-auto w-full max-w-7xl px-6 pb-20 pt-10" aria-labelledby="blog-title">
@@ -36,6 +36,8 @@
                                     src="{{ $post->cover_image }}"
                                     alt="Cover image for {{ $post->title }}"
                                     class="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                                    width="1600"
+                                    height="900"
                                     loading="lazy"
                                     decoding="async"
                                 >

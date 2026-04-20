@@ -7,6 +7,10 @@
 @section('hero_cv_url', route('blog.index'))
 @section('hero_background', $post->cover_image)
 
+@php
+    $postCoverWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $post->cover_image);
+@endphp
+
 @section('content')
     <main class="mx-auto w-full max-w-4xl px-6 pb-20 pt-10" aria-labelledby="post-title">
         <div class="fixed left-0 right-0 top-0 z-40 h-1 bg-slate-200/60" aria-hidden="true">
@@ -21,13 +25,19 @@
             :class="isVisible ? 'is-visible' : ''"
             class="about-reveal overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-premium backdrop-blur-sm"
         >
-            <img
-                src="{{ $post->cover_image }}"
-                alt="Cover image for {{ $post->title }}"
-                class="h-64 w-full object-cover md:h-80"
-                loading="eager"
-                decoding="async"
-            >
+            <picture>
+                <source srcset="{{ $postCoverWebp }}" type="image/webp">
+                <img
+                    src="{{ $post->cover_image }}"
+                    alt="Cover image for {{ $post->title }}"
+                    class="h-64 w-full object-cover md:h-80"
+                    width="1600"
+                    height="900"
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async"
+                >
+            </picture>
 
             <div class="space-y-8 p-6 md:p-10" id="article-content">
                 <a href="{{ route('blog.index') }}" class="inline-flex items-center rounded-full border border-slate-300/80 bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
