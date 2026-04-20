@@ -2,10 +2,12 @@
 
 @section('page_title', 'Dawud Muhammed | Laravel Developer')
 @section('meta_description', 'Premium Laravel 13 portfolio with lazy sections, named route navigation, and persistent theme settings.')
-@section('hero_name', 'Dawud Muhammed')
-@section('hero_title', 'Laravel Developer')
-@section('hero_cv_url', '#')
-@section('about_bio', 'I design and ship Laravel products focused on reliability, maintainability, and user trust. From architecture to implementation, I prioritize clear communication, measurable outcomes, and long-term scalability.')
+@section('hero_name', $siteSettings['hero_name'])
+@section('hero_title', $siteSettings['hero_title'])
+@section('hero_cv_url', $siteSettings['hero_cv_url'])
+@section('hero_background', $siteSettings['hero_background'])
+@section('about_bio', $siteSettings['about_bio'])
+@section('about_profile_image', $siteSettings['about_profile_image'])
 @section('about_profile_alt', 'Profile portrait of Dawud Muhammed')
 
 @section('content')

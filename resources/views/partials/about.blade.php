@@ -1,7 +1,8 @@
 @php
+    use App\Models\SiteSetting;
     use Illuminate\Support\Facades\Storage;
 
-    $aboutImage = trim($__env->yieldContent('about_profile_image', Storage::url('images/photo-1542831371-29b0f74f9713.jpg')));
+    $aboutImage = trim($__env->yieldContent('about_profile_image', SiteSetting::get('about_profile_image', Storage::url('images/photo-1542831371-29b0f74f9713.jpg'))));
     $aboutImageWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $aboutImage);
 @endphp
 
@@ -43,7 +44,7 @@
             </h2>
 
             <p class="text-base leading-relaxed text-slate-700 md:text-lg" style="font-family: var(--font-body);">
-                {{ trim($__env->yieldContent('about_bio', 'I design and ship Laravel products focused on reliability, maintainability, and user trust. From architecture to implementation, I prioritize clear communication, measurable outcomes, and long-term scalability.')) }}
+                {{ trim($__env->yieldContent('about_bio', SiteSetting::get('about_bio', 'I design and ship Laravel products focused on reliability, maintainability, and user trust. From architecture to implementation, I prioritize clear communication, measurable outcomes, and long-term scalability.'))) }}
             </p>
 
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3" aria-label="Core skills">

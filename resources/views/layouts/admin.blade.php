@@ -41,6 +41,7 @@
                 <a href="{{ route('admin.categories.index') }}" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.categories.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Categories</a>
                 <a href="{{ route('admin.skills.index') }}" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.skills.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Skills</a>
                 <a href="{{ route('admin.testimonials.index') }}" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.testimonials.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Testimonials</a>
+                <a href="{{ route('admin.settings.edit') }}" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.settings.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Site Settings</a>
                 <a href="{{ route('admin.contacts.index') }}" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.contacts.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Contacts Inbox</a>
             </nav>
 
@@ -103,6 +104,7 @@
                     <a href="{{ route('admin.categories.index') }}" @click="mobileSidebarOpen = false" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.categories.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Categories</a>
                     <a href="{{ route('admin.skills.index') }}" @click="mobileSidebarOpen = false" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.skills.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Skills</a>
                     <a href="{{ route('admin.testimonials.index') }}" @click="mobileSidebarOpen = false" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.testimonials.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Testimonials</a>
+                    <a href="{{ route('admin.settings.edit') }}" @click="mobileSidebarOpen = false" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.settings.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Site Settings</a>
                     <a href="{{ route('admin.contacts.index') }}" @click="mobileSidebarOpen = false" class="block rounded-xl px-4 py-3 transition hover:bg-slate-800 {{ request()->routeIs('admin.contacts.*') ? 'bg-slate-800 text-orange-300' : 'text-slate-200' }}">Contacts Inbox</a>
                 </nav>
 

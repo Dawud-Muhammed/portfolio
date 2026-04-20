@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Admin\SkillController as AdminSkillController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
@@ -14,8 +15,10 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Models\Project;
+use App\Models\SiteSetting;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'show'])->name('sitemap.show');
 Route::get('/robots.txt', [RobotsController::class, 'show'])->name('robots.show');
@@ -65,10 +68,20 @@ Route::get('/', function () {
         ->values()
         ->all();
 
+    $siteSettings = [
+        'hero_name' => SiteSetting::get('hero_name', 'Dawud Muhammed'),
+        'hero_title' => SiteSetting::get('hero_title', 'Laravel Developer'),
+        'hero_cv_url' => SiteSetting::get('hero_cv_url', url('/')),
+        'hero_background' => SiteSetting::get('hero_background', url(Storage::url('images/photo-1518770660439-4636190af475.jpg'))),
+        'about_bio' => SiteSetting::get('about_bio', 'I design and ship Laravel products focused on reliability, maintainability, and user trust. From architecture to implementation, I prioritize clear communication, measurable outcomes, and long-term scalability.'),
+        'about_profile_image' => SiteSetting::get('about_profile_image', url(Storage::url('images/photo-1542831371-29b0f74f9713.jpg'))),
+    ];
+
     return view('welcome', [
         'projects' => $projects,
         'filters' => $filters,
         'skills' => $skills,
+        'siteSettings' => $siteSettings,
     ]);
 })->name('home');
 
@@ -99,6 +112,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::patch('skills/{skill}/toggle', [AdminSkillController::class, 'toggle'])->name('skills.toggle');
     Route::resource('testimonials', AdminTestimonialController::class)->except(['show']);
     Route::patch('testimonials/sort', [AdminTestimonialController::class, 'sort'])->name('testimonials.sort');
+    Route::get('settings', [AdminSettingsController::class, 'edit'])->name('settings.edit');
+    Route::put('settings', [AdminSettingsController::class, 'update'])->name('settings.update');
 
     Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
     Route::patch('contacts/read-all', [AdminContactController::class, 'markAllRead'])->name('contacts.read-all');

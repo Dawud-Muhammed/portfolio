@@ -1,9 +1,11 @@
 @php
+    use App\Models\SiteSetting;
+
     $links = $socialLinks ?? [
-        ['label' => 'GitHub', 'url' => 'https://github.com/your-username'],
-        ['label' => 'LinkedIn', 'url' => 'https://www.linkedin.com/in/your-username'],
-        ['label' => 'X', 'url' => 'https://x.com/your-username'],
-        ['label' => 'Email', 'url' => 'mailto:hello@example.com'],
+        ['label' => 'GitHub', 'url' => SiteSetting::get('footer_github', 'https://github.com/your-username')],
+        ['label' => 'LinkedIn', 'url' => SiteSetting::get('footer_linkedin', 'https://www.linkedin.com/in/your-username')],
+        ['label' => 'X', 'url' => SiteSetting::get('footer_x', 'https://x.com/your-username')],
+        ['label' => 'Email', 'url' => SiteSetting::get('footer_email', 'mailto:hello@example.com')],
     ];
 @endphp
 

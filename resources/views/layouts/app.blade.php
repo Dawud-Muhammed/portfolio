@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     @php
+        use App\Models\SiteSetting;
         use Illuminate\Support\Facades\Storage;
 
         $defaultTitle = (string) config('seo.default_name', config('app.name', 'Portfolio'));
@@ -12,6 +13,11 @@
         $pageTitle = trim($__env->yieldContent('page_title', $defaultTitle));
         $pageDescription = trim($__env->yieldContent('meta_description', $defaultDescription));
         $canonicalUrl = trim($__env->yieldContent('canonical_url', url()->current()));
+
+        $defaultHeroName = (string) SiteSetting::get('hero_name', 'Dawud Muhammed');
+        $defaultHeroTitle = (string) SiteSetting::get('hero_title', 'Laravel Developer');
+        $defaultHeroCvUrl = (string) SiteSetting::get('hero_cv_url', url('/'));
+        $defaultHeroBackground = (string) SiteSetting::get('hero_background', Storage::url('images/photo-1518770660439-4636190af475.jpg'));
 
         $ogTitle = trim($__env->yieldContent('og_title', $pageTitle));
         $ogDescription = trim($__env->yieldContent('og_description', $pageDescription));
@@ -95,10 +101,10 @@
 
     @if (! in_array(strtolower($showHero), ['false', '0', 'off', 'no'], true))
         <x-hero
-            :name="trim($__env->yieldContent('hero_name', 'Dawud Muhammed'))"
-            :title="trim($__env->yieldContent('hero_title', 'Laravel Developer'))"
-            :cv-url="trim($__env->yieldContent('hero_cv_url', '#'))"
-            :background-image="trim($__env->yieldContent('hero_background', Storage::url('images/photo-1518770660439-4636190af475.jpg')))"
+            :name="trim($__env->yieldContent('hero_name', $defaultHeroName))"
+            :title="trim($__env->yieldContent('hero_title', $defaultHeroTitle))"
+            :cv-url="trim($__env->yieldContent('hero_cv_url', $defaultHeroCvUrl))"
+            :background-image="trim($__env->yieldContent('hero_background', $defaultHeroBackground))"
         />
     @endif
 
