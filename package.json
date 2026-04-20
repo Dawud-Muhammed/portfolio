@@ -17,6 +17,7 @@
     "dependencies": {
         "@tailwindcss/typography": "^0.5.19",
         "alpinejs": "^3.14.9",
+        "@napi-rs/canvas": "^0.1.70",
         "easymde": "^2.20.0"
     }
 }

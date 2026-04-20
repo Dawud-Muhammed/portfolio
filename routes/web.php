@@ -96,10 +96,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('posts', AdminPostController::class)->except(['show']);
     Route::resource('categories', AdminCategoryController::class)->except(['show']);
     Route::resource('skills', AdminSkillController::class)->except(['show']);
+    Route::patch('skills/{skill}/toggle', [AdminSkillController::class, 'toggle'])->name('skills.toggle');
     Route::resource('testimonials', AdminTestimonialController::class)->except(['show']);
     Route::patch('testimonials/sort', [AdminTestimonialController::class, 'sort'])->name('testimonials.sort');
 
     Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
+    Route::patch('contacts/read-all', [AdminContactController::class, 'markAllRead'])->name('contacts.read-all');
     Route::patch('contacts/{contact}/read', [AdminContactController::class, 'markRead'])->name('contacts.read');
     Route::post('contacts/{contact}/reply', [AdminContactController::class, 'reply'])->name('contacts.reply');
 });

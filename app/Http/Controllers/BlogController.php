@@ -30,6 +30,22 @@ class BlogController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return view('blog.show', ['post' => $post]);
+        $previousPost = Post::query()
+            ->published()
+            ->where('published_at', '<', $post->published_at)
+            ->orderByDesc('published_at')
+            ->first();
+
+        $nextPost = Post::query()
+            ->published()
+            ->where('published_at', '>', $post->published_at)
+            ->orderBy('published_at')
+            ->first();
+
+        return view('blog.show', [
+            'post' => $post,
+            'previousPost' => $previousPost,
+            'nextPost' => $nextPost,
+        ]);
     }
 }

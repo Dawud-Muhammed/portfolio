@@ -6,6 +6,7 @@
 @section('hero_title', $project->title)
 @section('hero_cv_url', route('home').'#projects')
 @section('hero_background', $project->image)
+@section('og_image', $project->og_image)
 @section('schema')
     <script type="application/ld+json">
         {!! json_encode([

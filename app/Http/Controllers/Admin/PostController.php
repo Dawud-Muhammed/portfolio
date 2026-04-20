@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -45,6 +46,7 @@ class PostController extends Controller
 
         $post = Post::query()->create($validated);
         $post->categories()->sync($categoryIds);
+        $this->generateOgImage('post', $post->getKey());
 
         return redirect()->route('admin.posts.index')->with('status', 'Post created successfully.');
     }
@@ -74,6 +76,7 @@ class PostController extends Controller
 
         $post->update($validated);
         $post->categories()->sync($categoryIds);
+        $this->generateOgImage('post', $post->getKey());
 
         return redirect()->route('admin.posts.index')->with('status', 'Post updated successfully.');
     }
@@ -83,5 +86,13 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('status', 'Post deleted successfully.');
+    }
+
+    private function generateOgImage(string $type, int $id): void
+    {
+        Artisan::call('og:generate', [
+            'type' => $type,
+            'id' => (string) $id,
+        ]);
     }
 }

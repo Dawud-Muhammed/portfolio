@@ -8,6 +8,56 @@
         <p class="mt-2 text-sm text-slate-600">Review incoming messages from the public contact form.</p>
     </div>
 
+    <div class="mb-6 space-y-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-premium">
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <form method="GET" action="{{ route('admin.contacts.index') }}" class="flex w-full flex-col gap-3 sm:flex-row lg:max-w-2xl">
+                <input type="hidden" name="filter" value="{{ $filter }}">
+                <input
+                    type="search"
+                    name="search"
+                    value="{{ $search }}"
+                    placeholder="Search by sender name, email, or subject"
+                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200"
+                >
+                <button type="submit" class="rounded-xl border border-orange-300 bg-orange-50 px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-orange-700 transition hover:bg-orange-100">
+                    Search
+                </button>
+            </form>
+
+            <form method="POST" action="{{ route('admin.contacts.read-all', request()->query()) }}">
+                @csrf
+                @method('PATCH')
+                <button type="submit" class="rounded-xl border border-orange-300 bg-orange-500/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-orange-700 transition hover:bg-orange-500 hover:text-white">
+                    Mark all as read
+                </button>
+            </form>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+            @php
+                $tabs = [
+                    'all' => 'All',
+                    'unread' => 'Unread',
+                    'read' => 'Read',
+                ];
+            @endphp
+
+            @foreach ($tabs as $key => $label)
+                @php
+                    $active = $filter === $key;
+                    $tabQuery = array_merge(request()->query(), ['filter' => $key]);
+                @endphp
+
+                <a
+                    href="{{ route('admin.contacts.index', $tabQuery) }}"
+                    class="rounded-xl border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition {{ $active ? 'border-orange-500 bg-orange-500 text-white' : 'border-slate-300 bg-white text-slate-700 hover:border-orange-300 hover:text-orange-700' }}"
+                >
+                    {{ $label }}
+                </a>
+            @endforeach
+        </div>
+    </div>
+
     <div class="space-y-4">
         @forelse ($contacts as $contact)
             @php
@@ -85,5 +135,5 @@
         @endforelse
     </div>
 
-    <div class="mt-6">{{ $contacts->links() }}</div>
+    <div class="mt-6">{{ $contacts->appends(request()->query())->links() }}</div>
 @endsection

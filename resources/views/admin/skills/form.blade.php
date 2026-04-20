@@ -42,10 +42,12 @@
         </div>
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <div x-data="{ level: '{{ old('level', $skill->level ?? 0) }}' }">
+            <div>
                 <label for="level" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Level</label>
-                <input id="level" name="level" type="range" min="0" max="100" value="{{ old('level', $skill->level ?? 0) }}" x-model="level" class="w-full accent-orange-500">
-                <div class="mt-2 text-xs uppercase tracking-[0.14em] text-slate-500">Current: <span x-text="level"></span></div>
+                <div x-data="{ level: Number(@js(old('level', $skill->level ?? 0))) }">
+                    <input id="level" name="level" type="range" min="0" max="100" x-model.number="level" class="w-full accent-orange-500">
+                    <div class="mt-2 text-xs uppercase tracking-[0.14em] text-slate-500">Current: <span x-text="`${level}%`"></span></div>
+                </div>
                 @error('level') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
 

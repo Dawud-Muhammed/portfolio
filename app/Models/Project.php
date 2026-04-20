@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Project extends Model
 {
@@ -30,6 +31,17 @@ class Project extends Model
         'is_featured' => 'boolean',
         'published_at' => 'datetime',
     ];
+
+    public function getOgImageAttribute(): string
+    {
+        $path = 'og/project-'.$this->getKey().'.jpg';
+
+        if (Storage::disk('public')->exists($path)) {
+            return Storage::url($path);
+        }
+
+        return (string) ($this->image ?: config('seo.default_image', ''));
+    }
 
     public function scopePublished(Builder $query): Builder
     {

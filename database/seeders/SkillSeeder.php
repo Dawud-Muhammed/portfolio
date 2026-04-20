@@ -21,6 +21,7 @@ class SkillSeeder extends Seeder
                 'years' => 5,
                 'description' => 'Architecting robust APIs, queues, policies, and modular service layers for production applications.',
                 'category' => SkillCategory::Backend->value,
+                'is_published' => true,
                 'published_at' => now()->subDays(30),
             ],
             [
@@ -30,6 +31,7 @@ class SkillSeeder extends Seeder
                 'years' => 6,
                 'description' => 'Writing maintainable, testable business logic with strong domain modeling and performance-aware patterns.',
                 'category' => SkillCategory::Backend->value,
+                'is_published' => true,
                 'published_at' => now()->subDays(30),
             ],
             [
@@ -39,6 +41,7 @@ class SkillSeeder extends Seeder
                 'years' => 4,
                 'description' => 'Building responsive, high-fidelity interfaces with lean interactivity and smooth progressive enhancement.',
                 'category' => SkillCategory::Frontend->value,
+                'is_published' => true,
                 'published_at' => now()->subDays(30),
             ],
             [
@@ -48,6 +51,7 @@ class SkillSeeder extends Seeder
                 'years' => 5,
                 'description' => 'Designing indexes, schema migrations, and efficient query strategies for data-heavy workloads.',
                 'category' => SkillCategory::Data->value,
+                'is_published' => true,
                 'published_at' => now()->subDays(30),
             ],
             [
@@ -57,6 +61,7 @@ class SkillSeeder extends Seeder
                 'years' => 4,
                 'description' => 'Implementing asynchronous pipelines, background processing, and resilient retry policies.',
                 'category' => SkillCategory::Tooling->value,
+                'is_published' => true,
                 'published_at' => now()->subDays(30),
             ],
             [
@@ -66,6 +71,7 @@ class SkillSeeder extends Seeder
                 'years' => 4,
                 'description' => 'Shipping polished frontends with rapid iteration, optimized bundles, and cohesive design systems.',
                 'category' => SkillCategory::Frontend->value,
+                'is_published' => true,
                 'published_at' => now()->subDays(30),
             ],
         ];

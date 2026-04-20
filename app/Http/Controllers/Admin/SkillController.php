@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\SkillCategory;
 use App\Http\Controllers\Controller;
 use App\Models\Skill;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,8 +16,30 @@ class SkillController extends Controller
 {
     public function index(): View
     {
+        $skills = Skill::query()
+            ->orderByRaw('FIELD(category, ?, ?, ?, ?)', [
+                SkillCategory::Backend->value,
+                SkillCategory::Frontend->value,
+                SkillCategory::Data->value,
+                SkillCategory::Tooling->value,
+            ])
+            ->orderByDesc('level')
+            ->orderBy('name')
+            ->get();
+
         return view('admin.skills.index', [
-            'skills' => Skill::query()->latest('published_at')->latest('id')->paginate(12),
+            'skillCategories' => collect(SkillCategory::cases())->map(fn (SkillCategory $category): array => [
+                'value' => $category->value,
+                'label' => $category->label(),
+            ])->all(),
+            'skillGroups' => collect(SkillCategory::cases())->map(function (SkillCategory $category) use ($skills): array {
+                return [
+                    'category' => $category,
+                    'skills' => $skills
+                        ->filter(fn (Skill $skill): bool => ($skill->category?->value ?? $skill->category) === $category->value)
+                        ->values(),
+                ];
+            })->all(),
         ]);
     }
 
@@ -70,6 +94,18 @@ class SkillController extends Controller
         $skill->delete();
 
         return redirect()->route('admin.skills.index')->with('status', 'Skill deleted successfully.');
+    }
+
+    public function toggle(Request $request, Skill $skill): JsonResponse
+    {
+        $skill->update([
+            'is_published' => ! $skill->is_published,
+        ]);
+
+        return response()->json([
+            'message' => 'Skill publication status updated.',
+            'is_published' => $skill->is_published,
+        ]);
     }
 
     /**

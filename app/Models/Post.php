@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Storage;
 use League\CommonMark\CommonMarkConverter;
 
 class Post extends Model
@@ -32,6 +33,7 @@ class Post extends Model
 
     protected $appends = [
         'rendered_body',
+        'og_image',
     ];
 
     public function getRenderedBodyAttribute(): HtmlString
@@ -39,6 +41,17 @@ class Post extends Model
         $converter = static::$markdownConverter ??= new CommonMarkConverter();
 
         return new HtmlString((string) $converter->convert($this->body ?? ''));
+    }
+
+    public function getOgImageAttribute(): string
+    {
+        $path = 'og/post-'.$this->getKey().'.jpg';
+
+        if (Storage::disk('public')->exists($path)) {
+            return Storage::url($path);
+        }
+
+        return (string) ($this->cover_image ?: config('seo.default_image', ''));
     }
 
     public function categories(): BelongsToMany

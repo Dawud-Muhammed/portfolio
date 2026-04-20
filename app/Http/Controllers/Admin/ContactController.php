@@ -13,11 +13,43 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = trim((string) $request->query('search', ''));
+        $filter = (string) $request->query('filter', 'all');
+
+        if (! in_array($filter, ['all', 'read', 'unread'], true)) {
+            $filter = 'all';
+        }
+
         return view('admin.contacts.index', [
-            'contacts' => Contact::query()->latest()->paginate(20),
+            'contacts' => Contact::query()
+                ->when($search, function ($query) use ($search) {
+                    $query->where(function ($subQuery) use ($search) {
+                        $subQuery
+                            ->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%")
+                            ->orWhere('subject', 'like', "%{$search}%");
+                    });
+                })
+                ->when($filter === 'read', fn ($query) => $query->whereNotNull('read_at'))
+                ->when($filter === 'unread', fn ($query) => $query->whereNull('read_at'))
+                ->latest()
+                ->paginate(20),
+            'search' => $search,
+            'filter' => $filter,
         ]);
+    }
+
+    public function markAllRead(Request $request): RedirectResponse
+    {
+        Contact::query()
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        return redirect()
+            ->route('admin.contacts.index', $request->only(['search', 'filter']))
+            ->with('status', 'All messages marked as read.');
     }
 
     public function markRead(MarkContactReadRequest $request, Contact $contact): RedirectResponse
