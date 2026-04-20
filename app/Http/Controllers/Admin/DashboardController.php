@@ -12,10 +12,32 @@ class DashboardController extends Controller
 {
     public function __invoke(): View
     {
+        $projectTotal = Project::query()->count();
+        $projectPublished = Project::query()->published()->count();
+
+        $postTotal = Post::query()->count();
+        $postPublished = Post::query()->published()->count();
+
         return view('admin.dashboard', [
-            'projectCount' => Project::query()->count(),
-            'postCount' => Post::query()->count(),
+            'projectCount' => $projectTotal,
+            'projectPublishedCount' => $projectPublished,
+            'postCount' => $postTotal,
+            'postPublishedCount' => $postPublished,
             'unreadContactCount' => Contact::query()->whereNull('read_at')->count(),
+            'recentContacts' => Contact::query()
+                ->latest()
+                ->take(5)
+                ->get(),
+            'recentPosts' => Post::query()
+                ->latest('published_at')
+                ->latest('id')
+                ->take(5)
+                ->get(),
+            'recentProjects' => Project::query()
+                ->latest('published_at')
+                ->latest('id')
+                ->take(5)
+                ->get(),
         ]);
     }
 }

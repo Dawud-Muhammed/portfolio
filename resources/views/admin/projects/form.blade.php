@@ -16,7 +16,20 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ $mode === 'create' ? route('admin.projects.store') : route('admin.projects.update', $project) }}" class="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-premium md:p-8">
+    <form
+        method="POST"
+        action="{{ $mode === 'create' ? route('admin.projects.store') : route('admin.projects.update', $project) }}"
+        x-data="{
+            imageMode: @js($errors->has('image_file') ? 'upload' : 'url'),
+            imagePreview: null,
+            setImagePreview(event) {
+                const file = event.target.files?.[0] ?? null;
+                this.imagePreview = file ? URL.createObjectURL(file) : null;
+            },
+        }"
+        x-bind:enctype="imageMode === 'upload' ? 'multipart/form-data' : null"
+        class="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-premium md:p-8"
+    >
         @csrf
         @if ($mode === 'edit')
             @method('PUT')
@@ -64,9 +77,41 @@
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div>
-                <label for="image" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Image URL</label>
-                <input id="image" name="image" type="url" value="{{ old('image', $project->image) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                <div class="mb-3 flex items-center gap-2">
+                    <button
+                        type="button"
+                        @click="imageMode = 'url'"
+                        :class="imageMode === 'url' ? 'border-orange-300 bg-orange-50 text-orange-700' : 'border-slate-300 bg-white text-slate-600'"
+                        class="rounded-lg border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] transition"
+                    >
+                        URL
+                    </button>
+                    <button
+                        type="button"
+                        @click="imageMode = 'upload'"
+                        :class="imageMode === 'upload' ? 'border-orange-300 bg-orange-50 text-orange-700' : 'border-slate-300 bg-white text-slate-600'"
+                        class="rounded-lg border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] transition"
+                    >
+                        Upload
+                    </button>
+                </div>
+
+                <div x-show="imageMode === 'url'" x-cloak>
+                    <label for="image" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Image URL</label>
+                    <input id="image" name="image" type="url" value="{{ old('image', $project->image) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                </div>
+
+                <div x-show="imageMode === 'upload'" x-cloak>
+                    <label for="image_file" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Upload Image</label>
+                    <input id="image_file" name="image_file" type="file" accept="image/*" @change="setImagePreview($event)" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-100 file:px-3 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.14em] file:text-orange-700">
+
+                    <div x-show="imagePreview" x-cloak class="mt-3">
+                        <img :src="imagePreview" alt="Project image preview" class="h-24 w-24 rounded-xl border border-slate-200 object-cover">
+                    </div>
+                </div>
+
                 @error('image') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+                @error('image_file') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
 
             <div>

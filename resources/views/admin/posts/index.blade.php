@@ -14,7 +14,29 @@
         </a>
     </div>
 
-    <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-premium">
+    <div x-data="{ query: '' }" class="space-y-4">
+        <div class="relative max-w-xl">
+            <input
+                type="search"
+                x-model="query"
+                placeholder="Search posts by title"
+                class="w-full rounded-xl border border-slate-300 px-4 py-3 pr-11 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200"
+            >
+
+            <button
+                type="button"
+                x-show="query.length > 0"
+                x-cloak
+                @click="query = ''"
+                class="absolute inset-y-0 right-3 flex items-center text-slate-400 transition hover:text-slate-600"
+                aria-label="Clear search"
+                title="Clear search"
+            >
+                <span class="text-xl leading-none">×</span>
+            </button>
+        </div>
+
+        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-premium">
         <table class="min-w-full divide-y divide-slate-200 text-sm">
             <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
                 <tr>
@@ -26,7 +48,7 @@
             </thead>
             <tbody class="divide-y divide-slate-100">
                 @forelse ($posts as $post)
-                    <tr>
+                    <tr x-data="{ title: @js(mb_strtolower($post->title)) }" x-show="query === '' || title.includes(query.toLowerCase())" x-cloak>
                         <td class="px-5 py-4 font-medium text-slate-900">{{ $post->title }}</td>
                         <td class="px-5 py-4 text-slate-600">{{ $post->slug }}</td>
                         <td class="px-5 py-4 text-slate-600">{{ $post->published_at?->format('M d, Y') ?? 'Draft' }}</td>
@@ -52,6 +74,7 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
     </div>
 
     <div class="mt-6">{{ $posts->links() }}</div>

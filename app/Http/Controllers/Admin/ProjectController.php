@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateAdminProjectRequest;
 use App\Models\Project;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -28,7 +29,16 @@ class ProjectController extends Controller
 
     public function store(StoreAdminProjectRequest $request): RedirectResponse
     {
-        Project::query()->create($this->normalizePayload($request->validated(), $request->boolean('is_featured')));
+        $validated = $request->validated();
+
+        if ($request->hasFile('image_file')) {
+            $path = Storage::disk('public')->put('images', $request->file('image_file'));
+            $validated['image'] = Storage::url($path);
+        }
+
+        unset($validated['image_file']);
+
+        Project::query()->create($this->normalizePayload($validated, $request->boolean('is_featured')));
 
         return redirect()->route('admin.projects.index')->with('status', 'Project created successfully.');
     }
@@ -43,7 +53,16 @@ class ProjectController extends Controller
 
     public function update(UpdateAdminProjectRequest $request, Project $project): RedirectResponse
     {
-        $project->update($this->normalizePayload($request->validated(), $request->boolean('is_featured')));
+        $validated = $request->validated();
+
+        if ($request->hasFile('image_file')) {
+            $path = Storage::disk('public')->put('images', $request->file('image_file'));
+            $validated['image'] = Storage::url($path);
+        }
+
+        unset($validated['image_file']);
+
+        $project->update($this->normalizePayload($validated, $request->boolean('is_featured')));
 
         return redirect()->route('admin.projects.index')->with('status', 'Project updated successfully.');
     }

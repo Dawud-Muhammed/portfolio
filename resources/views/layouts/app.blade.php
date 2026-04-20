@@ -78,6 +78,7 @@
     </style>
 
     <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @yield('schema')
 
     @if (app()->environment('production') && filled(config('services.plausible.domain')))
         <script defer data-domain="{{ config('services.plausible.domain') }}" src="https://plausible.io/js/script.js"></script>

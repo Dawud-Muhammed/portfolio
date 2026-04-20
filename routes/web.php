@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
+use App\Http\Controllers\Admin\SkillController as AdminSkillController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -18,12 +21,21 @@ Route::get('/sitemap.xml', [SitemapController::class, 'show'])->name('sitemap.sh
 Route::get('/robots.txt', [RobotsController::class, 'show'])->name('robots.show');
 
 Route::get('/', function () {
-    $projects = Project::query()
+    $featuredProjects = Project::query()
         ->published()
         ->where('is_featured', true)
         ->orderByDesc('published_at')
         ->take(6)
-        ->get()
+        ->get();
+
+    $filters = array_merge(['All'], $featuredProjects
+        ->flatMap(fn (Project $project) => $project->filters ?? [])
+        ->unique()
+        ->sort()
+        ->values()
+        ->all());
+
+    $projects = $featuredProjects
         ->map(fn (Project $project): array => [
             'title' => $project->title,
             'slug' => $project->slug,
@@ -55,6 +67,7 @@ Route::get('/', function () {
 
     return view('welcome', [
         'projects' => $projects,
+        'filters' => $filters,
         'skills' => $skills,
     ]);
 })->name('home');
@@ -81,7 +94,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::resource('projects', AdminProjectController::class)->except(['show']);
     Route::resource('posts', AdminPostController::class)->except(['show']);
+    Route::resource('categories', AdminCategoryController::class)->except(['show']);
+    Route::resource('skills', AdminSkillController::class)->except(['show']);
+    Route::resource('testimonials', AdminTestimonialController::class)->except(['show']);
+    Route::patch('testimonials/sort', [AdminTestimonialController::class, 'sort'])->name('testimonials.sort');
 
     Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
     Route::patch('contacts/{contact}/read', [AdminContactController::class, 'markRead'])->name('contacts.read');
+    Route::post('contacts/{contact}/reply', [AdminContactController::class, 'reply'])->name('contacts.reply');
 });

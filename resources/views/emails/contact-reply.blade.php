@@ -1,0 +1,6 @@
+Hello {{ $name }},
+
+{{ $replyBody }}
+
+---
+{{ $signature }}

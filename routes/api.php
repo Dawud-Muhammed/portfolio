@@ -14,6 +14,6 @@ Route::apiResource('contacts', ContactController::class)->only(['index', 'show']
 
 Route::prefix('v1')->group(function (): void {
     Route::post('contact', [ContactController::class, 'store'])
-        ->middleware('throttle:contact-form')
+    ->middleware('throttle:contact')
         ->name('api.v1.contact.store');
 });

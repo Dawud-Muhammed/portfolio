@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Contracts\View\View;
 
@@ -11,16 +12,21 @@ class BlogController extends Controller
     {
         $posts = Post::query()
             ->published()
+            ->with('categories')
             ->orderByDesc('published_at')
             ->get();
 
-        return view('blog.index', ['posts' => $posts]);
+        return view('blog.index', [
+            'posts' => $posts,
+            'categories' => Category::query()->orderBy('name')->get(),
+        ]);
     }
 
     public function show(string $slug): View
     {
         $post = Post::query()
             ->published()
+            ->with('categories')
             ->where('slug', $slug)
             ->firstOrFail();
 

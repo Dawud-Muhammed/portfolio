@@ -2,9 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -43,14 +40,5 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        RateLimiter::for('contact-form', function (Request $request): Limit {
-            return Limit::perMinute(5)
-                ->by((string) $request->ip())
-                ->response(function () {
-                    return response()->json([
-                        'message' => 'Too many contact attempts. Please try again in a minute.',
-                    ], 429);
-                });
-        });
     }
 }

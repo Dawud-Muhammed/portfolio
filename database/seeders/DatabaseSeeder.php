@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProjectSeeder::class);
         $this->call(SkillSeeder::class);
         $this->call(PostSeeder::class);
+        $this->call(TestimonialSeeder::class);
 
         // User::factory(10)->create();
 

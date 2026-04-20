@@ -6,6 +6,19 @@
 @section('hero_title', $project->title)
 @section('hero_cv_url', route('home').'#projects')
 @section('hero_background', $project->image)
+@section('schema')
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'CreativeWork',
+            'name' => $project->title,
+            'description' => $project->description,
+            'image' => $project->image,
+            'url' => route('projects.show', $project->slug),
+            'programmingLanguage' => array_values(array_filter($project->stack ?? [])),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+@endsection
 
 @php
     $projectHeroWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $project->image);

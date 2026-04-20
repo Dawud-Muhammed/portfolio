@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreAdminPostRequest;
 use App\Http\Requests\Admin\UpdateAdminPostRequest;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     public function index(): View
     {
         return view('admin.posts.index', [
-            'posts' => Post::query()->latest()->paginate(12),
+            'posts' => Post::query()->with('categories')->latest()->paginate(12),
         ]);
     }
 
@@ -22,13 +24,27 @@ class PostController extends Controller
     {
         return view('admin.posts.form', [
             'post' => new Post(),
+            'categories' => Category::query()->orderBy('name')->get(),
             'mode' => 'create',
         ]);
     }
 
     public function store(StoreAdminPostRequest $request): RedirectResponse
     {
-        Post::query()->create($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('cover_image_file')) {
+            $path = Storage::disk('public')->put('images', $request->file('cover_image_file'));
+            $validated['cover_image'] = Storage::url($path);
+        }
+
+        $categoryIds = $validated['categories'] ?? [];
+
+        unset($validated['cover_image_file']);
+        unset($validated['categories']);
+
+        $post = Post::query()->create($validated);
+        $post->categories()->sync($categoryIds);
 
         return redirect()->route('admin.posts.index')->with('status', 'Post created successfully.');
     }
@@ -36,6 +52,7 @@ class PostController extends Controller
     public function edit(Post $post): View
     {
         return view('admin.posts.form', [
+            'categories' => Category::query()->orderBy('name')->get(),
             'post' => $post,
             'mode' => 'edit',
         ]);
@@ -43,7 +60,20 @@ class PostController extends Controller
 
     public function update(UpdateAdminPostRequest $request, Post $post): RedirectResponse
     {
-        $post->update($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('cover_image_file')) {
+            $path = Storage::disk('public')->put('images', $request->file('cover_image_file'));
+            $validated['cover_image'] = Storage::url($path);
+        }
+
+        $categoryIds = $validated['categories'] ?? [];
+
+        unset($validated['cover_image_file']);
+        unset($validated['categories']);
+
+        $post->update($validated);
+        $post->categories()->sync($categoryIds);
 
         return redirect()->route('admin.posts.index')->with('status', 'Post updated successfully.');
     }

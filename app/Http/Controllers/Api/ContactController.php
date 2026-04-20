@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\StoreContactRequest;
-use App\Mail\ContactMessageMail;
+use App\Mail\ContactReceivedMail;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
@@ -20,19 +20,14 @@ class ContactController extends Controller
     {
         $validated = $request->safe()->only(['name', 'email', 'subject', 'message']);
 
-        Contact::query()->create([
+        $contact = Contact::query()->create([
             'name' => (string) $validated['name'],
             'email' => (string) $validated['email'],
             'subject' => (string) ($validated['subject'] ?? ''),
             'message' => (string) $validated['message'],
         ]);
 
-        Mail::to((string) config('contact.recipient_email'))->queue(new ContactMessageMail([
-            'name' => (string) $validated['name'],
-            'email' => (string) $validated['email'],
-            'subject' => (string) ($validated['subject'] ?? ''),
-            'message' => (string) $validated['message'],
-        ]));
+        Mail::to((string) config('mail.from.address'))->queue(new ContactReceivedMail($contact));
 
         return response()->json([
             'message' => 'Thanks, your message has been queued successfully.',

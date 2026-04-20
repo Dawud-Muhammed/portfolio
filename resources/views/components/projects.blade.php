@@ -1,4 +1,4 @@
-@props(['projects' => []])
+@props(['projects' => [], 'filters' => ['All']])
 
 @php
     $projectWebp = fn (string $image): string => preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $image);
@@ -7,7 +7,7 @@
 <section
     id="projects"
     class="mx-auto w-full max-w-7xl px-6 py-20"
-    x-data="projectsShowcase()"
+    x-data="projectsShowcase(@js($filters))"
     x-init="observe($el)"
     aria-labelledby="projects-heading"
 >

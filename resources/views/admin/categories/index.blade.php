@@ -1,0 +1,63 @@
+@extends('layouts.admin')
+
+@section('page_title', 'Admin Categories')
+
+@section('content')
+    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-3xl font-semibold tracking-tight text-slate-900" style="font-family: var(--font-display);">Categories</h1>
+            <p class="mt-2 text-sm text-slate-600">Organize blog posts with reusable category labels.</p>
+        </div>
+
+        <a href="{{ route('admin.categories.create') }}" class="inline-flex rounded-xl bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 px-5 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white shadow-[0_12px_28px_-16px_rgba(234,88,12,0.65)] transition hover:scale-[1.01]">
+            New Category
+        </a>
+    </div>
+
+    <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-premium">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                <tr>
+                    <th class="px-5 py-4">Name</th>
+                    <th class="px-5 py-4">Slug</th>
+                    <th class="px-5 py-4">Posts</th>
+                    <th class="px-5 py-4 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                @forelse ($categories as $category)
+                    @php
+                        $categoryName = data_get($category, 'name');
+                        $categorySlug = data_get($category, 'slug');
+                        $postsCount = data_get($category, 'posts_count');
+                    @endphp
+                    <tr>
+                        <td class="px-5 py-4 font-medium text-slate-900">{{ $categoryName }}</td>
+                        <td class="px-5 py-4 text-slate-600">{{ $categorySlug }}</td>
+                        <td class="px-5 py-4 text-slate-600">{{ $postsCount }}</td>
+                        <td class="px-5 py-4">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ route('admin.categories.edit', $category) }}" class="rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
+                                    Edit
+                                </a>
+                                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Delete this category?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="rounded-lg border border-rose-200 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-rose-700 transition hover:bg-rose-50">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-5 py-8 text-center text-slate-500">No categories found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-6">{{ $categories->links() }}</div>
+@endsection

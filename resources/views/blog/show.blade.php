@@ -6,6 +6,27 @@
 @section('hero_title', $post->title)
 @section('hero_cv_url', route('blog.index'))
 @section('hero_background', $post->cover_image)
+@section('schema')
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Article',
+            'headline' => $post->title,
+            'description' => $post->excerpt,
+            'image' => $post->cover_image,
+            'datePublished' => $post->published_at?->toAtomString(),
+            'author' => [
+                '@type' => 'Person',
+                'name' => config('seo.default_name', config('app.name', 'Portfolio')),
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => config('seo.default_name', config('app.name', 'Portfolio')),
+                'url' => config('seo.default_url', config('app.url')),
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+@endsection
 
 @php
     $postCoverWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $post->cover_image);
@@ -60,12 +81,8 @@
                     </p>
                 </header>
 
-                <section class="space-y-5 text-sm leading-relaxed text-slate-700 md:text-base" style="font-family: var(--font-body);">
-                    @foreach (preg_split('/\r\n|\r|\n/', $post->body) as $paragraph)
-                        @if (trim($paragraph) !== '')
-                            <p>{{ $paragraph }}</p>
-                        @endif
-                    @endforeach
+                <section class="prose prose-slate max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:text-slate-700 prose-a:text-orange-600 prose-a:decoration-orange-300 prose-a:underline-offset-4 prose-a:transition hover:prose-a:text-orange-700 prose-blockquote:border-orange-300 prose-blockquote:text-slate-600 prose-code:rounded-md prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none prose-img:rounded-2xl prose-pre:rounded-2xl prose-pre:bg-slate-900 prose-pre:text-slate-100" style="font-family: var(--font-body);">
+                    {!! $post->rendered_body !!}
                 </section>
             </div>
         </article>

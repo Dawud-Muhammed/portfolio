@@ -1,4 +1,6 @@
 import Alpine from 'alpinejs';
+import EasyMDE from 'easymde';
+import 'easymde/dist/easymde.min.css';
 
 window.themeController = () => ({
 	theme: 'light',
@@ -119,9 +121,9 @@ window.slideInOnScroll = () => ({
 	},
 });
 
-window.projectsShowcase = () => ({
-	activeFilter: 'All',
-	filters: ['All', 'Laravel', 'PHP'],
+window.projectsShowcase = (filters) => ({
+	activeFilter: filters?.[0] ?? 'All',
+	filters,
 	isVisible: false,
 	observe(element) {
 		if (!('IntersectionObserver' in window)) {
@@ -370,6 +372,30 @@ window.contactForm = () => ({
 	},
 });
 
+window.initializePostEditor = () => {
+	const bodyField = document.querySelector('#body');
+
+	if (!bodyField || bodyField.dataset.easyMdeInitialized === 'true') {
+		return;
+	}
+
+	bodyField.dataset.easyMdeInitialized = 'true';
+
+	new EasyMDE({
+		element: bodyField,
+		autosave: false,
+		spellChecker: false,
+		status: false,
+		toolbar: ['heading', '|', 'bold', 'italic', '|', 'unordered-list', 'ordered-list', 'code', 'quote', '|', 'link', 'image'],
+	});
+};
+
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', window.initializePostEditor, { once: true });
+} else {
+	window.initializePostEditor();
+}
+
 window.scrollToTop = () => ({
 	isVisible: false,
 	threshold: 300,
@@ -482,6 +508,61 @@ window.testimonialsCarousel = (testimonials) => ({
 	},
 	previous() {
 		this.goTo(this.currentIndex - 1);
+	},
+});
+
+window.testimonialReorder = () => ({
+	draggedRow: null,
+	sortUrl: '',
+	init() {
+		const sortTarget = this.$el.querySelector('[data-sort-url]');
+		this.sortUrl = sortTarget?.dataset.sortUrl ?? '';
+
+		this.$el.querySelectorAll('[data-testimonial-id]').forEach((row) => {
+			row.addEventListener('dragstart', () => {
+				this.draggedRow = row;
+				row.classList.add('opacity-50');
+			});
+
+			row.addEventListener('dragend', () => {
+				row.classList.remove('opacity-50');
+				this.draggedRow = null;
+			});
+
+			row.addEventListener('dragover', (event) => {
+				event.preventDefault();
+			});
+
+			row.addEventListener('drop', async (event) => {
+				event.preventDefault();
+
+				if (!this.draggedRow || this.draggedRow === row) {
+					return;
+				}
+
+				row.parentNode.insertBefore(this.draggedRow, row);
+				await this.persistOrder();
+			});
+		});
+	},
+	async persistOrder() {
+		if (!this.sortUrl) {
+			return;
+		}
+
+		const rows = Array.from(this.$el.querySelectorAll('[data-testimonial-id]'));
+		const order = rows.map((row) => Number(row.dataset.testimonialId));
+		const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+		await fetch(this.sortUrl, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': csrfToken ?? '',
+				Accept: 'application/json',
+			},
+			body: JSON.stringify({ order }),
+		});
 	},
 });
 
