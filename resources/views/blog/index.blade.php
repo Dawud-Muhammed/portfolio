@@ -2,6 +2,7 @@
 
 @section('page_title', 'Blog | Insights and Build Notes')
 @section('meta_description', 'Articles on Laravel architecture, product design, and Alpine.js interaction patterns.')
+@section('show_hero', false)
 @section('hero_name', 'Dawud Muhammed')
 @section('hero_title', 'Laravel Developer')
 @section('hero_cv_url', '#')

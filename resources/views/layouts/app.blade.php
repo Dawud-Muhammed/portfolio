@@ -88,12 +88,18 @@
 <body x-data="themeController()" x-init="init()" @theme-toggle-request.window="toggleTheme()" class="min-h-screen bg-bg text-fg antialiased">
     @include('partials.nav')
 
-    <x-hero
-        :name="trim($__env->yieldContent('hero_name', 'Dawud Muhammed'))"
-        :title="trim($__env->yieldContent('hero_title', 'Laravel Developer'))"
-        :cv-url="trim($__env->yieldContent('hero_cv_url', '#'))"
-        :background-image="trim($__env->yieldContent('hero_background', Storage::url('images/photo-1518770660439-4636190af475.jpg')))"
-    />
+    @php
+        $showHero = trim($__env->yieldContent('show_hero', 'true'));
+    @endphp
+
+    @if (! in_array(strtolower($showHero), ['false', '0', 'off', 'no'], true))
+        <x-hero
+            :name="trim($__env->yieldContent('hero_name', 'Dawud Muhammed'))"
+            :title="trim($__env->yieldContent('hero_title', 'Laravel Developer'))"
+            :cv-url="trim($__env->yieldContent('hero_cv_url', '#'))"
+            :background-image="trim($__env->yieldContent('hero_background', Storage::url('images/photo-1518770660439-4636190af475.jpg')))"
+        />
+    @endif
 
     @yield('content')
     @include('partials.footer')
