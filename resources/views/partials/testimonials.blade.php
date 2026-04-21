@@ -33,103 +33,91 @@
         </p>
     </div>
 
-    <div class="overflow-hidden rounded-3xl border border-slate-700 bg-slate-900 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.95)]">
-        <div class="grid grid-cols-1 gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-            <div class="relative border-b border-slate-800 p-8 lg:border-b-0 lg:border-r lg:p-10">
-                <div class="absolute left-0 top-0 h-full w-full bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.16),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_36%)]"></div>
-                <div class="relative flex h-full flex-col justify-between gap-8">
-                    <div>
-                        <span class="inline-flex rounded-full border border-orange-300/30 bg-orange-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-200">
-                            Client Feedback
-                        </span>
-                        <div class="mt-6 min-h-[220px]">
-                            <template x-for="(testimonial, index) in testimonials" :key="testimonial.author + index">
-                                <article
-                                    x-show="currentIndex === index"
-                                    x-transition.opacity.duration.300ms
-                                    class="space-y-6"
-                                    x-cloak
+    <div class="relative overflow-hidden rounded-3xl border border-slate-700 bg-slate-900 px-6 py-10 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.95)] sm:px-8 sm:py-12 lg:px-12">
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.2),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_36%)]"></div>
+
+        <div class="relative mx-auto flex w-full max-w-3xl flex-col items-center">
+            <div class="w-full min-h-[310px] sm:min-h-[280px]">
+                <template x-if="!testimonials.length">
+                    <article class="rounded-2xl border border-slate-700/80 bg-slate-950/50 px-6 py-10 text-center">
+                        <p class="text-lg text-slate-200">No testimonials are available yet.</p>
+                    </article>
+                </template>
+
+                <template x-for="(testimonial, index) in testimonials" :key="testimonial.author + index">
+                    <article
+                        x-show="currentIndex === index"
+                        x-transition.opacity.duration.350ms
+                        x-cloak
+                        class="rounded-2xl border border-slate-700/80 bg-slate-950/55 px-6 py-8 text-center sm:px-10 sm:py-10"
+                    >
+                        <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border-2 border-orange-300/70 bg-orange-400/10 text-sm font-semibold uppercase text-orange-200">
+                            <template x-if="testimonial.avatar">
+                                <img
+                                    :src="testimonial.avatar"
+                                    :alt="`${testimonial.author} avatar`"
+                                    class="h-full w-full object-cover"
+                                    width="56"
+                                    height="56"
+                                    loading="lazy"
+                                    decoding="async"
                                 >
-                                    <p class="text-2xl leading-relaxed text-slate-100 md:text-3xl" style="font-family: var(--font-display);">
-                                        <span class="text-orange-300">“</span><span x-text="testimonial.quote"></span><span class="text-orange-300">”</span>
-                                    </p>
-
-                                    <div class="flex items-center gap-4">
-                                        <template x-if="testimonial.avatar">
-                                            <img
-                                                :src="testimonial.avatar"
-                                                :alt="`${testimonial.author} avatar`"
-                                                class="h-14 w-14 rounded-full border-2 border-orange-300/60 object-cover"
-                                                width="56"
-                                                height="56"
-                                                loading="lazy"
-                                                decoding="async"
-                                            >
-                                        </template>
-                                        <template x-if="!testimonial.avatar">
-                                            <div class="flex h-14 w-14 items-center justify-center rounded-full border-2 border-orange-300/60 bg-orange-400/10 text-sm font-semibold text-orange-200">
-                                                <span x-text="testimonial.author.split(' ').map(part => part[0]).slice(0, 2).join('')"></span>
-                                            </div>
-                                        </template>
-
-                                        <div>
-                                            <p class="text-lg font-semibold text-white" style="font-family: var(--font-display);" x-text="testimonial.author"></p>
-                                            <p class="text-sm text-slate-300" x-text="testimonial.role"></p>
-                                        </div>
-                                    </div>
-                                </article>
+                            </template>
+                            <template x-if="!testimonial.avatar">
+                                <span x-text="initialsFor(testimonial.author)"></span>
                             </template>
                         </div>
-                    </div>
 
-                    <div class="flex items-center gap-3">
-                        <button
-                            type="button"
-                            @click="previous()"
-                            class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-slate-100 transition hover:border-orange-300 hover:text-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-300"
-                            aria-label="Previous testimonial"
-                        >
-                            <span aria-hidden="true">←</span>
-                        </button>
-                        <button
-                            type="button"
-                            @click="next()"
-                            class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-slate-100 transition hover:border-orange-300 hover:text-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-300"
-                            aria-label="Next testimonial"
-                        >
-                            <span aria-hidden="true">→</span>
-                        </button>
-                        <p class="text-xs uppercase tracking-[0.18em] text-slate-400">
-                            <span x-text="String(currentIndex + 1).padStart(2, '0')"></span>
-                            /
-                            <span x-text="String(testimonials.length).padStart(2, '0')"></span>
+                        <p class="mx-auto max-w-2xl text-xl leading-relaxed text-slate-100 sm:text-2xl md:text-3xl" style="font-family: var(--font-display);">
+                            <span class="text-orange-300" aria-hidden="true">“</span>
+                            <span x-text="testimonial.quote"></span>
+                            <span class="text-orange-300" aria-hidden="true">”</span>
                         </p>
-                    </div>
-                </div>
+
+                        <div class="mt-7 space-y-1">
+                            <p class="text-lg font-semibold text-white" style="font-family: var(--font-display);" x-text="testimonial.author"></p>
+                            <p class="text-sm text-slate-300" x-text="testimonial.role"></p>
+                        </div>
+                    </article>
+                </template>
             </div>
 
-            <div class="p-8 lg:p-10">
-                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                    <template x-for="(testimonial, index) in testimonials" :key="`dot-${testimonial.author}-${index}`">
-                        <button
-                            type="button"
-                            @click="goTo(index)"
-                            class="flex items-center gap-3 rounded-2xl border px-4 py-4 text-left transition"
-                            :class="currentIndex === index
-                                ? 'border-orange-300 bg-orange-400/10 text-white shadow-[0_12px_28px_-20px_rgba(249,115,22,0.75)]'
-                                : 'border-slate-700 bg-slate-950/40 text-slate-300 hover:border-orange-300/50 hover:bg-slate-800'"
-                            :aria-pressed="currentIndex === index"
-                            :aria-label="`Show testimonial from ${testimonial.author}`"
-                        >
-                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-xs font-semibold uppercase tracking-[0.16em] text-orange-200">
-                                <span x-text="String(index + 1).padStart(2, '0')"></span>
-                            </div>
-                            <div class="min-w-0">
-                                <p class="truncate text-sm font-semibold" x-text="testimonial.author"></p>
-                                <p class="truncate text-xs text-slate-400" x-text="testimonial.role"></p>
-                            </div>
-                        </button>
-                    </template>
+            <div x-show="testimonials.length > 1" x-cloak class="mt-7 flex flex-col items-center gap-4">
+                <div class="flex items-center justify-center gap-3">
+                    <button
+                        type="button"
+                        @click="previous()"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-slate-100 transition hover:border-orange-300 hover:text-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-300"
+                        aria-label="Previous testimonial"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
+                            <path d="m15 18-6-6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div class="flex items-center gap-2" role="tablist" aria-label="Testimonial pagination">
+                        <template x-for="(testimonial, index) in testimonials" :key="`dot-${testimonial.author}-${index}`">
+                            <button
+                                type="button"
+                                @click="goTo(index)"
+                                class="h-2.5 w-2.5 rounded-full border border-orange-300/60 transition"
+                                :class="currentIndex === index ? 'bg-orange-300' : 'bg-transparent hover:bg-orange-300/50'"
+                                :aria-label="`Show testimonial from ${testimonial.author}`"
+                                :aria-pressed="currentIndex === index"
+                            ></button>
+                        </template>
+                    </div>
+
+                    <button
+                        type="button"
+                        @click="next()"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-slate-100 transition hover:border-orange-300 hover:text-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-300"
+                        aria-label="Next testimonial"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>

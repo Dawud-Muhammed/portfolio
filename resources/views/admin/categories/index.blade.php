@@ -14,49 +14,72 @@
         </a>
     </div>
 
-    <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-premium">
-        <table class="min-w-full divide-y divide-slate-200 text-sm">
-            <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                <tr>
-                    <th class="px-5 py-4">Name</th>
-                    <th class="px-5 py-4">Slug</th>
-                    <th class="px-5 py-4">Posts</th>
-                    <th class="px-5 py-4 text-right">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100">
-                @forelse ($categories as $category)
-                    @php
-                        $categoryName = data_get($category, 'name');
-                        $categorySlug = data_get($category, 'slug');
-                        $postsCount = data_get($category, 'posts_count');
-                    @endphp
+    <div x-data="{ query: '' }" class="space-y-4">
+        <div class="relative max-w-xl">
+            <input
+                type="search"
+                x-model="query"
+                placeholder="Search categories by name"
+                class="w-full rounded-xl border border-slate-300 px-4 py-3 pr-11 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200"
+            >
+
+            <button
+                type="button"
+                x-show="query.length > 0"
+                x-cloak
+                @click="query = ''"
+                class="absolute inset-y-0 right-3 flex items-center text-slate-400 transition hover:text-slate-600"
+                aria-label="Clear search"
+                title="Clear search"
+            >
+                <span class="text-xl leading-none">×</span>
+            </button>
+        </div>
+
+        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-premium">
+            <table class="min-w-full divide-y divide-slate-200 text-sm">
+                <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
                     <tr>
-                        <td class="px-5 py-4 font-medium text-slate-900">{{ $categoryName }}</td>
-                        <td class="px-5 py-4 text-slate-600">{{ $categorySlug }}</td>
-                        <td class="px-5 py-4 text-slate-600">{{ $postsCount }}</td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center justify-end gap-2">
-                                <a href="{{ route('admin.categories.edit', $category) }}" class="rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
-                                    Edit
-                                </a>
-                                <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Delete this category?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="rounded-lg border border-rose-200 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-rose-700 transition hover:bg-rose-50">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+                        <th class="px-5 py-4">Name</th>
+                        <th class="px-5 py-4">Slug</th>
+                        <th class="px-5 py-4">Posts</th>
+                        <th class="px-5 py-4 text-right">Actions</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="px-5 py-8 text-center text-slate-500">No categories found.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @forelse ($categories as $category)
+                        @php
+                            $categoryName = data_get($category, 'name');
+                            $categorySlug = data_get($category, 'slug');
+                            $postsCount = data_get($category, 'posts_count');
+                        @endphp
+                        <tr x-data="{ title: @js(mb_strtolower((string) ($categoryName ?? ''))) }" x-show="query === '' || title.includes(query.toLowerCase())" x-cloak>
+                            <td class="px-5 py-4 font-medium text-slate-900">{{ $categoryName }}</td>
+                            <td class="px-5 py-4 text-slate-600">{{ $categorySlug }}</td>
+                            <td class="px-5 py-4 text-slate-600">{{ $postsCount }}</td>
+                            <td class="px-5 py-4">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('admin.categories.edit', $category) }}" class="rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
+                                        Edit
+                                    </a>
+                                    <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" onsubmit="return confirm('Delete this category?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="rounded-lg border border-rose-200 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-rose-700 transition hover:bg-rose-50">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-5 py-8 text-center text-slate-500">No categories found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="mt-6">{{ $categories->links() }}</div>

@@ -3,21 +3,75 @@ import EasyMDE from 'easymde';
 import 'easymde/dist/easymde.min.css';
 
 window.themeController = () => ({
-	theme: 'light',
+	theme: 'system',
+	systemThemeMediaQuery: null,
+	mediaQueryChangeHandler: null,
 	init() {
 		const savedTheme = window.localStorage.getItem('portfolio-theme');
-		const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		this.theme = this.isValidTheme(savedTheme) ? savedTheme : 'system';
 
-		this.theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+		this.systemThemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+		this.mediaQueryChangeHandler = () => {
+			if (this.theme === 'system') {
+				this.applyTheme();
+			}
+		};
+
+		if (typeof this.systemThemeMediaQuery.addEventListener === 'function') {
+			this.systemThemeMediaQuery.addEventListener('change', this.mediaQueryChangeHandler);
+		} else {
+			this.systemThemeMediaQuery.addListener(this.mediaQueryChangeHandler);
+		}
+
+		this.$el.addEventListener(
+			'alpine:destroy',
+			() => {
+				if (!this.systemThemeMediaQuery || !this.mediaQueryChangeHandler) {
+					return;
+				}
+
+				if (typeof this.systemThemeMediaQuery.removeEventListener === 'function') {
+					this.systemThemeMediaQuery.removeEventListener('change', this.mediaQueryChangeHandler);
+				} else {
+					this.systemThemeMediaQuery.removeListener(this.mediaQueryChangeHandler);
+				}
+			},
+			{ once: true }
+		);
+
 		this.applyTheme();
 	},
-	toggleTheme() {
-		this.theme = this.theme === 'dark' ? 'light' : 'dark';
+	isValidTheme(theme) {
+		return ['system', 'dark', 'light'].includes(theme);
+	},
+	setTheme(theme) {
+		if (!this.isValidTheme(theme)) {
+			return;
+		}
+
+		this.theme = theme;
 		this.applyTheme();
+	},
+	resolveTheme() {
+		if (this.theme === 'system') {
+			return this.systemThemeMediaQuery?.matches ? 'dark' : 'light';
+		}
+
+		return this.theme;
 	},
 	applyTheme() {
-		document.documentElement.dataset.theme = this.theme;
+		const resolvedTheme = this.resolveTheme();
+		document.documentElement.dataset.theme = resolvedTheme;
+		document.documentElement.dataset.themePreference = this.theme;
 		window.localStorage.setItem('portfolio-theme', this.theme);
+		window.dispatchEvent(
+			new CustomEvent('theme-mode-updated', {
+				detail: {
+					theme: this.theme,
+					resolvedTheme,
+				},
+			})
+		);
 	},
 });
 
@@ -509,6 +563,19 @@ window.testimonialsCarousel = (testimonials) => ({
 	previous() {
 		this.goTo(this.currentIndex - 1);
 	},
+	initialsFor(name) {
+		if (!name || typeof name !== 'string') {
+			return '--';
+		}
+
+		return name
+			.trim()
+			.split(/\s+/)
+			.map((part) => part[0])
+			.slice(0, 2)
+			.join('')
+			.toUpperCase();
+	},
 });
 
 window.testimonialReorder = () => ({
@@ -570,11 +637,26 @@ window.navController = () => ({
 	sections: ['about', 'skills', 'projects', 'testimonials', 'contact'],
 	activeSection: 'about',
 	isDrawerOpen: false,
+	isThemeMenuOpen: false,
+	selectedTheme: 'system',
 	isNavVisible: true,
 	lastScrollY: 0,
 	observer: null,
+	themeUpdateHandler: null,
 	init() {
 		this.lastScrollY = window.scrollY;
+
+		const savedTheme = window.localStorage.getItem('portfolio-theme');
+		this.selectedTheme = ['system', 'dark', 'light'].includes(savedTheme) ? savedTheme : 'system';
+
+		this.themeUpdateHandler = (event) => {
+			const nextTheme = event?.detail?.theme;
+			if (['system', 'dark', 'light'].includes(nextTheme)) {
+				this.selectedTheme = nextTheme;
+			}
+		};
+
+		window.addEventListener('theme-mode-updated', this.themeUpdateHandler);
 
 		const handleScroll = () => {
 			const currentScrollY = window.scrollY;
@@ -628,6 +710,9 @@ window.navController = () => ({
 			() => {
 				window.removeEventListener('scroll', handleScroll);
 				window.removeEventListener('resize', handleResize);
+				if (this.themeUpdateHandler) {
+					window.removeEventListener('theme-mode-updated', this.themeUpdateHandler);
+				}
 
 				if (this.observer) {
 					this.observer.disconnect();
@@ -635,6 +720,21 @@ window.navController = () => ({
 			},
 			{ once: true }
 		);
+	},
+	toggleThemeMenu() {
+		this.isThemeMenuOpen = !this.isThemeMenuOpen;
+	},
+	closeThemeMenu() {
+		this.isThemeMenuOpen = false;
+	},
+	selectTheme(theme) {
+		if (!['system', 'dark', 'light'].includes(theme)) {
+			return;
+		}
+
+		this.selectedTheme = theme;
+		this.closeThemeMenu();
+		this.$dispatch('theme-change-request', { theme });
 	},
 	toggleDrawer() {
 		this.isDrawerOpen = !this.isDrawerOpen;

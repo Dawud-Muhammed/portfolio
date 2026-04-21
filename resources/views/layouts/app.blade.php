@@ -92,7 +92,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body x-data="themeController()" x-init="init()" @theme-toggle-request.window="toggleTheme()" class="min-h-screen bg-bg text-fg antialiased">
+<body x-data="themeController()" x-init="init()" @theme-change-request.window="setTheme($event.detail?.theme)" class="min-h-screen bg-bg text-fg antialiased">
     @include('partials.nav')
 
     @php
