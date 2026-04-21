@@ -47,8 +47,12 @@
                 <template x-for="(testimonial, index) in testimonials" :key="testimonial.author + index">
                     <article
                         x-show="currentIndex === index"
-                        x-transition.opacity.duration.350ms
-                        x-cloak
+                        x-transition:enter="transition-opacity duration-350"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
+                        x-transition:leave="transition-opacity duration-200"
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
                         class="rounded-2xl border border-slate-700/80 bg-slate-950/55 px-6 py-8 text-center sm:px-10 sm:py-10"
                     >
                         <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border-2 border-orange-300/70 bg-orange-400/10 text-sm font-semibold uppercase text-orange-200">

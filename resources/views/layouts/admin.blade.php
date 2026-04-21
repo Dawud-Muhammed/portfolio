@@ -70,7 +70,7 @@
     style="font-family: var(--font-body);"
 >
     <div class="min-h-screen md:pl-72">
-        <aside class="fixed inset-y-0 left-0 z-40 hidden w-72 border-r border-slate-700 bg-slate-900 p-6 text-slate-100 md:block">
+        <aside class="admin-sidebar fixed inset-y-0 left-0 z-40 hidden w-72 overflow-y-auto border-r border-slate-700 bg-slate-900 px-6 pb-6 pt-6 text-slate-100 md:block">
             <a href="{{ route('admin.dashboard') }}" class="block text-xl font-semibold tracking-tight" style="font-family: var(--font-display);">
                 Admin Portal
             </a>
@@ -148,7 +148,7 @@
                 x-transition:leave="transform transition ease-in duration-150"
                 x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="translate-x-full"
-                class="fixed inset-y-0 right-0 z-50 w-full max-w-xs bg-slate-900 p-6 text-slate-100"
+                class="admin-sidebar fixed inset-y-0 right-0 z-50 w-full max-w-xs overflow-y-auto bg-slate-900 p-6 text-slate-100"
             >
                 <div class="flex items-center justify-between gap-4">
                     <a id="mobile-admin-sidebar-title" href="{{ route('admin.dashboard') }}" @click="mobileSidebarOpen = false" class="block text-xl font-semibold tracking-tight" style="font-family: var(--font-display);">

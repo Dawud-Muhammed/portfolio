@@ -2,12 +2,30 @@ import Alpine from 'alpinejs';
 import EasyMDE from 'easymde';
 import 'easymde/dist/easymde.min.css';
 
+const THEME_STORAGE_KEY = 'portfolio-theme';
+
+const readStoredTheme = () => {
+	try {
+		return window.localStorage.getItem(THEME_STORAGE_KEY);
+	} catch {
+		return null;
+	}
+};
+
+const writeStoredTheme = (theme) => {
+	try {
+		window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+	} catch {
+		// Ignore localStorage errors in private mode or restricted contexts.
+	}
+};
+
 window.themeController = () => ({
 	theme: 'system',
 	systemThemeMediaQuery: null,
 	mediaQueryChangeHandler: null,
 	init() {
-		const savedTheme = window.localStorage.getItem('portfolio-theme');
+		const savedTheme = readStoredTheme();
 		this.theme = this.isValidTheme(savedTheme) ? savedTheme : 'system';
 
 		this.systemThemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -63,7 +81,7 @@ window.themeController = () => ({
 		const resolvedTheme = this.resolveTheme();
 		document.documentElement.dataset.theme = resolvedTheme;
 		document.documentElement.dataset.themePreference = this.theme;
-		window.localStorage.setItem('portfolio-theme', this.theme);
+		writeStoredTheme(this.theme);
 		window.dispatchEvent(
 			new CustomEvent('theme-mode-updated', {
 				detail: {
@@ -633,20 +651,26 @@ window.testimonialReorder = () => ({
 	},
 });
 
-window.navController = () => ({
+window.navController = (config = {}) => ({
 	sections: ['about', 'skills', 'projects', 'testimonials', 'contact'],
-	activeSection: 'about',
+	activeSection: 'top',
 	isDrawerOpen: false,
 	isThemeMenuOpen: false,
 	selectedTheme: 'system',
 	isNavVisible: true,
 	lastScrollY: 0,
+	isHomeRoute: Boolean(config.isHomeRoute),
+	homeUrl: typeof config.homeUrl === 'string' ? config.homeUrl : '/',
+	linkCatalog: Array.isArray(config.linkCatalog) ? config.linkCatalog : [],
+	quickQuery: '',
 	observer: null,
 	themeUpdateHandler: null,
+	lastKnownHash: '',
 	init() {
 		this.lastScrollY = window.scrollY;
+		this.syncFromLocation();
 
-		const savedTheme = window.localStorage.getItem('portfolio-theme');
+		const savedTheme = readStoredTheme();
 		this.selectedTheme = ['system', 'dark', 'light'].includes(savedTheme) ? savedTheme : 'system';
 
 		this.themeUpdateHandler = (event) => {
@@ -661,16 +685,19 @@ window.navController = () => ({
 		const handleScroll = () => {
 			const currentScrollY = window.scrollY;
 
-			if (currentScrollY < 80) {
+			if (currentScrollY < 48) {
 				this.isNavVisible = true;
 			} else {
-				this.isNavVisible = currentScrollY < this.lastScrollY;
+				this.isNavVisible = currentScrollY <= this.lastScrollY;
 			}
 
 			this.lastScrollY = currentScrollY;
 		};
 
+		const handleHashChange = () => this.syncFromLocation();
+
 		window.addEventListener('scroll', handleScroll, { passive: true });
+		window.addEventListener('hashchange', handleHashChange, { passive: true });
 
 		if ('IntersectionObserver' in window) {
 			this.observer = new IntersectionObserver(
@@ -681,6 +708,7 @@ window.navController = () => ({
 
 					if (visibleEntries.length > 0) {
 						this.activeSection = visibleEntries[0].target.id;
+						this.lastKnownHash = this.activeSection;
 					}
 				},
 				{
@@ -703,6 +731,21 @@ window.navController = () => ({
 			}
 		};
 
+		this.$watch('isDrawerOpen', (isOpen) => {
+			document.body.classList.toggle('overflow-hidden', isOpen);
+
+			if (isOpen) {
+				this.$nextTick(() => {
+					const firstFocusable = this.$refs.firstMobileLink ?? this.$refs.mobileNavSearch;
+					firstFocusable?.focus();
+				});
+			} else {
+				this.$nextTick(() => {
+					this.$refs.drawerToggle?.focus();
+				});
+			}
+		});
+
 		window.addEventListener('resize', handleResize);
 
 		this.$el.addEventListener(
@@ -710,6 +753,8 @@ window.navController = () => ({
 			() => {
 				window.removeEventListener('scroll', handleScroll);
 				window.removeEventListener('resize', handleResize);
+				window.removeEventListener('hashchange', handleHashChange);
+				document.body.classList.remove('overflow-hidden');
 				if (this.themeUpdateHandler) {
 					window.removeEventListener('theme-mode-updated', this.themeUpdateHandler);
 				}
@@ -720,6 +765,63 @@ window.navController = () => ({
 			},
 			{ once: true }
 		);
+	},
+	syncFromLocation() {
+		const hash = window.location.hash.replace('#', '').trim().toLowerCase();
+		if (!hash) {
+			this.activeSection = 'top';
+			this.lastKnownHash = 'top';
+			return;
+		}
+
+		this.activeSection = hash;
+		this.lastKnownHash = hash;
+	},
+	toAbsoluteHref(href) {
+		if (typeof href !== 'string' || href.length === 0) {
+			return this.homeUrl;
+		}
+
+		if (href.startsWith('#')) {
+			return `${this.homeUrl}${href}`;
+		}
+
+		return href;
+	},
+	normalizeKey(value) {
+		return String(value ?? '')
+			.trim()
+			.toLowerCase();
+	},
+	isLinkActive(href) {
+		const normalizedHref = this.toAbsoluteHref(href);
+		const hash = normalizedHref.includes('#') ? normalizedHref.split('#')[1] : '';
+		if (!hash) {
+			return this.activeSection === 'top';
+		}
+
+		return this.activeSection === hash;
+	},
+	runQuickSearch() {
+		const query = this.normalizeKey(this.quickQuery);
+		if (!query) {
+			return;
+		}
+
+		const matchedLink = this.linkCatalog.find((link) => {
+			const label = this.normalizeKey(link?.label);
+			const href = this.normalizeKey(link?.href);
+			return label === query || label.includes(query) || href.includes(`#${query}`);
+		});
+
+		if (!matchedLink?.href) {
+			return;
+		}
+
+		const nextHref = this.toAbsoluteHref(matchedLink.href);
+		window.location.href = nextHref;
+		this.closeDrawer();
+		this.quickQuery = '';
 	},
 	toggleThemeMenu() {
 		this.isThemeMenuOpen = !this.isThemeMenuOpen;

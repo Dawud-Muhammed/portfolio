@@ -92,23 +92,26 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body x-data="themeController()" x-init="init()" @theme-change-request.window="setTheme($event.detail?.theme)" class="min-h-screen bg-bg text-fg antialiased">
+<body id="top" x-data="themeController()" x-init="init()" @theme-change-request.window="setTheme($event.detail?.theme)" class="min-h-screen bg-bg text-fg antialiased">
     @include('partials.nav')
 
     @php
         $showHero = trim($__env->yieldContent('show_hero', 'true'));
     @endphp
 
-    @if (! in_array(strtolower($showHero), ['false', '0', 'off', 'no'], true))
-        <x-hero
-            :name="trim($__env->yieldContent('hero_name', $defaultHeroName))"
-            :title="trim($__env->yieldContent('hero_title', $defaultHeroTitle))"
-            :cv-url="trim($__env->yieldContent('hero_cv_url', $defaultHeroCvUrl))"
-            :background-image="trim($__env->yieldContent('hero_background', $defaultHeroBackground))"
-        />
-    @endif
+    <main id="main-content" tabindex="-1">
+        @if (! in_array(strtolower($showHero), ['false', '0', 'off', 'no'], true))
+            <x-hero
+                :name="trim($__env->yieldContent('hero_name', $defaultHeroName))"
+                :title="trim($__env->yieldContent('hero_title', $defaultHeroTitle))"
+                :cv-url="trim($__env->yieldContent('hero_cv_url', $defaultHeroCvUrl))"
+                :background-image="trim($__env->yieldContent('hero_background', $defaultHeroBackground))"
+            />
+        @endif
 
-    @yield('content')
+        @yield('content')
+    </main>
+
     @include('partials.footer')
 
     <div x-data="scrollToTop()" x-init="init()" class="pointer-events-none">
