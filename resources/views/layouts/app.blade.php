@@ -75,6 +75,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         :root {
@@ -89,11 +90,11 @@
     @if (app()->environment('production') && filled(config('services.plausible.domain')))
         <script defer data-domain="{{ config('services.plausible.domain') }}" src="https://plausible.io/js/script.js"></script>
     @endif
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body id="top" x-data="themeController()" x-init="init()" @theme-change-request.window="setTheme($event.detail?.theme)" class="min-h-screen bg-bg text-fg antialiased">
-    @include('partials.nav')
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-400 dark:focus:bg-slate-800 dark:focus:text-slate-100">
+        Skip to main content
+    </a>
 
     @php
         $showHero = trim($__env->yieldContent('show_hero', 'true'));

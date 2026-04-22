@@ -11,6 +11,8 @@
 @section('about_profile_alt', 'Profile portrait of Dawud Muhammed')
 
 @section('content')
+    @include('partials.inline-header')
+
     @include('partials.about')
 
     <main>

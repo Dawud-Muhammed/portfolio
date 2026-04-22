@@ -29,7 +29,7 @@
                         loading="lazy"
                         decoding="async"
                     >
-                </picture>
+                    </picture>
                 <figcaption class="sr-only">Profile image</figcaption>
             </figure>
         </div>

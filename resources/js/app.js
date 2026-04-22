@@ -651,198 +651,138 @@ window.testimonialReorder = () => ({
 	},
 });
 
-window.navController = (config = {}) => ({
-	sections: ['about', 'skills', 'projects', 'testimonials', 'contact'],
-	activeSection: 'top',
-	isDrawerOpen: false,
-	isThemeMenuOpen: false,
-	selectedTheme: 'system',
-	isNavVisible: true,
-	lastScrollY: 0,
+window.inlineHeaderController = (config = {}) => ({
+	sections: Array.isArray(config.sections) ? config.sections : ['about', 'skills', 'projects', 'testimonials', 'contact'],
+	activeSection: typeof config.initialSection === 'string' ? config.initialSection : 'home',
+	selectedTheme: 'light',
 	isHomeRoute: Boolean(config.isHomeRoute),
-	homeUrl: typeof config.homeUrl === 'string' ? config.homeUrl : '/',
-	linkCatalog: Array.isArray(config.linkCatalog) ? config.linkCatalog : [],
-	quickQuery: '',
-	observer: null,
+	scrollHandler: null,
+	hashHandler: null,
 	themeUpdateHandler: null,
-	lastKnownHash: '',
 	init() {
-		this.lastScrollY = window.scrollY;
-		this.syncFromLocation();
-
 		const savedTheme = readStoredTheme();
-		this.selectedTheme = ['system', 'dark', 'light'].includes(savedTheme) ? savedTheme : 'system';
+		if (savedTheme === 'dark' || savedTheme === 'light') {
+			this.selectedTheme = savedTheme;
+		} else {
+			this.selectedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
 
 		this.themeUpdateHandler = (event) => {
-			const nextTheme = event?.detail?.theme;
-			if (['system', 'dark', 'light'].includes(nextTheme)) {
-				this.selectedTheme = nextTheme;
+			const preferredTheme = event?.detail?.theme;
+			const resolvedTheme = event?.detail?.resolvedTheme;
+
+			if (resolvedTheme === 'dark' || resolvedTheme === 'light') {
+				this.selectedTheme = resolvedTheme;
+				return;
+			}
+
+			if (preferredTheme === 'dark' || preferredTheme === 'light') {
+				this.selectedTheme = preferredTheme;
 			}
 		};
 
 		window.addEventListener('theme-mode-updated', this.themeUpdateHandler);
 
-		const handleScroll = () => {
-			const currentScrollY = window.scrollY;
-
-			if (currentScrollY < 48) {
-				this.isNavVisible = true;
-			} else {
-				this.isNavVisible = currentScrollY <= this.lastScrollY;
-			}
-
-			this.lastScrollY = currentScrollY;
+		this.hashHandler = () => {
+			this.syncFromLocation();
 		};
 
-		const handleHashChange = () => this.syncFromLocation();
+		window.addEventListener('hashchange', this.hashHandler, { passive: true });
 
-		window.addEventListener('scroll', handleScroll, { passive: true });
-		window.addEventListener('hashchange', handleHashChange, { passive: true });
-
-		if ('IntersectionObserver' in window) {
-			this.observer = new IntersectionObserver(
-				(entries) => {
-					const visibleEntries = entries
-						.filter((entry) => entry.isIntersecting)
-						.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-					if (visibleEntries.length > 0) {
-						this.activeSection = visibleEntries[0].target.id;
-						this.lastKnownHash = this.activeSection;
-					}
-				},
-				{
-					threshold: [0.2, 0.35, 0.5, 0.75],
-					rootMargin: '-20% 0px -55% 0px',
-				}
-			);
-
-			this.sections.forEach((sectionId) => {
-				const element = document.getElementById(sectionId);
-				if (element) {
-					this.observer.observe(element);
-				}
-			});
-		}
-
-		const handleResize = () => {
-			if (window.innerWidth >= 768) {
-				this.isDrawerOpen = false;
-			}
+		this.scrollHandler = () => {
+			this.syncActiveFromScroll();
 		};
 
-		this.$watch('isDrawerOpen', (isOpen) => {
-			document.body.classList.toggle('overflow-hidden', isOpen);
+		window.addEventListener('scroll', this.scrollHandler, { passive: true });
 
-			if (isOpen) {
-				this.$nextTick(() => {
-					const firstFocusable = this.$refs.firstMobileLink ?? this.$refs.mobileNavSearch;
-					firstFocusable?.focus();
-				});
-			} else {
-				this.$nextTick(() => {
-					this.$refs.drawerToggle?.focus();
-				});
-			}
-		});
-
-		window.addEventListener('resize', handleResize);
+		this.syncFromLocation();
+		this.scrollHandler();
 
 		this.$el.addEventListener(
 			'alpine:destroy',
 			() => {
-				window.removeEventListener('scroll', handleScroll);
-				window.removeEventListener('resize', handleResize);
-				window.removeEventListener('hashchange', handleHashChange);
-				document.body.classList.remove('overflow-hidden');
-				if (this.themeUpdateHandler) {
-					window.removeEventListener('theme-mode-updated', this.themeUpdateHandler);
+				if (this.scrollHandler) {
+					window.removeEventListener('scroll', this.scrollHandler);
 				}
 
-				if (this.observer) {
-					this.observer.disconnect();
+				if (this.hashHandler) {
+					window.removeEventListener('hashchange', this.hashHandler);
+				}
+
+				if (this.themeUpdateHandler) {
+					window.removeEventListener('theme-mode-updated', this.themeUpdateHandler);
 				}
 			},
 			{ once: true }
 		);
 	},
-	syncFromLocation() {
-		const hash = window.location.hash.replace('#', '').trim().toLowerCase();
-		if (!hash) {
-			this.activeSection = 'top';
-			this.lastKnownHash = 'top';
-			return;
-		}
-
-		this.activeSection = hash;
-		this.lastKnownHash = hash;
-	},
-	toAbsoluteHref(href) {
-		if (typeof href !== 'string' || href.length === 0) {
-			return this.homeUrl;
-		}
-
-		if (href.startsWith('#')) {
-			return `${this.homeUrl}${href}`;
-		}
-
-		return href;
-	},
-	normalizeKey(value) {
-		return String(value ?? '')
+	normalizeHash(hash) {
+		return String(hash ?? '')
+			.replace('#', '')
 			.trim()
 			.toLowerCase();
 	},
-	isLinkActive(href) {
-		const normalizedHref = this.toAbsoluteHref(href);
-		const hash = normalizedHref.includes('#') ? normalizedHref.split('#')[1] : '';
-		if (!hash) {
-			return this.activeSection === 'top';
-		}
-
-		return this.activeSection === hash;
-	},
-	runQuickSearch() {
-		const query = this.normalizeKey(this.quickQuery);
-		if (!query) {
+	syncFromLocation() {
+		if (!this.isHomeRoute) {
 			return;
 		}
 
-		const matchedLink = this.linkCatalog.find((link) => {
-			const label = this.normalizeKey(link?.label);
-			const href = this.normalizeKey(link?.href);
-			return label === query || label.includes(query) || href.includes(`#${query}`);
+		const hash = this.normalizeHash(window.location.hash);
+		if (!hash || hash === 'top') {
+			this.activeSection = 'home';
+			return;
+		}
+
+		if (this.sections.includes(hash)) {
+			this.activeSection = hash;
+		}
+	},
+	syncActiveFromScroll() {
+		if (!this.isHomeRoute) {
+			return;
+		}
+
+		let nextActive = 'home';
+		const threshold = 164;
+
+		this.sections.forEach((sectionId) => {
+			const section = document.getElementById(sectionId);
+			if (!section) {
+				return;
+			}
+
+			if (section.getBoundingClientRect().top <= threshold) {
+				nextActive = sectionId;
+			}
 		});
 
-		if (!matchedLink?.href) {
+		this.activeSection = nextActive;
+	},
+	isActive(key) {
+		return this.activeSection === key;
+	},
+	navigateTo(hash, href, event) {
+		if (!this.isHomeRoute || !href.startsWith('#')) {
 			return;
 		}
 
-		const nextHref = this.toAbsoluteHref(matchedLink.href);
-		window.location.href = nextHref;
-		this.closeDrawer();
-		this.quickQuery = '';
-	},
-	toggleThemeMenu() {
-		this.isThemeMenuOpen = !this.isThemeMenuOpen;
-	},
-	closeThemeMenu() {
-		this.isThemeMenuOpen = false;
-	},
-	selectTheme(theme) {
-		if (!['system', 'dark', 'light'].includes(theme)) {
-			return;
-		}
+		event.preventDefault();
+		const targetId = hash === 'top' ? 'top' : hash;
+		const target = document.getElementById(targetId);
 
-		this.selectedTheme = theme;
-		this.closeThemeMenu();
-		this.$dispatch('theme-change-request', { theme });
+		if (target) {
+			target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			this.activeSection = hash === 'top' ? 'home' : hash;
+			window.history.replaceState({}, '', href);
+		}
 	},
-	toggleDrawer() {
-		this.isDrawerOpen = !this.isDrawerOpen;
+	themeLabel() {
+		return this.selectedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
 	},
-	closeDrawer() {
-		this.isDrawerOpen = false;
+	cycleTheme() {
+		const nextTheme = this.selectedTheme === 'dark' ? 'light' : 'dark';
+		this.selectedTheme = nextTheme;
+		this.$dispatch('theme-change-request', { theme: nextTheme });
 	},
 });
 

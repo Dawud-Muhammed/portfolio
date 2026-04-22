@@ -34,16 +34,11 @@
     </div>
 
     <div class="relative overflow-hidden rounded-3xl border border-slate-700 bg-slate-900 px-6 py-10 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.95)] sm:px-8 sm:py-12 lg:px-12">
-        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.2),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_36%)]"></div>
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.2),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_36%)]">
+        </div>
 
         <div class="relative mx-auto flex w-full max-w-3xl flex-col items-center">
             <div class="w-full min-h-[310px] sm:min-h-[280px]">
-                <template x-if="!testimonials.length">
-                    <article class="rounded-2xl border border-slate-700/80 bg-slate-950/50 px-6 py-10 text-center">
-                        <p class="text-lg text-slate-200">No testimonials are available yet.</p>
-                    </article>
-                </template>
-
                 <template x-for="(testimonial, index) in testimonials" :key="testimonial.author + index">
                     <article
                         x-show="currentIndex === index"
@@ -68,13 +63,17 @@
                                 >
                             </template>
                             <template x-if="!testimonial.avatar">
-                                <span x-text="initialsFor(testimonial.author)"></span>
+                                <span x-text="initialsFor(testimonial.author)">
+
+                                </span>
                             </template>
                         </div>
 
                         <p class="mx-auto max-w-2xl text-xl leading-relaxed text-slate-100 sm:text-2xl md:text-3xl" style="font-family: var(--font-display);">
                             <span class="text-orange-300" aria-hidden="true">“</span>
-                            <span x-text="testimonial.quote"></span>
+                            <span x-text="testimonial.quote">
+
+                            </span>
                             <span class="text-orange-300" aria-hidden="true">”</span>
                         </p>
 
@@ -82,6 +81,12 @@
                             <p class="text-lg font-semibold text-white" style="font-family: var(--font-display);" x-text="testimonial.author"></p>
                             <p class="text-sm text-slate-300" x-text="testimonial.role"></p>
                         </div>
+                    </article>
+                </template>
+
+                <template x-if="!testimonials.length">
+                    <article class="rounded-2xl border border-slate-700/80 bg-slate-950/50 px-6 py-10 text-center">
+                        <p class="text-lg text-slate-200">No testimonials are available yet.</p>
                     </article>
                 </template>
             </div>
@@ -124,6 +129,7 @@
                     </button>
                 </div>
             </div>
+            
         </div>
     </div>
 </section>
