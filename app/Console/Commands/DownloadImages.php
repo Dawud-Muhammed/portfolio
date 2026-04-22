@@ -12,12 +12,14 @@ class DownloadImages extends Command
 
     protected $description = 'Download portfolio images into storage/app/public/images and generate WebP versions.';
 
+    private bool $supportsWebp = false;
+
     public function handle(): int
     {
-        if (! function_exists('imagecreatefromjpeg') || ! function_exists('imagewebp')) {
-            $this->error('The GD extension with JPEG and WebP support is required.');
+        $this->supportsWebp = function_exists('imagecreatefromjpeg') && function_exists('imagewebp');
 
-            return self::FAILURE;
+        if (! $this->supportsWebp) {
+            $this->warn('GD with JPEG/WebP support is not available. Downloading JPG files only.');
         }
 
         $images = [
@@ -62,6 +64,12 @@ class DownloadImages extends Command
             }
 
             Storage::disk('public')->put($jpegPath, $contents);
+        }
+
+        if (! $this->supportsWebp) {
+            $this->line(sprintf('%s -> %s', $sourceUrl, Storage::url($jpegPath)));
+
+            return;
         }
 
         $temporaryJpeg = Storage::disk('public')->path($jpegPath);

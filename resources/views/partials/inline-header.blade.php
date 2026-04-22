@@ -33,10 +33,17 @@
                 :title="themeLabel()"
                 :aria-label="themeLabel()"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" class="h-4 w-4" aria-hidden="true">
-                    <path d="M12 3v2.5M12 18.5V21M4.8 4.8l1.8 1.8M17.4 17.4l1.8 1.8M3 12h2.5M18.5 12H21M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8" />
-                    <circle cx="12" cy="12" r="4" />
-                </svg>
+                <template x-if="selectedTheme === 'light'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" class="h-4 w-4" aria-hidden="true">
+                        <path d="M12 3v2.5M12 18.5V21M4.8 4.8l1.8 1.8M17.4 17.4l1.8 1.8M3 12h2.5M18.5 12H21M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8" />
+                        <circle cx="12" cy="12" r="4" />
+                    </svg>
+                </template>
+                <template x-if="selectedTheme === 'dark'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" class="h-4 w-4" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z" />
+                    </svg>
+                </template>
                 <span>Theme</span>
             </button>
         </div>

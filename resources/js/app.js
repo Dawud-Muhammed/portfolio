@@ -2,6 +2,18 @@ import Alpine from 'alpinejs';
 import EasyMDE from 'easymde';
 import 'easymde/dist/easymde.min.css';
 
+const registerAlpineController = (name, factory) => {
+	window[name] = factory;
+
+	document.addEventListener(
+		'alpine:init',
+		() => {
+			Alpine.data(name, (...args) => factory(...args));
+		},
+		{ once: true }
+	);
+};
+
 const THEME_STORAGE_KEY = 'portfolio-theme';
 
 const readStoredTheme = () => {
@@ -20,7 +32,7 @@ const writeStoredTheme = (theme) => {
 	}
 };
 
-window.themeController = () => ({
+const themeController = () => ({
 	theme: 'system',
 	systemThemeMediaQuery: null,
 	mediaQueryChangeHandler: null,
@@ -92,6 +104,8 @@ window.themeController = () => ({
 		);
 	},
 });
+
+registerAlpineController('themeController', themeController);
 
 window.lazySections = () => ({
 	loaded: {
@@ -541,7 +555,7 @@ window.blogReadingProgress = () => ({
 	},
 });
 
-window.testimonialsCarousel = (testimonials) => ({
+const testimonialsCarousel = (testimonials) => ({
 	testimonials,
 	currentIndex: 0,
 	autoAdvanceId: null,
@@ -595,6 +609,8 @@ window.testimonialsCarousel = (testimonials) => ({
 			.toUpperCase();
 	},
 });
+
+registerAlpineController('testimonialsCarousel', testimonialsCarousel);
 
 window.testimonialReorder = () => ({
 	draggedRow: null,
@@ -651,7 +667,7 @@ window.testimonialReorder = () => ({
 	},
 });
 
-window.inlineHeaderController = (config = {}) => ({
+const inlineHeaderController = (config = {}) => ({
 	sections: Array.isArray(config.sections) ? config.sections : ['about', 'skills', 'projects', 'testimonials', 'contact'],
 	activeSection: typeof config.initialSection === 'string' ? config.initialSection : 'home',
 	selectedTheme: 'light',
@@ -785,6 +801,8 @@ window.inlineHeaderController = (config = {}) => ({
 		this.$dispatch('theme-change-request', { theme: nextTheme });
 	},
 });
+
+registerAlpineController('inlineHeaderController', inlineHeaderController);
 
 window.Alpine = Alpine;
 Alpine.start();

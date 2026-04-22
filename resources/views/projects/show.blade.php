@@ -5,7 +5,7 @@
 @section('hero_name', 'Selected Work')
 @section('hero_title', $project->title)
 @section('hero_cv_url', route('home').'#projects')
-@section('hero_background', $project->image)
+@section('hero_background', $project->image_url)
 @section('og_image', $project->og_image)
 @section('schema')
     <script type="application/ld+json">
@@ -14,7 +14,7 @@
             '@type' => 'CreativeWork',
             'name' => $project->title,
             'description' => $project->description,
-            'image' => $project->image,
+            'image' => $project->image_url,
             'url' => route('projects.show', $project->slug),
             'programmingLanguage' => array_values(array_filter($project->stack ?? [])),
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
@@ -22,7 +22,10 @@
 @endsection
 
 @php
-    $projectHeroWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $project->image);
+    use App\Support\ImageAsset;
+
+    $projectImage = $project->image_url;
+    $projectHeroWebp = ImageAsset::webpVariant($projectImage);
 @endphp
 
 @section('content')
@@ -43,9 +46,11 @@
             <article class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.55)] backdrop-blur-sm">
                 <div class="relative overflow-hidden">
                     <picture>
-                        <source srcset="{{ $projectHeroWebp }}" type="image/webp">
+                        @if (!empty($projectHeroWebp))
+                            <source srcset="{{ $projectHeroWebp }}" type="image/webp">
+                        @endif
                         <img
-                            src="{{ $project->image }}"
+                            src="{{ $projectImage }}"
                             alt="Hero image for {{ $project->title }}"
                             class="h-64 w-full object-cover md:h-80"
                             width="1600"

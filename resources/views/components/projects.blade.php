@@ -1,7 +1,9 @@
 @props(['projects' => [], 'filters' => ['All']])
 
 @php
-    $projectWebp = fn (string $image): string => preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $image);
+    use App\Support\ImageAsset;
+
+    $projectWebp = fn (string $image): ?string => ImageAsset::webpVariant($image);
 @endphp
 
 <section
@@ -48,10 +50,16 @@
                 style="transition-delay: {{ 80 + ($index * 90) }}ms;"
             >
                 <div class="relative overflow-hidden">
+                    @php
+                        $projectImage = (string) ($project['image'] ?? ImageAsset::default());
+                        $projectImageWebp = $projectWebp($projectImage);
+                    @endphp
                     <picture>
-                        <source srcset="{{ $projectWebp($project['image']) }}" type="image/webp">
+                        @if (!empty($projectImageWebp))
+                            <source srcset="{{ $projectImageWebp }}" type="image/webp">
+                        @endif
                         <img
-                            src="{{ $project['image'] }}"
+                            src="{{ $projectImage }}"
                             alt="Preview image for {{ $project['title'] }}"
                             class="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
                             width="1200"

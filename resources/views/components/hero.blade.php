@@ -2,11 +2,14 @@
     'name' => 'Dawud Muhammed',
     'title' => 'Laravel Developer',
     'cvUrl' => '#',
-    'backgroundImage' => '/storage/images/photo-1518770660439-4636190af475.jpg',
+    'backgroundImage' => '/storage/images/photo-1542831371-29b0f74f9713.jpg',
 ])
 
 @php
-    $backgroundImageWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $backgroundImage);
+    use App\Support\ImageAsset;
+
+    $backgroundImage = ImageAsset::resolve((string) $backgroundImage, (string) config('seo.default_image', ''));
+    $backgroundImageWebp = ImageAsset::webpVariant($backgroundImage);
 @endphp
 
 <section
@@ -15,7 +18,9 @@
     x-data="heroTypewriter(@js($name), @js($title))"
 >
     <picture class="absolute inset-0 block h-full w-full">
-        <source srcset="{{ $backgroundImageWebp }}" type="image/webp">
+        @if (!empty($backgroundImageWebp))
+            <source srcset="{{ $backgroundImageWebp }}" type="image/webp">
+        @endif
         <img
             src="{{ $backgroundImage }}"
             alt="Futuristic coding workstation with glowing monitors in a dark studio"

@@ -9,7 +9,7 @@ return [
     ),
     'default_image' => env(
         'SEO_DEFAULT_IMAGE',
-        '/storage/images/photo-1518770660439-4636190af475.jpg'
+        '/storage/images/photo-1542831371-29b0f74f9713.jpg'
     ),
     'default_url' => env('SEO_DEFAULT_URL', env('APP_URL', 'http://localhost')),
     'social' => [

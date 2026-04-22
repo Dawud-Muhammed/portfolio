@@ -17,8 +17,8 @@ use App\Http\Controllers\SitemapController;
 use App\Models\Project;
 use App\Models\SiteSetting;
 use App\Models\Skill;
+use App\Support\ImageAsset;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'show'])->name('sitemap.show');
 Route::get('/robots.txt', [RobotsController::class, 'show'])->name('robots.show');
@@ -43,7 +43,7 @@ Route::get('/', function () {
             'title' => $project->title,
             'slug' => $project->slug,
             'description' => $project->description,
-            'image' => $project->image,
+            'image' => $project->image_url,
             'stack' => $project->stack,
             'filters' => $project->filters ?? ['Laravel', 'PHP'],
             'github' => $project->github_url,
@@ -72,9 +72,15 @@ Route::get('/', function () {
         'hero_name' => SiteSetting::get('hero_name', 'Dawud Muhammed'),
         'hero_title' => SiteSetting::get('hero_title', 'Laravel Developer'),
         'hero_cv_url' => SiteSetting::get('hero_cv_url', url('/')),
-        'hero_background' => SiteSetting::get('hero_background', url(Storage::url('images/photo-1518770660439-4636190af475.jpg'))),
+        'hero_background' => ImageAsset::resolve(
+            SiteSetting::get('hero_background'),
+            (string) config('seo.default_image', '')
+        ),
         'about_bio' => SiteSetting::get('about_bio', 'I design and ship Laravel products focused on reliability, maintainability, and user trust. From architecture to implementation, I prioritize clear communication, measurable outcomes, and long-term scalability.'),
-        'about_profile_image' => SiteSetting::get('about_profile_image', url(Storage::url('images/photo-1542831371-29b0f74f9713.jpg'))),
+        'about_profile_image' => ImageAsset::resolve(
+            SiteSetting::get('about_profile_image'),
+            '/storage/images/photo-1542831371-29b0f74f9713.jpg'
+        ),
     ];
 
     return view('welcome', [

@@ -6,7 +6,7 @@
 @section('hero_name', 'Dawud Muhammed')
 @section('hero_title', 'Laravel Developer')
 @section('hero_cv_url', '#')
-@section('hero_background', \Illuminate\Support\Facades\Storage::url('images/photo-1484417894907-623942c8ee29.jpg'))
+@section('hero_background', \App\Support\ImageAsset::default())
 
 @section('content')
     <main class="mx-auto w-full max-w-7xl px-6 pb-20 pt-10" aria-labelledby="blog-title">
@@ -65,7 +65,7 @@
                             <a href="{{ route('blog.show', $post->slug) }}" class="block">
                                 <div class="relative overflow-hidden">
                                     <img
-                                        src="{{ $post->cover_image }}"
+                                        src="{{ $post->cover_image_url }}"
                                         alt="Cover image for {{ $post->title }}"
                                         class="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
                                         width="1600"

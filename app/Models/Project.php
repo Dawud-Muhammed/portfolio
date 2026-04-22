@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ImageAsset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,10 @@ use Illuminate\Support\Facades\Storage;
 class Project extends Model
 {
     use HasFactory;
+
+    protected $appends = [
+        'image_url',
+    ];
 
     protected $fillable = [
         'title',
@@ -40,7 +45,12 @@ class Project extends Model
             return Storage::url($path);
         }
 
-        return (string) ($this->image ?: config('seo.default_image', ''));
+        return $this->image_url;
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        return ImageAsset::resolve((string) $this->getRawOriginal('image'), (string) config('seo.default_image', ''));
     }
 
     public function scopePublished(Builder $query): Builder

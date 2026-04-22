@@ -29,7 +29,7 @@
             Trusted by thoughtful teams and product leaders.
         </h2>
         <p class="mx-auto max-w-3xl text-sm leading-relaxed text-slate-300 lg:mx-0" style="font-family: var(--font-body);">
-            A few words from collaborators and stakeholders who value clear communication, sharp delivery, and polished execution.
+            A few words from collaborators and stakeholders who value clear communication, sharp delivery, and polished execution.í
         </p>
     </div>
 
@@ -41,7 +41,7 @@
             <div class="w-full min-h-[310px] sm:min-h-[280px]">
                 <template x-for="(testimonial, index) in testimonials" :key="testimonial.author + index">
                     <article
-                        x-show="currentIndex === index"
+                        x-show="currentIndex === index"í
                         x-transition:enter="transition-opacity duration-350"
                         x-transition:enter-start="opacity-0"
                         x-transition:enter-end="opacity-100"

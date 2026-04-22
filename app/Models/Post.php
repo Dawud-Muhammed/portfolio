@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ImageAsset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,7 @@ class Post extends Model
 
     protected $appends = [
         'rendered_body',
+        'cover_image_url',
         'og_image',
     ];
 
@@ -51,7 +53,12 @@ class Post extends Model
             return Storage::url($path);
         }
 
-        return (string) ($this->cover_image ?: config('seo.default_image', ''));
+        return $this->cover_image_url;
+    }
+
+    public function getCoverImageUrlAttribute(): string
+    {
+        return ImageAsset::resolve((string) $this->getRawOriginal('cover_image'), (string) config('seo.default_image', ''));
     }
 
     public function categories(): BelongsToMany

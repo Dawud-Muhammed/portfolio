@@ -5,7 +5,7 @@
 @section('hero_name', 'Article')
 @section('hero_title', $post->title)
 @section('hero_cv_url', route('blog.index'))
-@section('hero_background', $post->cover_image)
+@section('hero_background', $post->cover_image_url)
 @section('og_image', $post->og_image)
 @section('schema')
     <script type="application/ld+json">
@@ -14,7 +14,7 @@
             '@type' => 'Article',
             'headline' => $post->title,
             'description' => $post->excerpt,
-            'image' => $post->cover_image,
+            'image' => $post->cover_image_url,
             'datePublished' => $post->published_at?->toAtomString(),
             'author' => [
                 '@type' => 'Person',
@@ -30,7 +30,10 @@
 @endsection
 
 @php
-    $postCoverWebp = preg_replace('/\.(jpe?g)(\?.*)?$/i', '.webp$2', $post->cover_image);
+    use App\Support\ImageAsset;
+
+    $postCover = $post->cover_image_url;
+    $postCoverWebp = ImageAsset::webpVariant($postCover);
 @endphp
 
 @php
@@ -59,9 +62,11 @@
             class="about-reveal overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-premium backdrop-blur-sm"
         >
             <picture>
-                <source srcset="{{ $postCoverWebp }}" type="image/webp">
+                @if (!empty($postCoverWebp))
+                    <source srcset="{{ $postCoverWebp }}" type="image/webp">
+                @endif
                 <img
-                    src="{{ $post->cover_image }}"
+                    src="{{ $postCover }}"
                     alt="Cover image for {{ $post->title }}"
                     class="h-64 w-full object-cover md:h-80"
                     width="1600"
