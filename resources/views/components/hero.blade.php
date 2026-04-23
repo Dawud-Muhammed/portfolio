@@ -50,7 +50,7 @@
             </h1>
 
             <p class="animate-fade-up max-w-2xl text-base text-zinc-200 md:text-lg [animation-delay:260ms]" style="font-family: var(--font-body);">
-                I build robust, scalable backend systems and polished interfaces powered by Laravel 13, Alpine.js 3.14+, and Vite.
+                I build robust, scalable backend systems powered by Laravel and polished interfaces using Tailwind CSS.
             </p>
 
             <div class="animate-fade-up flex w-full flex-col items-center justify-center gap-4 pt-2 [animation-delay:320ms] sm:flex-row lg:justify-start">

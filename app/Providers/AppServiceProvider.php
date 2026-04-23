@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->cleanupStaleViteHotFile();
+
         View::composer('welcome', function ($view): void {
             $view->with('sectionLinks', [
                 ['label' => 'Home', 'url' => route('home')],
@@ -40,5 +43,44 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
+    }
+
+    private function cleanupStaleViteHotFile(): void
+    {
+        if (! App::isLocal()) {
+            return;
+        }
+
+        $hotFile = public_path('hot');
+        if (! is_file($hotFile)) {
+            return;
+        }
+
+        $hotUrl = trim((string) @file_get_contents($hotFile));
+        if ($hotUrl === '') {
+            @unlink($hotFile);
+
+            return;
+        }
+
+        $parts = parse_url($hotUrl);
+        $host = (string) ($parts['host'] ?? '');
+        $port = (int) ($parts['port'] ?? 5173);
+
+        if ($host === '') {
+            @unlink($hotFile);
+
+            return;
+        }
+
+        $connection = @fsockopen($host, $port, $errorCode, $errorMessage, 0.25);
+
+        if (is_resource($connection)) {
+            fclose($connection);
+
+            return;
+        }
+
+        @unlink($hotFile);
     }
 }

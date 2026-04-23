@@ -54,7 +54,7 @@
             </p>
 
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3" aria-label="Core skills">
-                @foreach (['Laravel', 'PHP', 'MySQL', 'REST APIs', 'Alpine.js', 'Tailwind CSS'] as $skill)
+                @foreach (['Laravel', 'PHP', 'MySQL','Tailwind CSS'] as $skill)
                     <span class="rounded-xl border border-emerald-300/60 bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-800 dark:border-emerald-700/50 dark:text-emerald-300">
                         {{ $skill }}
                     </span>
