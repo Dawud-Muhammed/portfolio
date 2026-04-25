@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -36,10 +37,15 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('partials.footer', function ($view): void {
             $view->with('socialLinks', [
-                ['label' => 'GitHub', 'url' => 'https://github.com/your-username'],
-                ['label' => 'LinkedIn', 'url' => 'https://www.linkedin.com/in/your-username'],
-                ['label' => 'X', 'url' => 'https://x.com/your-username'],
-                ['label' => 'Email', 'url' => 'mailto:hello@example.com'],
+                ['key' => 'home', 'label' => 'Home', 'url' => route('home')],
+                ['key' => 'github', 'label' => 'GitHub', 'url' => SiteSetting::get('footer_github', 'https://github.com/your-username')],
+                ['key' => 'linkedin', 'label' => 'LinkedIn', 'url' => SiteSetting::get('footer_linkedin', 'https://www.linkedin.com/in/your-username')],
+                ['key' => 'x', 'label' => 'X', 'url' => SiteSetting::get('footer_x', 'https://x.com/your-username')],
+                ['key' => 'tiktok', 'label' => 'TikTok', 'url' => SiteSetting::get('footer_tiktok', 'https://www.tiktok.com/@your-username')],
+                ['key' => 'telegram', 'label' => 'Telegram', 'url' => SiteSetting::get('footer_telegram', 'https://t.me/your-username')],
+                ['key' => 'instagram', 'label' => 'Instagram', 'url' => SiteSetting::get('footer_instagram', 'https://www.instagram.com/your-username')],
+                ['key' => 'facebook', 'label' => 'Facebook', 'url' => SiteSetting::get('footer_facebook', 'https://www.facebook.com/your-username')],
+                ['key' => 'whatsapp', 'label' => 'WhatsApp', 'url' => SiteSetting::get('footer_whatsapp', 'https://wa.me/2340000000000')],
             ]);
         });
 

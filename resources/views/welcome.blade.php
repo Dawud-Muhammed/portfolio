@@ -21,7 +21,7 @@
         </section>
 
         <section class="mx-auto w-full max-w-7xl px-6">
-            <x-projects :projects="$projects" :filters="$filters" />
+            <x-projects :projects="$projects" :categories="$projectCategories" />
         </section>
 
         <section class="mx-auto w-full max-w-7xl px-6">

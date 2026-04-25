@@ -1,4 +1,4 @@
-@props(['projects' => [], 'filters' => ['All']])
+@props(['projects' => [], 'categories' => []])
 
 @php
     use App\Support\ImageAsset;
@@ -9,7 +9,7 @@
 <section
     id="projects"
     class="mx-auto w-full max-w-7xl px-6 py-20"
-    x-data="projectsShowcase(@js($filters))"
+    x-data="projectsShowcase(@js($categories))"
     x-init="observe($el)"
     aria-labelledby="projects-heading"
 >
@@ -24,28 +24,39 @@
         </div>
 
         <div class="flex flex-wrap items-center justify-center gap-2 lg:justify-end" role="tablist" aria-label="Project filters">
-            <template x-for="filter in filters" :key="filter">
+            <button
+                type="button"
+                @click="activeCategory = 'all'"
+                :class="activeCategory === 'all'
+                    ? 'border-orange-400 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_10px_20px_-14px_rgba(234,88,12,0.7)]'
+                    : 'border-slate-300 bg-white text-slate-600 hover:border-orange-300 hover:text-orange-700'"
+                class="inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
+            >
+                All
+            </button>
+
+            <template x-for="category in categories" :key="category.slug">
                 <button
                     type="button"
-                    @click="activeFilter = filter"
-                    x-text="filter"
-                    class="rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition"
-                    :class="activeFilter === filter
-                        ? 'border-orange-400 bg-orange-500 text-white shadow-[0_10px_35px_-15px_rgba(249,115,22,0.9)]'
-                        : 'border-slate-300/80 bg-white/70 text-slate-700 hover:border-orange-300 hover:text-orange-700'"
-                    :aria-selected="activeFilter === filter"
+                    @click="activeCategory = category.slug"
+                    x-text="category.name"
+                    class="inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
+                    :class="activeCategory === category.slug
+                        ? 'border-orange-400 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_10px_20px_-14px_rgba(234,88,12,0.7)]'
+                        : 'border-slate-300 bg-white text-slate-600 hover:border-orange-300 hover:text-orange-700'"
+                    :aria-selected="activeCategory === category.slug"
                 ></button>
             </template>
         </div>
     </div>
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        @foreach ($projects as $index => $project)
+        @forelse ($projects as $index => $project)
             <article
                 class="project-card group overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 shadow-[0_16px_45px_-28px_rgba(15,23,42,0.45)] backdrop-blur-sm"
-                x-show="activeFilter === 'All' || @js($project['filters']).includes(activeFilter)"
+                x-data="{ projectCategories: @js($project['categories'] ?? []) }"
+                x-show="activeCategory === 'all' || projectCategories.includes(activeCategory)"
                 x-transition.opacity.duration.350ms
-                x-cloak
                 :class="isVisible ? 'project-card-visible' : ''"
                 style="transition-delay: {{ 80 + ($index * 90) }}ms;"
             >
@@ -112,6 +123,10 @@
                     </div>
                 </div>
             </article>
-        @endforeach
+        @empty
+            <p class="col-span-full rounded-3xl border border-slate-200 bg-white/70 p-8 text-sm text-slate-600" style="font-family: var(--font-body);">
+                No projects are available yet.
+            </p>
+        @endforelse
     </div>
 </section>

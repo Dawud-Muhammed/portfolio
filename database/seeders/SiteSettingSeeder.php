@@ -23,7 +23,11 @@ class SiteSettingSeeder extends Seeder
             'footer_github' => 'https://github.com/your-username',
             'footer_linkedin' => 'https://www.linkedin.com/in/your-username',
             'footer_x' => 'https://x.com/your-username',
-            'footer_email' => 'mailto:hello@example.com',
+            'footer_tiktok' => 'https://www.tiktok.com/@your-username',
+            'footer_telegram' => 'https://t.me/your-username',
+            'footer_instagram' => 'https://www.instagram.com/your-username',
+            'footer_facebook' => 'https://www.facebook.com/your-username',
+            'footer_whatsapp' => 'https://wa.me/2340000000000',
         ];
 
         $payload = [];

@@ -2,6 +2,8 @@ import Alpine from 'alpinejs';
 import EasyMDE from 'easymde';
 import 'easymde/dist/easymde.min.css';
 
+document.documentElement.classList.add('js-enabled');
+
 const registerAlpineController = (name, factory) => {
 	window[name] = factory;
 
@@ -167,9 +169,9 @@ window.slideInOnScroll = () => ({
 	},
 });
 
-window.projectsShowcase = (filters) => ({
-	activeFilter: filters?.[0] ?? 'All',
-	filters,
+window.projectsShowcase = (categories) => ({
+	activeCategory: 'all',
+	categories: categories ?? [],
 	isVisible: false,
 	observe(element) {
 		if (!('IntersectionObserver' in window)) {
@@ -446,10 +448,18 @@ window.scrollToTop = () => ({
 	isVisible: false,
 	threshold: 300,
 	isTopVisible: true,
+	isFooterNear: false,
 	observer: null,
 	init() {
+		const footerElement = document.querySelector('footer');
+
 		const updateVisibility = () => {
-			this.isVisible = window.scrollY > this.threshold && !this.isTopVisible;
+			if (footerElement) {
+				const footerRect = footerElement.getBoundingClientRect();
+				this.isFooterNear = footerRect.top < window.innerHeight - 88;
+			}
+
+			this.isVisible = window.scrollY > this.threshold && !this.isTopVisible && !this.isFooterNear;
 		};
 
 		if ('IntersectionObserver' in window && this.$refs.topSentinel) {

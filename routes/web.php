@@ -19,37 +19,65 @@ use App\Models\Skill;
 use App\Models\Testimonial;
 use App\Support\ImageAsset;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'show'])->name('sitemap.show');
 Route::get('/robots.txt', [RobotsController::class, 'show'])->name('robots.show');
 
 Route::get('/', function () {
-    $featuredProjects = Project::query()
+    $publishedProjects = Project::query()
         ->published()
-        ->where('is_featured', true)
         ->orderByDesc('published_at')
-        ->take(6)
         ->get();
 
-    $filters = array_merge(['All'], $featuredProjects
-        ->flatMap(fn (Project $project) => $project->filters ?? [])
-        ->unique()
-        ->sort()
-        ->values()
-        ->all());
+    $projectsCollection = $publishedProjects->isNotEmpty()
+        ? $publishedProjects
+        : Project::query()->latest()->get();
 
-    $projects = $featuredProjects
-        ->map(fn (Project $project): array => [
-            'title' => $project->title,
-            'slug' => $project->slug,
-            'description' => $project->description,
-            'image' => $project->image_url,
-            'stack' => $project->stack,
-            'filters' => $project->filters ?? ['Laravel', 'PHP'],
-            'github' => $project->github_url,
-            'demo' => $project->demo_url,
-            'details' => $project->details,
+    $projectCategoryNames = static function (Project $project): array {
+        $source = is_array($project->filters) && ! empty($project->filters)
+            ? $project->filters
+            : (is_array($project->stack) ? $project->stack : []);
+
+        return collect($source)
+            ->map(static fn (mixed $value): string => trim((string) $value))
+            ->filter()
+            ->values()
+            ->all();
+    };
+
+    $projectCategories = $projectsCollection
+        ->flatMap(static fn (Project $project): array => $projectCategoryNames($project))
+        ->map(static fn (string $name): array => [
+            'name' => $name,
+            'slug' => Str::slug($name),
         ])
+        ->filter(static fn (array $category): bool => $category['slug'] !== '')
+        ->unique('slug')
+        ->sortBy('name')
+        ->values()
+        ->all();
+
+    $projects = $projectsCollection
+        ->map(static function (Project $project) use ($projectCategoryNames): array {
+            $categoryNames = $projectCategoryNames($project);
+
+            return [
+                'title' => $project->title,
+                'slug' => $project->slug,
+                'description' => $project->description,
+                'image' => $project->image_url,
+                'stack' => $project->stack,
+                'categories' => collect($categoryNames)
+                    ->map(static fn (string $name): string => Str::slug($name))
+                    ->filter()
+                    ->values()
+                    ->all(),
+                'github' => $project->github_url,
+                'demo' => $project->demo_url,
+                'details' => $project->details,
+            ];
+        })
         ->values()
         ->all();
 
@@ -98,7 +126,7 @@ Route::get('/', function () {
 
     return view('welcome', [
         'projects' => $projects,
-        'filters' => $filters,
+        'projectCategories' => $projectCategories,
         'skills' => $skills,
         'testimonials' => $testimonials,
         'siteSettings' => $siteSettings,

@@ -24,7 +24,11 @@ class SettingsController extends Controller
         'footer_github',
         'footer_linkedin',
         'footer_x',
-        'footer_email',
+        'footer_tiktok',
+        'footer_telegram',
+        'footer_instagram',
+        'footer_facebook',
+        'footer_whatsapp',
     ];
 
     public function edit(): View
@@ -53,7 +57,11 @@ class SettingsController extends Controller
             'footer_github' => ['nullable', 'string', 'max:2048'],
             'footer_linkedin' => ['nullable', 'string', 'max:2048'],
             'footer_x' => ['nullable', 'string', 'max:2048'],
-            'footer_email' => ['nullable', 'string', 'max:2048'],
+            'footer_tiktok' => ['nullable', 'string', 'max:2048'],
+            'footer_telegram' => ['nullable', 'string', 'max:2048'],
+            'footer_instagram' => ['nullable', 'string', 'max:2048'],
+            'footer_facebook' => ['nullable', 'string', 'max:2048'],
+            'footer_whatsapp' => ['nullable', 'string', 'max:2048'],
         ]);
 
         $current = SiteSetting::query()
@@ -71,7 +79,11 @@ class SettingsController extends Controller
             'footer_github' => trim((string) ($validated['footer_github'] ?? '')),
             'footer_linkedin' => trim((string) ($validated['footer_linkedin'] ?? '')),
             'footer_x' => trim((string) ($validated['footer_x'] ?? '')),
-            'footer_email' => trim((string) ($validated['footer_email'] ?? '')),
+            'footer_tiktok' => trim((string) ($validated['footer_tiktok'] ?? '')),
+            'footer_telegram' => trim((string) ($validated['footer_telegram'] ?? '')),
+            'footer_instagram' => trim((string) ($validated['footer_instagram'] ?? '')),
+            'footer_facebook' => trim((string) ($validated['footer_facebook'] ?? '')),
+            'footer_whatsapp' => trim((string) ($validated['footer_whatsapp'] ?? '')),
         ];
 
         if ($request->hasFile('hero_background_file')) {

@@ -102,15 +102,39 @@
                 </div>
 
                 <div>
-                    <label for="footer_x" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">X URL</label>
+                    <label for="footer_x" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Twitter (X) URL</label>
                     <input id="footer_x" name="footer_x" type="url" value="{{ old('footer_x', $settings['footer_x'] ?? '') }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
                     @error('footer_x') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="footer_email" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Footer Email Link</label>
-                    <input id="footer_email" name="footer_email" type="text" value="{{ old('footer_email', $settings['footer_email'] ?? '') }}" placeholder="mailto:hello@example.com" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
-                    @error('footer_email') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+                    <label for="footer_tiktok" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">TikTok URL</label>
+                    <input id="footer_tiktok" name="footer_tiktok" type="url" value="{{ old('footer_tiktok', $settings['footer_tiktok'] ?? '') }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                    @error('footer_tiktok') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="footer_telegram" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Telegram URL</label>
+                    <input id="footer_telegram" name="footer_telegram" type="url" value="{{ old('footer_telegram', $settings['footer_telegram'] ?? '') }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                    @error('footer_telegram') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="footer_instagram" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Instagram URL</label>
+                    <input id="footer_instagram" name="footer_instagram" type="url" value="{{ old('footer_instagram', $settings['footer_instagram'] ?? '') }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                    @error('footer_instagram') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="footer_facebook" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Facebook URL</label>
+                    <input id="footer_facebook" name="footer_facebook" type="url" value="{{ old('footer_facebook', $settings['footer_facebook'] ?? '') }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                    @error('footer_facebook') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="footer_whatsapp" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">WhatsApp URL</label>
+                    <input id="footer_whatsapp" name="footer_whatsapp" type="url" value="{{ old('footer_whatsapp', $settings['footer_whatsapp'] ?? '') }}" placeholder="https://wa.me/2340000000000" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                    @error('footer_whatsapp') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
                 </div>
             </div>
         </section>
