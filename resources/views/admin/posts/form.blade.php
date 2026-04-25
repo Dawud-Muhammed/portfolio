@@ -19,15 +19,23 @@
     <form
         method="POST"
         action="{{ $mode === 'create' ? route('admin.posts.store') : route('admin.posts.update', $post) }}"
+        enctype="multipart/form-data"
         x-data="{
-            coverImageMode: @js($errors->has('cover_image_file') ? 'upload' : 'url'),
+            coverImageMode: @js(old('cover_image_mode', $errors->has('cover_image_file') ? 'upload' : 'url')),
             coverImagePreview: null,
+            setCoverImageMode(mode) {
+                this.coverImageMode = mode;
+
+                if (mode === 'url' && this.$refs.coverImageFile) {
+                    this.$refs.coverImageFile.value = '';
+                    this.coverImagePreview = null;
+                }
+            },
             setCoverImagePreview(event) {
                 const file = event.target.files?.[0] ?? null;
                 this.coverImagePreview = file ? URL.createObjectURL(file) : null;
             },
         }"
-        x-bind:enctype="coverImageMode === 'upload' ? 'multipart/form-data' : null"
         class="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-premium md:p-8"
     >
         @csrf
@@ -35,8 +43,10 @@
             @method('PUT')
         @endif
 
+        <input type="hidden" name="cover_image_mode" x-model="coverImageMode">
+
         @php
-            $selectedCategoryIds = collect(old('category_ids', $post->categories->pluck('id')->all()))
+            $selectedCategoryIds = collect(old('categories', $post->categories->pluck('id')->all()))
                 ->map(fn ($categoryId) => (string) $categoryId)
                 ->all();
         @endphp
@@ -84,7 +94,7 @@
                             $categorySlug = data_get($category, 'slug');
                         @endphp
                         <label class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 transition hover:border-orange-300 hover:bg-orange-50/60">
-                            <input type="checkbox" name="category_ids[]" value="{{ $categoryId }}" @checked(in_array((string) $categoryId, $selectedCategoryIds, true)) class="mt-1 h-4 w-4 rounded border-slate-300 text-orange-500 focus:ring-orange-300">
+                            <input type="checkbox" name="categories[]" value="{{ $categoryId }}" @checked(in_array((string) $categoryId, $selectedCategoryIds, true)) class="mt-1 h-4 w-4 rounded border-slate-300 text-orange-500 focus:ring-orange-300">
                             <span>
                                 <span class="block font-semibold text-slate-900">{{ $categoryName }}</span>
                                 <span class="block text-xs uppercase tracking-[0.14em] text-slate-500">{{ $categorySlug }}</span>
@@ -98,8 +108,8 @@
                 </div>
             @endif
 
-            @error('category_ids') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
-            @error('category_ids.*') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+            @error('categories') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+            @error('categories.*') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
         </div>
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -107,7 +117,7 @@
                 <div class="mb-3 flex items-center gap-2">
                     <button
                         type="button"
-                        @click="coverImageMode = 'url'"
+                        @click="setCoverImageMode('url')"
                         :class="coverImageMode === 'url' ? 'border-orange-300 bg-orange-50 text-orange-700' : 'border-slate-300 bg-white text-slate-600'"
                         class="rounded-lg border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] transition"
                     >
@@ -115,7 +125,7 @@
                     </button>
                     <button
                         type="button"
-                        @click="coverImageMode = 'upload'"
+                        @click="setCoverImageMode('upload')"
                         :class="coverImageMode === 'upload' ? 'border-orange-300 bg-orange-50 text-orange-700' : 'border-slate-300 bg-white text-slate-600'"
                         class="rounded-lg border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] transition"
                     >
@@ -123,16 +133,16 @@
                     </button>
                 </div>
 
-                <div x-show="coverImageMode === 'url'" x-cloak>
+                <div x-show="coverImageMode === 'url'">
                     <label for="cover_image" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Cover Image URL</label>
-                    <input id="cover_image" name="cover_image" type="url" value="{{ old('cover_image', $post->cover_image) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                    <input id="cover_image" name="cover_image" type="url" :disabled="coverImageMode !== 'url'" value="{{ old('cover_image', $post->cover_image) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
                 </div>
 
-                <div x-show="coverImageMode === 'upload'" x-cloak>
+                <div x-show="coverImageMode === 'upload'">
                     <label for="cover_image_file" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Upload Cover Image</label>
-                    <input id="cover_image_file" name="cover_image_file" type="file" accept="image/*" @change="setCoverImagePreview($event)" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-100 file:px-3 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.14em] file:text-orange-700">
+                    <input id="cover_image_file" x-ref="coverImageFile" name="cover_image_file" type="file" accept="image/*" :disabled="coverImageMode !== 'upload'" @change="setCoverImagePreview($event)" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-100 file:px-3 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.14em] file:text-orange-700">
 
-                    <div x-show="coverImagePreview" x-cloak class="mt-3">
+                    <div x-show="coverImagePreview" class="mt-3">
                         <img :src="coverImagePreview" alt="Cover image preview" class="h-24 w-24 rounded-xl border border-slate-200 object-cover">
                     </div>
                 </div>

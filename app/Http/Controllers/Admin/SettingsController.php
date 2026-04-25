@@ -95,6 +95,7 @@ class SettingsController extends Controller
         }
 
         SiteSetting::query()->upsert($payload, ['key'], ['value', 'updated_at']);
+        SiteSetting::flushResolvedValues();
 
         return redirect()
             ->route('admin.settings.edit')

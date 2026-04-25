@@ -10,12 +10,7 @@
 
 @section('content')
     <main class="mx-auto w-full max-w-7xl px-6 pb-20 pt-10" aria-labelledby="blog-title">
-        <section
-            x-data="slideInOnScroll()"
-            x-init="observe($el)"
-            :class="isVisible ? 'is-visible' : ''"
-            class="about-reveal space-y-8"
-        >
+        <section class="space-y-8">
             <div class="space-y-3">
                 <p class="inline-flex rounded-full border border-orange-300/45 bg-orange-400/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-orange-700">
                     Blog
@@ -40,17 +35,17 @@
                     </button>
 
                     @foreach ($categories as $category)
-                            @php
-                                $categorySlug = data_get($category, 'slug');
-                                $categoryName = data_get($category, 'name');
-                            @endphp
+                        @php
+                            $categorySlug = data_get($category, 'slug');
+                            $categoryName = data_get($category, 'name');
+                        @endphp
                         <button
                             type="button"
-                                @click="activeCategory = '{{ $categorySlug }}'"
-                                :class="activeCategory === '{{ $categorySlug }}' ? 'border-orange-400 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_10px_20px_-14px_rgba(234,88,12,0.7)]' : 'border-slate-300 bg-white text-slate-600 hover:border-orange-300 hover:text-orange-700'"
+                            @click="activeCategory = '{{ $categorySlug }}'"
+                            :class="activeCategory === '{{ $categorySlug }}' ? 'border-orange-400 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_10px_20px_-14px_rgba(234,88,12,0.7)]' : 'border-slate-300 bg-white text-slate-600 hover:border-orange-300 hover:text-orange-700'"
                             class="inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
                         >
-                                {{ $categoryName }}
+                            {{ $categoryName }}
                         </button>
                     @endforeach
                 </div>
@@ -58,7 +53,8 @@
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     @forelse ($posts as $post)
                         <article
-                                x-show="activeCategory === 'all' || categories.includes(activeCategory)"
+                            x-data="{ postCategories: @js($post->categories->pluck('slug')->values()->all()) }"
+                            x-show="activeCategory === 'all' || postCategories.includes(activeCategory)"
                             x-transition.opacity.duration.200ms
                             class="group overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 shadow-premium backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-orange-300/80"
                         >

@@ -2,6 +2,7 @@
     'name' => 'Dawud Muhammed',
     'title' => 'Laravel Developer',
     'cvUrl' => '#',
+    'ctaLabel' => 'Download CV',
     'backgroundImage' => '/storage/images/photo-1542831371-29b0f74f9713.jpg',
 ])
 
@@ -10,6 +11,7 @@
 
     $backgroundImage = ImageAsset::resolve((string) $backgroundImage, (string) config('seo.default_image', ''));
     $backgroundImageWebp = ImageAsset::webpVariant($backgroundImage);
+    $ctaUrl = filter_var(trim((string) $cvUrl), FILTER_VALIDATE_URL) ? trim((string) $cvUrl) : null;
 @endphp
 
 <section
@@ -63,14 +65,16 @@
                     View Projects
                 </button>
 
-                <a
-                    href="{{ $cvUrl }}"
-                    download
-                    class="hero-button-glow w-full rounded-xl border border-white/45 bg-white/10 px-7 py-3 text-sm font-semibold uppercase tracking-wide text-white transition duration-300 hover:-translate-y-0.5 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto"
-                    aria-label="Download curriculum vitae"
-                >
-                    Download CV
-                </a>
+                @if ($ctaUrl)
+                    <a
+                        href="{{ $ctaUrl }}"
+                        @if ($ctaLabel === 'Download CV') download @endif
+                        class="hero-button-glow w-full rounded-xl border border-white/45 bg-white/10 px-7 py-3 text-sm font-semibold uppercase tracking-wide text-white transition duration-300 hover:-translate-y-0.5 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto"
+                        aria-label="{{ $ctaLabel }}"
+                    >
+                        {{ $ctaLabel }}
+                    </a>
+                @endif
             </div>
         </div>
     </div>

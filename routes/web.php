@@ -10,13 +10,13 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Models\Project;
 use App\Models\SiteSetting;
 use App\Models\Skill;
+use App\Models\Testimonial;
 use App\Support\ImageAsset;
 use Illuminate\Support\Facades\Route;
 
@@ -68,6 +68,19 @@ Route::get('/', function () {
         ->values()
         ->all();
 
+    $testimonials = Testimonial::query()
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->get()
+        ->map(fn (Testimonial $testimonial): array => [
+            'quote' => $testimonial->quote,
+            'author' => $testimonial->author,
+            'role' => $testimonial->role,
+            'avatar' => $testimonial->avatar_url,
+        ])
+        ->values()
+        ->all();
+
     $siteSettings = [
         'hero_name' => SiteSetting::get('hero_name', 'Dawud Muhammed'),
         'hero_title' => SiteSetting::get('hero_title', 'Laravel Developer'),
@@ -87,6 +100,7 @@ Route::get('/', function () {
         'projects' => $projects,
         'filters' => $filters,
         'skills' => $skills,
+        'testimonials' => $testimonials,
         'siteSettings' => $siteSettings,
     ]);
 })->name('home');
@@ -97,7 +111,6 @@ Route::get('/projects', function () {
 Route::get('/projects/{slug}', [ProjectController::class, 'show'])->name('projects.show');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
-Route::resource('contacts', ContactController::class)->only(['index', 'store', 'show']);
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');

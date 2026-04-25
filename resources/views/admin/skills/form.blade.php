@@ -16,16 +16,42 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ $mode === 'create' ? route('admin.skills.store') : route('admin.skills.update', $skill) }}" class="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-premium md:p-8">
+    <form
+        method="POST"
+        action="{{ $mode === 'create' ? route('admin.skills.store') : route('admin.skills.update', $skill) }}"
+        x-data="{
+            skillId: @js(old('skill_id', $skill->skill_id ?? '')),
+            slugify(value) {
+                return String(value || '')
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+            },
+            syncSkillId(value) {
+                this.skillId = this.slugify(value);
+            },
+        }"
+        class="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-premium md:p-8"
+    >
         @csrf
         @if ($mode === 'edit')
             @method('PUT')
         @endif
 
+        <input type="hidden" name="skill_id" x-model="skillId">
+
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div>
                 <label for="name" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Name</label>
-                <input id="name" name="name" type="text" value="{{ old('name', $skill->name) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value="{{ old('name', $skill->name) }}"
+                    @input="syncSkillId($event.target.value)"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200"
+                >
                 @error('name') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
 

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\SkillCategory;
 use App\Models\Skill;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class SkillSeeder extends Seeder
 {
@@ -13,6 +14,33 @@ class SkillSeeder extends Seeder
      */
     public function run(): void
     {
+        Skill::query()
+            ->where(function ($query): void {
+                $query->whereNull('skill_id')->orWhere('skill_id', '');
+            })
+            ->orderBy('id')
+            ->get()
+            ->each(function (Skill $skill): void {
+                $base = Str::slug($skill->name);
+
+                if ($base === '') {
+                    return;
+                }
+
+                $candidate = $base;
+                $suffix = 2;
+
+                while (Skill::query()
+                    ->where('skill_id', $candidate)
+                    ->whereKeyNot($skill->getKey())
+                    ->exists()) {
+                    $candidate = $base.'-'.$suffix;
+                    $suffix++;
+                }
+
+                $skill->update(['skill_id' => $candidate]);
+            });
+
         $skills = [
             [
                 'skill_id' => 'laravel-13',
@@ -77,6 +105,8 @@ class SkillSeeder extends Seeder
         ];
 
         foreach ($skills as $skill) {
+            $skill['skill_id'] = $skill['skill_id'] ?? Str::slug($skill['name']);
+
             Skill::query()->updateOrCreate(
                 ['skill_id' => $skill['skill_id']],
                 $skill

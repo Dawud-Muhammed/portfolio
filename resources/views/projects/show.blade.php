@@ -5,6 +5,7 @@
 @section('hero_name', 'Selected Work')
 @section('hero_title', $project->title)
 @section('hero_cv_url', route('home').'#projects')
+@section('hero_cta_label', 'Back to Projects')
 @section('hero_background', $project->image_url)
 @section('og_image', $project->og_image)
 @section('schema')

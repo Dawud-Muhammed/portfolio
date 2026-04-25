@@ -260,6 +260,7 @@
         transition: opacity 0.75s ease, transform 0.75s ease;
     }
 
+    .about-reveal.is-visible,
     .is-visible .about-reveal {
         opacity: 1;
         transform: translateX(0);
@@ -305,6 +306,7 @@
     .animate-pulse-glow,
     .hero-bloom,
     .type-caret,
+    .about-reveal.is-visible,
     .is-visible .about-reveal,
     .project-card,
     .skills-card {

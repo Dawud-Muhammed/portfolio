@@ -107,46 +107,6 @@ const themeController = () => ({
 
 registerAlpineController('themeController', themeController);
 
-window.lazySections = () => ({
-	loaded: {
-		skills: false,
-		projects: false,
-		contact: false,
-	},
-	initObservers(refs) {
-		if (!('IntersectionObserver' in window)) {
-			this.loaded.skills = true;
-			this.loaded.projects = true;
-			this.loaded.contact = true;
-			return;
-		}
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (!entry.isIntersecting) {
-						return;
-					}
-
-					const sectionKey = entry.target.dataset.lazySection;
-					if (sectionKey && this.loaded[sectionKey] === false) {
-						this.loaded[sectionKey] = true;
-					}
-
-					observer.unobserve(entry.target);
-				});
-			},
-			{ threshold: 0.18, rootMargin: '0px 0px 120px 0px' }
-		);
-
-		Object.values(refs).forEach((element) => {
-			if (element) {
-				observer.observe(element);
-			}
-		});
-	},
-});
-
 window.heroTypewriter = (name, title) => ({
 	displayText: '',
 	fullText: `Hi, I'm ${name} | ${title}`,

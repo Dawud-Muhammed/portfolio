@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class SkillController extends Controller
 {
@@ -59,6 +60,13 @@ class SkillController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $request->merge([
+            'skill_id' => $this->resolveSkillId(
+                (string) $request->input('skill_id', ''),
+                (string) $request->input('name', '')
+            ),
+        ]);
+
         $validated = $request->validate($this->rules());
 
         Skill::query()->create($validated);
@@ -82,7 +90,15 @@ class SkillController extends Controller
 
     public function update(Request $request, Skill $skill): RedirectResponse
     {
-        $validated = $request->validate($this->rules());
+        $request->merge([
+            'skill_id' => $this->resolveSkillId(
+                (string) $request->input('skill_id', ''),
+                (string) $request->input('name', ''),
+                $skill
+            ),
+        ]);
+
+        $validated = $request->validate($this->rules($skill));
 
         $skill->update($validated);
 
@@ -111,9 +127,18 @@ class SkillController extends Controller
     /**
      * @return array<string, array<int, mixed>>
      */
-    private function rules(): array
+    private function rules(?Skill $skill = null): array
     {
+        $skillIdRules = ['nullable', 'string', 'max:255'];
+
+        if ($skill !== null) {
+            $skillIdRules[] = Rule::unique('skills', 'skill_id')->ignore($skill);
+        } else {
+            $skillIdRules[] = Rule::unique('skills', 'skill_id');
+        }
+
         return [
+            'skill_id' => $skillIdRules,
             'name' => ['required', 'string', 'max:255'],
             'category' => ['required', Rule::enum(SkillCategory::class)],
             'level' => ['required', 'integer', 'min:0', 'max:100'],
@@ -121,5 +146,27 @@ class SkillController extends Controller
             'description' => ['nullable', 'string'],
             'published_at' => ['nullable', 'date'],
         ];
+    }
+
+    private function resolveSkillId(string $skillId, string $name, ?Skill $ignoreSkill = null): string
+    {
+        $base = Str::slug(trim($skillId !== '' ? $skillId : $name));
+
+        if ($base === '') {
+            return '';
+        }
+
+        $candidate = $base;
+        $suffix = 2;
+
+        while (Skill::query()
+            ->where('skill_id', $candidate)
+            ->when($ignoreSkill !== null, fn ($query) => $query->whereKeyNot($ignoreSkill->getKey()))
+            ->exists()) {
+            $candidate = $base.'-'.$suffix;
+            $suffix++;
+        }
+
+        return $candidate;
     }
 }

@@ -12,8 +12,10 @@ class BlogController extends Controller
     {
         $posts = Post::query()
             ->published()
-            ->with('categories')
-            ->orderByDesc('published_at')
+            ->with([
+                'categories' => fn ($query) => $query->orderBy('name'),
+            ])
+            ->latest('published_at')
             ->get();
 
         return view('blog.index', [

@@ -53,6 +53,8 @@ class PostController extends Controller
 
     public function edit(Post $post): View
     {
+        $post->loadMissing('categories');
+
         return view('admin.posts.form', [
             'categories' => Category::query()->orderBy('name')->get(),
             'post' => $post,

@@ -42,7 +42,13 @@ class Post extends Model
     {
         $converter = static::$markdownConverter ??= new CommonMarkConverter();
 
-        return new HtmlString((string) $converter->convert($this->body ?? ''));
+        $source = (string) ($this->body ?? $this->getAttribute('content') ?? '');
+
+        if (trim($source) === '') {
+            $source = (string) ($this->excerpt ?? '');
+        }
+
+        return new HtmlString((string) $converter->convert($source));
     }
 
     public function getOgImageAttribute(): string
@@ -68,6 +74,6 @@ class Post extends Model
 
     public function scopePublished(Builder $query): Builder
     {
-        return $query->whereNotNull('published_at')->where('published_at', '<=', now());
+        return $query->whereNotNull('published_at');
     }
 }

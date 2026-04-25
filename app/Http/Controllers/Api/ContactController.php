@@ -27,7 +27,7 @@ class ContactController extends Controller
             'message' => (string) $validated['message'],
         ]);
 
-        Mail::to((string) config('mail.from.address'))->queue(new ContactReceivedMail($contact));
+        Mail::to((string) config('contact.recipient_email'))->queue(new ContactReceivedMail($contact));
 
         return response()->json([
             'message' => 'Thanks, your message has been queued successfully.',

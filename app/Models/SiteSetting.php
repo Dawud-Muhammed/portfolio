@@ -47,4 +47,9 @@ class SiteSetting extends Model
 
         return $value ?? $default;
     }
+
+    public static function flushResolvedValues(): void
+    {
+        static::$resolvedValues = [];
+    }
 }

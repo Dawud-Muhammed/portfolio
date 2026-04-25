@@ -106,6 +106,7 @@
                 :name="trim($__env->yieldContent('hero_name', $defaultHeroName))"
                 :title="trim($__env->yieldContent('hero_title', $defaultHeroTitle))"
                 :cv-url="trim($__env->yieldContent('hero_cv_url', $defaultHeroCvUrl))"
+                :cta-label="trim($__env->yieldContent('hero_cta_label', 'Download CV'))"
                 :background-image="trim($__env->yieldContent('hero_background', $defaultHeroBackground))"
             />
         @endif

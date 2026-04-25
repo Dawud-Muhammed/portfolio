@@ -2,10 +2,7 @@
 
 @section('page_title', $post->title.' | Blog')
 @section('meta_description', $post->excerpt)
-@section('hero_name', 'Article')
-@section('hero_title', $post->title)
-@section('hero_cv_url', route('blog.index'))
-@section('hero_background', $post->cover_image_url)
+@section('show_hero', false)
 @section('og_image', $post->og_image)
 @section('schema')
     <script type="application/ld+json">
@@ -59,7 +56,7 @@
             x-data="slideInOnScroll()"
             x-init="observe($el)"
             :class="isVisible ? 'is-visible' : ''"
-            class="about-reveal overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-premium backdrop-blur-sm"
+            class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-premium backdrop-blur-sm"
         >
             <picture>
                 @if (!empty($postCoverWebp))

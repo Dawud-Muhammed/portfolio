@@ -25,7 +25,7 @@
         </section>
 
         <section class="mx-auto w-full max-w-7xl px-6">
-            @include('partials.testimonials')
+            @include('partials.testimonials', ['testimonials' => $testimonials])
         </section>
 
         <section class="mx-auto w-full max-w-7xl px-6">
