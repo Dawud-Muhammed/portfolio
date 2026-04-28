@@ -39,7 +39,7 @@
                 Remember me
             </label>
 
-            <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-white shadow-[0_12px_28px_-16px_rgba(234,88,12,0.65)] transition hover:scale-[1.01]">
+            <button type="submit" class="portal-button w-full">
                 Login
             </button>
         </form>

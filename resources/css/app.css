@@ -207,6 +207,272 @@
         appearance: none;
         -webkit-tap-highlight-color: transparent;
     }
+
+    .settings-help {
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        line-height: 1.5;
+        color: rgb(100 116 139);
+    }
+
+    .settings-preview {
+        margin-top: 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 9999px;
+        border: 1px solid rgb(251 146 60 / 0.18);
+        background: rgb(255 251 247);
+        padding: 0.45rem 0.75rem;
+        font-size: 0.75rem;
+        color: rgb(124 45 18);
+    }
+
+    .settings-file-input {
+        border-color: rgb(203 213 225);
+        background: rgb(255 255 255);
+        color: rgb(71 85 105);
+        transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    }
+
+    .settings-file-input::file-selector-button {
+        margin-right: 1rem;
+        border: 0;
+        border-radius: 0.75rem;
+        background: linear-gradient(90deg, rgb(251 146 60), rgb(249 115 22));
+        padding: 0.65rem 0.95rem;
+        color: rgb(255 255 255);
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: filter 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .settings-file-input:hover::file-selector-button {
+        filter: brightness(1.03);
+        box-shadow: 0 12px 24px -18px rgb(249 115 22 / 0.65);
+    }
+
+    .settings-file-input:focus,
+    .settings-file-input:focus-within {
+        border-color: rgb(251 146 60 / 0.8);
+        box-shadow: 0 0 0 4px rgb(249 115 22 / 0.12);
+    }
+
+    .settings-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1rem;
+        border: 1px solid rgb(253 186 116 / 0.65);
+        background: linear-gradient(90deg, rgb(251 146 60), rgb(249 115 22), rgb(234 88 12));
+        padding: 0.85rem 1.4rem;
+        color: rgb(255 255 255);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        box-shadow: 0 18px 34px -22px rgb(249 115 22 / 0.6);
+        transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+    }
+
+    .settings-submit:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.02);
+        box-shadow: 0 20px 36px -22px rgb(249 115 22 / 0.72);
+    }
+
+    .settings-submit:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 4px rgb(253 186 116 / 0.25), 0 18px 34px -22px rgb(249 115 22 / 0.62);
+    }
+
+    .settings-submit:disabled {
+        cursor: not-allowed;
+        opacity: 0.75;
+        transform: none;
+        filter: none;
+    }
+
+    .portal-button,
+    .portal-button-secondary,
+    .portal-link-button,
+    .portal-chip,
+    .portal-icon-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease, color 180ms ease, filter 180ms ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .portal-button {
+        border-radius: 0.875rem;
+        border: 1px solid rgb(253 186 116 / 0.72);
+        background: linear-gradient(90deg, rgb(251 146 60), rgb(249 115 22) 52%, rgb(234 88 12));
+        padding: 0.9rem 1.75rem;
+        color: rgb(255 255 255);
+        font-size: 0.875rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        box-shadow: 0 18px 38px -24px rgb(249 115 22 / 0.72);
+    }
+
+    .portal-button:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.03);
+        box-shadow: 0 22px 42px -26px rgb(249 115 22 / 0.82);
+    }
+
+    .portal-button:focus-visible,
+    .portal-button-secondary:focus-visible,
+    .portal-link-button:focus-visible,
+    .portal-chip:focus-visible,
+    .portal-icon-button:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 4px rgb(253 186 116 / 0.24);
+    }
+
+    .portal-button-secondary,
+    .portal-link-button {
+        border-radius: 0.875rem;
+        border: 1px solid rgb(226 232 240 / 0.95);
+        background: rgb(255 255 255 / 0.88);
+        padding: 0.9rem 1.5rem;
+        color: rgb(51 65 85);
+        font-size: 0.875rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        box-shadow: 0 16px 32px -24px rgb(15 23 42 / 0.28);
+    }
+
+    .portal-button-secondary:hover,
+    .portal-link-button:hover {
+        transform: translateY(-1px);
+        border-color: rgb(251 146 60 / 0.35);
+        color: rgb(194 65 12);
+        box-shadow: 0 20px 36px -24px rgb(15 23 42 / 0.35);
+    }
+
+    .portal-link-button.portal-link-button-accent {
+        border-color: rgb(253 186 116 / 0.6);
+        background: rgb(255 247 237 / 0.96);
+        color: rgb(154 52 18);
+    }
+
+    .portal-link-button.portal-link-button-accent:hover {
+        border-color: rgb(249 115 22 / 0.45);
+        background: rgb(249 115 22 / 0.1);
+        color: rgb(194 65 12);
+    }
+
+    .portal-link-button.portal-link-button-dark,
+    .portal-icon-button.portal-icon-button-dark {
+        border-color: rgb(51 65 85);
+        background: rgb(15 23 42 / 0.8);
+        color: rgb(241 245 249);
+    }
+
+    .portal-link-button.portal-link-button-dark:hover,
+    .portal-icon-button.portal-icon-button-dark:hover {
+        border-color: rgb(253 186 116 / 0.55);
+        background: rgb(30 41 59 / 0.92);
+        color: rgb(255 237 213);
+    }
+
+    .portal-chip {
+        border-radius: 9999px;
+        border: 1px solid rgb(203 213 225);
+        background: rgb(255 255 255);
+        padding: 0.55rem 1rem;
+        color: rgb(71 85 105);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        box-shadow: 0 10px 24px -24px rgb(15 23 42 / 0.28);
+    }
+
+    .portal-chip:hover {
+        border-color: rgb(251 146 60 / 0.45);
+        color: rgb(194 65 12);
+        transform: translateY(-1px);
+    }
+
+    .portal-chip.is-active {
+        border-color: rgb(251 146 60 / 0.88);
+        background: linear-gradient(90deg, rgb(251 146 60), rgb(249 115 22) 55%, rgb(234 88 12));
+        color: rgb(255 255 255);
+        box-shadow: 0 14px 30px -22px rgb(249 115 22 / 0.78);
+    }
+
+    .portal-icon-button {
+        height: 2.5rem;
+        width: 2.5rem;
+        border-radius: 9999px;
+        border: 1px solid rgb(203 213 225);
+        background: rgb(255 255 255);
+        color: rgb(71 85 105);
+        box-shadow: 0 10px 24px -24px rgb(15 23 42 / 0.3);
+    }
+
+    .portal-icon-button:hover {
+        transform: translateY(-1px);
+        border-color: rgb(251 146 60 / 0.45);
+        color: rgb(194 65 12);
+    }
+
+    .portal-icon-button.portal-icon-button-accent {
+        border-color: rgb(253 186 116 / 0.7);
+        background: linear-gradient(135deg, rgb(251 146 60), rgb(249 115 22) 55%, rgb(234 88 12));
+        color: rgb(255 255 255);
+        box-shadow: 0 14px 28px -22px rgb(249 115 22 / 0.72);
+    }
+
+    .portal-icon-button.portal-icon-button-accent:hover {
+        border-color: rgb(253 186 116 / 0.82);
+        background: linear-gradient(135deg, rgb(251 146 60), rgb(249 115 22) 60%, rgb(234 88 12));
+        color: rgb(255 255 255);
+        box-shadow: 0 18px 32px -22px rgb(249 115 22 / 0.8);
+    }
+
+    .portal-icon-button:disabled,
+    .portal-chip:disabled,
+    .portal-button:disabled,
+    .portal-button-secondary:disabled,
+    .portal-link-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.72;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .portal-dot-button {
+        height: 0.7rem;
+        width: 0.7rem;
+        border-radius: 9999px;
+        border: 1px solid rgb(253 186 116 / 0.62);
+        background: transparent;
+        transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .portal-dot-button:hover {
+        transform: scale(1.08);
+        border-color: rgb(251 146 60 / 0.8);
+        background: rgb(251 146 60 / 0.18);
+    }
+
+    .portal-dot-button.is-active {
+        border-color: rgb(253 186 116 / 0.95);
+        background: rgb(253 186 116);
+        box-shadow: 0 0 0 4px rgb(249 115 22 / 0.16);
+    }
 }
 
 @keyframes fade-up {

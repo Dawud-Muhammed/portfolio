@@ -87,7 +87,7 @@
                     <button
                         type="button"
                         @click="previous()"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-slate-100 transition hover:border-orange-300 hover:text-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-300"
+                        class="portal-icon-button portal-icon-button-dark"
                         aria-label="Previous testimonial"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
@@ -100,8 +100,8 @@
                             <button
                                 type="button"
                                 @click="goTo(index)"
-                                class="h-2.5 w-2.5 rounded-full border border-orange-300/60 transition"
-                                :class="currentIndex === index ? 'bg-orange-300' : 'bg-transparent hover:bg-orange-300/50'"
+                                class="portal-dot-button"
+                                :class="currentIndex === index ? 'is-active' : ''"
                                 :aria-label="`Show testimonial from ${testimonial.author}`"
                                 :aria-pressed="currentIndex === index"
                             ></button>
@@ -111,7 +111,7 @@
                     <button
                         type="button"
                         @click="next()"
-                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-slate-100 transition hover:border-orange-300 hover:text-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-300"
+                        class="portal-icon-button portal-icon-button-dark"
                         aria-label="Next testimonial"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">

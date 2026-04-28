@@ -138,7 +138,7 @@
             x-transition:leave-end="opacity-0 translate-y-3 scale-95"
             @click="scrollToTop"
             type="button"
-            class="pointer-events-auto fixed bottom-4 right-4 z-50 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_8px_24px_rgba(249,115,22,0.35)] transition duration-200 hover:scale-105 hover:shadow-[0_12px_28px_rgba(234,88,12,0.38)] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-300 focus-visible:ring-offset-2 sm:bottom-6 sm:right-6 sm:h-12 sm:w-12"
+            class="pointer-events-auto portal-icon-button portal-icon-button-accent fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6 sm:h-12 sm:w-12"
             aria-label="Scroll back to top"
             title="Scroll to top"
         >

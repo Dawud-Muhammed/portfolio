@@ -28,8 +28,8 @@
                     <button
                         type="button"
                         @click="activeCategory = 'all'"
-                        :class="activeCategory === 'all' ? 'border-orange-400 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_10px_20px_-14px_rgba(234,88,12,0.7)]' : 'border-slate-300 bg-white text-slate-600 hover:border-orange-300 hover:text-orange-700'"
-                        class="inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
+                        :class="activeCategory === 'all' ? 'is-active' : ''"
+                        class="portal-chip"
                     >
                         All
                     </button>
@@ -42,8 +42,8 @@
                         <button
                             type="button"
                             @click="activeCategory = '{{ $categorySlug }}'"
-                            :class="activeCategory === '{{ $categorySlug }}' ? 'border-orange-400 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_10px_20px_-14px_rgba(234,88,12,0.7)]' : 'border-slate-300 bg-white text-slate-600 hover:border-orange-300 hover:text-orange-700'"
-                            class="inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
+                            :class="activeCategory === '{{ $categorySlug }}' ? 'is-active' : ''"
+                            class="portal-chip"
                         >
                             {{ $categoryName }}
                         </button>
@@ -87,7 +87,7 @@
                                         {{ $post->excerpt }}
                                     </p>
 
-                                    <span class="inline-flex rounded-full border border-orange-300 bg-orange-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-orange-700 transition group-hover:bg-orange-500 group-hover:text-white">
+                                    <span class="portal-link-button portal-link-button-accent">
                                         Read Article
                                     </span>
                                 </div>

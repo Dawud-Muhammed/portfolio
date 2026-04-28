@@ -75,7 +75,7 @@
             </picture>
 
             <div class="space-y-8 p-6 md:p-10" id="article-content">
-                <a href="{{ route('blog.index') }}" class="inline-flex items-center rounded-full border border-slate-300/80 bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
+                <a href="{{ route('blog.index') }}" class="portal-link-button">
                     Back to Blog
                 </a>
 
@@ -126,7 +126,7 @@
 
                                 <div class="mt-4 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.16em]">
                                     @if (!empty($githubUrl))
-                                        <a href="{{ $githubUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
+                                        <a href="{{ $githubUrl }}" target="_blank" rel="noopener noreferrer" class="portal-link-button portal-link-button-secondary">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true">
                                                 <path d="M12 .5C5.7.5.6 5.7.6 12.1c0 5.1 3.3 9.4 7.8 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.2-1.7-1.2-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 1.6-.7 1.9-1.1.1-.7.4-1.1.8-1.4-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2.9-.2 1.9-.3 2.9-.3s2 .1 2.9.3c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.9 1.2 2 1.2 3.3 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1 .8 2.1v3.1c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.9C23.4 5.7 18.3.5 12 .5Z"/>
                                             </svg>
@@ -135,7 +135,7 @@
                                     @endif
 
                                     @if (!empty($linkedinUrl))
-                                        <a href="{{ $linkedinUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
+                                        <a href="{{ $linkedinUrl }}" target="_blank" rel="noopener noreferrer" class="portal-link-button portal-link-button-secondary">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true">
                                                 <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.86-3.04-1.87 0-2.16 1.46-2.16 2.94v5.67H9.31V9h3.42v1.56h.05c.48-.9 1.66-1.86 3.42-1.86 3.66 0 4.34 2.41 4.34 5.54v6.21ZM5.33 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.11 20.45H3.55V9h3.56v11.45Z"/>
                                             </svg>
@@ -169,7 +169,7 @@
                                 href="https://twitter.com/intent/tweet?url={{ urlencode($canonicalUrl) }}&text={{ urlencode($shareTitle) }}"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="inline-flex items-center rounded-full border border-slate-300 bg-slate-50 px-4 py-2 text-slate-700 transition hover:border-orange-300 hover:text-orange-700"
+                                class="portal-link-button"
                             >
                                 Share on X
                             </a>
@@ -177,14 +177,14 @@
                                 href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode($canonicalUrl) }}&title={{ urlencode($shareTitle) }}"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="inline-flex items-center rounded-full border border-slate-300 bg-slate-50 px-4 py-2 text-slate-700 transition hover:border-orange-300 hover:text-orange-700"
+                                class="portal-link-button"
                             >
                                 Share on LinkedIn
                             </a>
                             <button
                                 type="button"
                                 @click="copyLink()"
-                                class="inline-flex items-center rounded-full border border-orange-300 bg-orange-500/10 px-4 py-2 text-orange-700 transition hover:bg-orange-500 hover:text-white"
+                                class="portal-link-button portal-link-button-accent"
                                 x-text="copied ? 'Copied!' : 'Copy Link'"
                             ></button>
                         </div>
@@ -195,7 +195,7 @@
                             @if ($previousPost)
                                 <a
                                     href="{{ route('blog.show', $previousPost->slug) }}"
-                                    class="flex h-full flex-col justify-center rounded-full border border-slate-300/80 bg-white/75 px-4 py-3 text-left transition hover:border-orange-300 hover:text-orange-700"
+                                    class="portal-link-button flex h-full flex-col justify-center items-start text-left"
                                 >
                                     <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">← Previous</span>
                                     <span class="mt-1 line-clamp-2 text-sm font-semibold text-slate-800">{{ $previousPost->title }}</span>
@@ -207,7 +207,7 @@
                             @if ($nextPost)
                                 <a
                                     href="{{ route('blog.show', $nextPost->slug) }}"
-                                    class="flex h-full flex-col justify-center rounded-full border border-slate-300/80 bg-white/75 px-4 py-3 text-left transition hover:border-orange-300 hover:text-orange-700 sm:text-right"
+                                    class="portal-link-button flex h-full flex-col justify-center items-start text-left sm:items-end sm:text-right"
                                 >
                                     <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Next →</span>
                                     <span class="mt-1 line-clamp-2 text-sm font-semibold text-slate-800">{{ $nextPost->title }}</span>
@@ -217,7 +217,7 @@
                     </div>
 
                     <div class="flex items-center justify-start">
-                        <a href="{{ route('blog.index') }}" class="inline-flex items-center rounded-full border border-slate-300/80 bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
+                        <a href="{{ route('blog.index') }}" class="portal-link-button">
                             Back to Blog
                         </a>
                     </div>

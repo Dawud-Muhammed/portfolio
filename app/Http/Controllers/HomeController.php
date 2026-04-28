@@ -111,27 +111,27 @@ class HomeController extends Controller
             [
                 'key' => 'about',
                 'label' => SiteSetting::get('nav_about_label', 'About'),
-                'url' => route('home.about'),
+                'url' => SiteSetting::get('nav_about_url', route('home.about')),
             ],
             [
                 'key' => 'skills',
                 'label' => SiteSetting::get('nav_skills_label', 'Skills'),
-                'url' => route('home.skills'),
+                'url' => SiteSetting::get('nav_skills_url', route('home.skills')),
             ],
             [
                 'key' => 'projects',
                 'label' => SiteSetting::get('nav_projects_label', 'Projects'),
-                'url' => route('projects.index'),
+                'url' => SiteSetting::get('nav_projects_url', route('projects.index')),
             ],
             [
                 'key' => 'testimonials',
                 'label' => SiteSetting::get('nav_testimonials_label', 'Testimonials'),
-                'url' => route('home.testimonials'),
+                'url' => SiteSetting::get('nav_testimonials_url', route('home.testimonials')),
             ],
             [
                 'key' => 'contact',
                 'label' => SiteSetting::get('nav_contact_label', 'Contact'),
-                'url' => route('home.contact'),
+                'url' => SiteSetting::get('nav_contact_url', route('home.contact')),
             ],
         ];
 

@@ -40,6 +40,11 @@ class SettingsController extends Controller
         'nav_projects_label',
         'nav_testimonials_label',
         'nav_contact_label',
+        'nav_about_url',
+        'nav_skills_url',
+        'nav_projects_url',
+        'nav_testimonials_url',
+        'nav_contact_url',
         'projects_badge',
         'projects_heading',
         'testimonials_badge',
@@ -100,6 +105,7 @@ class SettingsController extends Controller
             'hero_name' => ['required', 'string', 'max:255'],
             'hero_title' => ['required', 'string', 'max:255'],
             'hero_cv_url' => ['nullable', 'string', 'max:2048'],
+            'hero_cv_file' => ['nullable', 'file', 'mimetypes:application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'max:10240'],
             'hero_cta_label' => ['nullable', 'string', 'max:255'],
             'hero_primary_cta_label' => ['nullable', 'string', 'max:255'],
             'hero_availability_text' => ['nullable', 'string', 'max:255'],
@@ -121,6 +127,11 @@ class SettingsController extends Controller
             'nav_projects_label' => ['nullable', 'string', 'max:255'],
             'nav_testimonials_label' => ['nullable', 'string', 'max:255'],
             'nav_contact_label' => ['nullable', 'string', 'max:255'],
+            'nav_about_url' => ['nullable', 'string', 'max:2048'],
+            'nav_skills_url' => ['nullable', 'string', 'max:2048'],
+            'nav_projects_url' => ['nullable', 'string', 'max:2048'],
+            'nav_testimonials_url' => ['nullable', 'string', 'max:2048'],
+            'nav_contact_url' => ['nullable', 'string', 'max:2048'],
             'projects_badge' => ['nullable', 'string', 'max:255'],
             'projects_heading' => ['nullable', 'string', 'max:255'],
             'testimonials_badge' => ['nullable', 'string', 'max:255'],
@@ -191,6 +202,11 @@ class SettingsController extends Controller
             'nav_projects_label' => trim((string) ($validated['nav_projects_label'] ?? '')),
             'nav_testimonials_label' => trim((string) ($validated['nav_testimonials_label'] ?? '')),
             'nav_contact_label' => trim((string) ($validated['nav_contact_label'] ?? '')),
+            'nav_about_url' => trim((string) ($validated['nav_about_url'] ?? '')),
+            'nav_skills_url' => trim((string) ($validated['nav_skills_url'] ?? '')),
+            'nav_projects_url' => trim((string) ($validated['nav_projects_url'] ?? '')),
+            'nav_testimonials_url' => trim((string) ($validated['nav_testimonials_url'] ?? '')),
+            'nav_contact_url' => trim((string) ($validated['nav_contact_url'] ?? '')),
             'projects_badge' => trim((string) ($validated['projects_badge'] ?? '')),
             'projects_heading' => trim((string) ($validated['projects_heading'] ?? '')),
             'testimonials_badge' => trim((string) ($validated['testimonials_badge'] ?? '')),
@@ -230,12 +246,20 @@ class SettingsController extends Controller
             'footer_whatsapp_label' => trim((string) ($validated['footer_whatsapp_label'] ?? '')),
         ];
 
+        if ($request->hasFile('hero_cv_file')) {
+            SiteSetting::forgetStoredFile($current['hero_cv_url'] ?? null);
+            $path = $request->file('hero_cv_file')->store('settings/cv', 'public');
+            $values['hero_cv_url'] = url(Storage::url($path));
+        }
+
         if ($request->hasFile('hero_background_file')) {
+            SiteSetting::forgetStoredFile($current['hero_background'] ?? null);
             $path = $request->file('hero_background_file')->store('settings', 'public');
             $values['hero_background'] = url(Storage::url($path));
         }
 
         if ($request->hasFile('about_profile_image_file')) {
+            SiteSetting::forgetStoredFile($current['about_profile_image'] ?? null);
             $path = $request->file('about_profile_image_file')->store('settings', 'public');
             $values['about_profile_image'] = url(Storage::url($path));
         }

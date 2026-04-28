@@ -39,7 +39,7 @@
         >
             <a
                 href="{{ route('home') }}#projects"
-                class="inline-flex items-center rounded-full border border-slate-300/80 bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 transition hover:border-orange-300 hover:text-orange-700"
+                class="portal-link-button"
             >
                 Back to Projects
             </a>
@@ -103,13 +103,13 @@
 
                     <section class="flex flex-wrap items-center gap-3 border-t border-slate-200/80 pt-6 text-xs font-semibold uppercase tracking-[0.16em]">
                         @if (!empty($project->github_url))
-                            <a href="{{ $project->github_url }}" target="_blank" rel="noopener noreferrer" class="rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
+                            <a href="{{ $project->github_url }}" target="_blank" rel="noopener noreferrer" class="portal-link-button">
                                 GitHub
                             </a>
                         @endif
 
                         @if (!empty($project->demo_url))
-                            <a href="{{ $project->demo_url }}" target="_blank" rel="noopener noreferrer" class="rounded-full border border-orange-300 bg-orange-500/10 px-4 py-2 text-orange-700 transition hover:bg-orange-500 hover:text-white">
+                            <a href="{{ $project->demo_url }}" target="_blank" rel="noopener noreferrer" class="portal-link-button portal-link-button-accent">
                                 Live Demo
                             </a>
                         @endif

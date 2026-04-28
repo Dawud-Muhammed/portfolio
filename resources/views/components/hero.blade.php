@@ -16,6 +16,10 @@
     $backgroundImage = ImageAsset::resolve((string) $backgroundImage, (string) config('seo.default_image', ''));
     $backgroundImageWebp = ImageAsset::webpVariant($backgroundImage);
     $ctaUrl = filter_var(trim((string) $cvUrl), FILTER_VALIDATE_URL) ? trim((string) $cvUrl) : null;
+    $ctaPath = (string) parse_url($ctaUrl ?? '', PHP_URL_PATH);
+    $ctaShouldDownload = $ctaUrl !== null && (
+        str_starts_with($ctaUrl, url('/storage/')) || preg_match('/\.(pdf|docx?|zip)$/i', $ctaPath) === 1
+    );
 @endphp
 
 <section
@@ -63,22 +67,27 @@
                 <button
                     type="button"
                     @click="scrollToProjects"
-                    class="hero-button-glow w-full rounded-xl border border-orange-300/50 bg-gradient-to-r from-[#ff6a1c] to-[#ff8743] px-7 py-3 text-sm font-semibold uppercase tracking-wide text-white transition duration-300 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300 sm:w-auto"
+                    class="portal-button hero-button-glow w-full sm:w-auto"
                     aria-label="Scroll to the projects section"
                 >
                     {{ $primaryCtaLabel }}
                 </button>
-
-                @if ($ctaUrl)
-                    <a
-                        href="{{ $ctaUrl }}"
-                        @if ($ctaLabel === 'Download CV') download @endif
-                        class="hero-button-glow w-full rounded-xl border border-white/45 bg-white/10 px-7 py-3 text-sm font-semibold uppercase tracking-wide text-white transition duration-300 hover:-translate-y-0.5 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto"
-                        aria-label="{{ $ctaLabel }}"
-                    >
-                        {{ $ctaLabel }}
-                    </a>
-                @endif
+                    @if ($ctaUrl)
+                        <a
+                            href="{{ $ctaUrl }}"
+                            @if ($ctaShouldDownload) download @endif
+                            class="portal-button-secondary hero-button-glow w-full sm:w-auto inline-flex items-center justify-center gap-2"
+                            aria-label="{{ $ctaLabel }}"
+                        >
+                            <span>{{ $ctaLabel }}</span>
+                            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download">
+                                <path d="M12 15V3"></path>
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <path d="m7 10 5 5 5-5"></path>
+                            </svg>
+                        </a>
+                    @endif
             </div>
         </div>
     </div>

@@ -54,7 +54,7 @@
             <button
                 type="button"
                 @click="cycleTheme()"
-                class="inline-flex items-center gap-2 rounded-md border border-slate-300/80 bg-slate-50/90 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-orange-300 hover:text-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:border-slate-700/80 dark:bg-slate-800/90 dark:text-slate-200 dark:hover:border-orange-400 dark:hover:text-orange-300"
+                class="portal-button-secondary"
                 :title="themeLabel()"
                 :aria-label="themeLabel()"
             >

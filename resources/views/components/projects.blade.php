@@ -27,10 +27,8 @@
             <button
                 type="button"
                 @click="activeCategory = 'all'"
-                :class="activeCategory === 'all'
-                    ? 'border-orange-400 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_10px_20px_-14px_rgba(234,88,12,0.7)]'
-                    : 'border-slate-300 bg-white text-slate-600 hover:border-orange-300 hover:text-orange-700'"
-                class="inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
+                :class="activeCategory === 'all' ? 'is-active' : ''"
+                class="portal-chip"
             >
                 All
             </button>
@@ -40,10 +38,8 @@
                     type="button"
                     @click="activeCategory = category.slug"
                     x-text="category.name"
-                    class="inline-flex rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
-                    :class="activeCategory === category.slug
-                        ? 'border-orange-400 bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white shadow-[0_10px_20px_-14px_rgba(234,88,12,0.7)]'
-                        : 'border-slate-300 bg-white text-slate-600 hover:border-orange-300 hover:text-orange-700'"
+                    class="portal-chip"
+                    :class="activeCategory === category.slug ? 'is-active' : ''"
                     :aria-selected="activeCategory === category.slug"
                 ></button>
             </template>
@@ -107,17 +103,17 @@
                     @if (!empty($project['slug']))
                         <a
                             href="{{ route('projects.show', $project['slug']) }}"
-                            class="inline-flex items-center rounded-full border border-orange-300/80 bg-orange-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-orange-700 transition hover:bg-orange-500 hover:text-white"
+                            class="portal-link-button portal-link-button-accent"
                         >
                             View Case Study
                         </a>
                     @endif
 
                     <div class="flex items-center gap-3 pt-1 text-xs font-semibold uppercase tracking-[0.16em]">
-                        <a href="{{ $project['github'] }}" target="_blank" rel="noopener noreferrer" class="rounded-full border border-slate-300 px-4 py-2 text-slate-700 transition hover:border-orange-300 hover:text-orange-700">
+                        <a href="{{ $project['github'] }}" target="_blank" rel="noopener noreferrer" class="portal-link-button">
                             GitHub
                         </a>
-                        <a href="{{ $project['demo'] }}" target="_blank" rel="noopener noreferrer" class="rounded-full border border-orange-300 bg-orange-500/10 px-4 py-2 text-orange-700 transition hover:bg-orange-500 hover:text-white">
+                        <a href="{{ $project['demo'] }}" target="_blank" rel="noopener noreferrer" class="portal-link-button portal-link-button-accent">
                             Live Demo
                         </a>
                     </div>
