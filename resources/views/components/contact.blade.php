@@ -1,19 +1,43 @@
+@props([
+    'kicker' => 'Contact',
+    'heading' => 'Let us build something exceptional.',
+    'subheading' => 'Send a message and I will respond as soon as possible.',
+    'submitLabel' => 'Send Message',
+    'submittingLabel' => 'Sending...',
+    'nameLabel' => 'Name',
+    'emailLabel' => 'Email',
+    'subjectLabel' => 'Subject',
+    'messageLabel' => 'Message',
+    'validationErrorMessage' => 'Please fix the highlighted fields.',
+    'successMessage' => 'Message sent successfully.',
+    'errorMessage' => 'Unable to send your message right now.',
+    'networkErrorMessage' => 'A network error occurred. Please try again.',
+])
+
 <section
     id="contact"
     class="contact-shell mx-auto w-full max-w-7xl px-6 py-20"
-    x-data="contactForm()"
+    x-data="contactForm({
+        endpoint: @js(route('api.v1.contact.store')),
+        submitLabel: @js($submitLabel),
+        submittingLabel: @js($submittingLabel),
+        validationErrorMessage: @js($validationErrorMessage),
+        successMessage: @js($successMessage),
+        errorMessage: @js($errorMessage),
+        networkErrorMessage: @js($networkErrorMessage),
+    })"
     aria-labelledby="contact-heading"
 >
     <div class="contact-panel rounded-3xl border p-6 md:p-10">
         <div class="mx-auto mb-8 max-w-2xl text-center">
             <p class="mb-3 inline-flex rounded-full border border-orange-300/45 bg-orange-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-orange-200">
-                Contact
+                {{ $kicker }}
             </p>
             <h2 id="contact-heading" class="text-3xl font-semibold tracking-tight text-slate-100 md:text-4xl" style="font-family: var(--font-display);">
-                Let us build something exceptional.
+                {{ $heading }}
             </h2>
             <p class="mt-4 text-sm text-slate-300 md:text-base" style="font-family: var(--font-body);">
-                Send a message and I will respond as soon as possible.
+                {{ $subheading }}
             </p>
         </div>
 
@@ -30,7 +54,7 @@
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div>
-                    <label for="contact-name" class="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">Name</label>
+                    <label for="contact-name" class="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">{{ $nameLabel }}</label>
                     <input
                         id="contact-name"
                         type="text"
@@ -45,7 +69,7 @@
                 </div>
 
                 <div>
-                    <label for="contact-email" class="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">Email</label>
+                    <label for="contact-email" class="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">{{ $emailLabel }}</label>
                     <input
                         id="contact-email"
                         type="email"
@@ -61,7 +85,7 @@
             </div>
 
             <div>
-                <label for="contact-subject" class="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">Subject</label>
+                <label for="contact-subject" class="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">{{ $subjectLabel }}</label>
                 <input
                     id="contact-subject"
                     type="text"
@@ -75,7 +99,7 @@
             </div>
 
             <div>
-                <label for="contact-message" class="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">Message</label>
+                <label for="contact-message" class="mb-2 block text-xs font-semibold uppercase tracking-[0.15em] text-slate-300">{{ $messageLabel }}</label>
                 <textarea
                     id="contact-message"
                     x-model.trim="form.message"
@@ -93,7 +117,7 @@
 
                 <button
                     type="submit"
-                    class="contact-submit inline-flex items-center justify-center gap-2 rounded-xl border border-orange-300/45 bg-gradient-to-r from-orange-500 to-orange-400 px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition"
+                    class="contact-submit"
                     :disabled="isSubmitting"
                     :aria-busy="isSubmitting"
                 >
@@ -101,7 +125,7 @@
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.25" stroke-width="4"></circle>
                         <path d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" stroke-width="4"></path>
                     </svg>
-                    <span x-text="isSubmitting ? 'Sending...' : 'Send Message'"></span>
+                    <span x-text="isSubmitting ? copy.submittingLabel : copy.submitLabel">{{ $submitLabel }}</span>
                 </button>
             </div>
         </form>

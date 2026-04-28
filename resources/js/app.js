@@ -283,7 +283,16 @@ window.skillsShowcase = (skills, categories, maxExperience, avgProficiency) => (
 	},
 });
 
-window.contactForm = () => ({
+window.contactForm = (options = {}) => ({
+	endpoint: options.endpoint || '/api/v1/contact',
+	copy: {
+		submitLabel: options.submitLabel || 'Send Message',
+		submittingLabel: options.submittingLabel || 'Sending...',
+		validationErrorMessage: options.validationErrorMessage || 'Please fix the highlighted fields.',
+		successMessage: options.successMessage || 'Message sent successfully.',
+		errorMessage: options.errorMessage || 'Unable to send your message right now.',
+		networkErrorMessage: options.networkErrorMessage || 'A network error occurred. Please try again.',
+	},
 	form: {
 		name: '',
 		email: '',
@@ -354,7 +363,7 @@ window.contactForm = () => ({
 
 		if (!this.validateAll()) {
 			this.status = {
-				message: 'Please fix the highlighted fields.',
+				message: this.copy.validationErrorMessage,
 				ok: false,
 			};
 			return;
@@ -365,7 +374,7 @@ window.contactForm = () => ({
 		try {
 			const csrfToken = document.head.querySelector('meta[name=csrf-token]')?.content ?? '';
 
-			const response = await fetch('/api/v1/contact', {
+			const response = await fetch(this.endpoint, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -385,7 +394,7 @@ window.contactForm = () => ({
 				}
 
 				this.status = {
-					message: payload.message || 'Unable to send your message right now.',
+					message: payload.message || this.copy.errorMessage,
 					ok: false,
 				};
 
@@ -402,7 +411,7 @@ window.contactForm = () => ({
 			};
 
 			this.status = {
-				message: payload.message || 'Message sent successfully.',
+				message: payload.message || this.copy.successMessage,
 				ok: true,
 			};
 
@@ -411,7 +420,7 @@ window.contactForm = () => ({
 			}
 		} catch {
 			this.status = {
-				message: 'A network error occurred. Please try again.',
+				message: this.copy.networkErrorMessage,
 				ok: false,
 			};
 		} finally {

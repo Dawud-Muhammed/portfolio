@@ -3,7 +3,11 @@
     'title' => 'Laravel Developer',
     'cvUrl' => '#',
     'ctaLabel' => 'Download CV',
+    'primaryCtaLabel' => 'View Projects',
+    'availabilityText' => 'Available for freelance and full-time roles',
+    'description' => 'I build robust, scalable backend systems powered by Laravel and polished interfaces using Tailwind CSS.',
     'backgroundImage' => '/storage/images/photo-1542831371-29b0f74f9713.jpg',
+    'backgroundAlt' => 'Futuristic coding workstation with glowing monitors in a dark studio',
 ])
 
 @php
@@ -25,7 +29,7 @@
         @endif
         <img
             src="{{ $backgroundImage }}"
-            alt="Futuristic coding workstation with glowing monitors in a dark studio"
+            alt="{{ $backgroundAlt }}"
             class="absolute inset-0 h-full w-full object-cover"
             width="1600"
             height="900"
@@ -43,7 +47,7 @@
     <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center gap-10 px-6 py-24 text-center lg:items-start lg:text-left">
         <div class="max-w-3xl space-y-6">
             <p class="animate-fade-up text-xs font-semibold uppercase tracking-[0.25em] text-orange-200/90 [animation-delay:120ms]">
-                Available for freelance and full-time roles
+                {{ $availabilityText }}
             </p>
 
             <h1 id="hero-heading" class="animate-fade-up text-balance text-4xl font-bold leading-tight text-white md:text-6xl [animation-delay:180ms]" style="font-family: var(--font-display);">
@@ -52,7 +56,7 @@
             </h1>
 
             <p class="animate-fade-up max-w-2xl text-base text-zinc-200 md:text-lg [animation-delay:260ms]" style="font-family: var(--font-body);">
-                I build robust, scalable backend systems powered by Laravel and polished interfaces using Tailwind CSS.
+                {{ $description }}
             </p>
 
             <div class="animate-fade-up flex w-full flex-col items-center justify-center gap-4 pt-2 [animation-delay:320ms] sm:flex-row lg:justify-start">
@@ -62,7 +66,7 @@
                     class="hero-button-glow w-full rounded-xl border border-orange-300/50 bg-gradient-to-r from-[#ff6a1c] to-[#ff8743] px-7 py-3 text-sm font-semibold uppercase tracking-wide text-white transition duration-300 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300 sm:w-auto"
                     aria-label="Scroll to the projects section"
                 >
-                    View Projects
+                    {{ $primaryCtaLabel }}
                 </button>
 
                 @if ($ctaUrl)

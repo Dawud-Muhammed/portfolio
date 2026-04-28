@@ -1,5 +1,8 @@
 @props([
     'testimonials' => collect(),
+    'kicker' => 'Testimonials',
+    'heading' => 'Trusted by thoughtful teams and product leaders.',
+    'subheading' => 'A few words from collaborators and stakeholders who value clear communication, sharp delivery, and polished execution.',
 ])
 
 <section
@@ -11,13 +14,13 @@
 >
     <div class="mb-10 flex flex-col gap-4 text-center lg:text-left">
         <p class="mx-auto inline-flex rounded-full border border border-orange-300 bg-orange-500/10 px-4 py-2 text-orange-700 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] lg:mx-0">
-            Testimonials
+            {{ $kicker }}
         </p>
         <h2 id="testimonials-heading" class="text-3xl font-semibold tracking-tight text-slate-600 md:text-4xl" style="font-family: var(--font-display);">
-            Trusted by thoughtful teams and product leaders.
+            {{ $heading }}
         </h2>
         <p class="mx-auto max-w-3xl text-sm leading-relaxed text-slate-1000 lg:mx-0" style="font-family: var(--font-body);">
-            A few words from collaborators and stakeholders who value clear communication, sharp delivery, and polished execution.
+            {{ $subheading }}
         </p>
     </div>
 

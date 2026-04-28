@@ -10,128 +10,23 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
-use App\Models\Project;
-use App\Models\SiteSetting;
-use App\Models\Skill;
-use App\Models\Testimonial;
-use App\Support\ImageAsset;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'show'])->name('sitemap.show');
 Route::get('/robots.txt', [RobotsController::class, 'show'])->name('robots.show');
 
-Route::get('/', function () {
-    $publishedProjects = Project::query()
-        ->published()
-        ->orderByDesc('published_at')
-        ->get();
+Route::get('/', HomeController::class)->name('home');
 
-    $projectsCollection = $publishedProjects->isNotEmpty()
-        ? $publishedProjects
-        : Project::query()->latest()->get();
+$redirectToHomeSection = static fn (string $section) => redirect()->to(route('home').'#'.$section);
 
-    $projectCategoryNames = static function (Project $project): array {
-        $source = is_array($project->filters) && ! empty($project->filters)
-            ? $project->filters
-            : (is_array($project->stack) ? $project->stack : []);
-
-        return collect($source)
-            ->map(static fn (mixed $value): string => trim((string) $value))
-            ->filter()
-            ->values()
-            ->all();
-    };
-
-    $projectCategories = $projectsCollection
-        ->flatMap(static fn (Project $project): array => $projectCategoryNames($project))
-        ->map(static fn (string $name): array => [
-            'name' => $name,
-            'slug' => Str::slug($name),
-        ])
-        ->filter(static fn (array $category): bool => $category['slug'] !== '')
-        ->unique('slug')
-        ->sortBy('name')
-        ->values()
-        ->all();
-
-    $projects = $projectsCollection
-        ->map(static function (Project $project) use ($projectCategoryNames): array {
-            $categoryNames = $projectCategoryNames($project);
-
-            return [
-                'title' => $project->title,
-                'slug' => $project->slug,
-                'description' => $project->description,
-                'image' => $project->image_url,
-                'stack' => $project->stack,
-                'categories' => collect($categoryNames)
-                    ->map(static fn (string $name): string => Str::slug($name))
-                    ->filter()
-                    ->values()
-                    ->all(),
-                'github' => $project->github_url,
-                'demo' => $project->demo_url,
-                'details' => $project->details,
-            ];
-        })
-        ->values()
-        ->all();
-
-    $skills = Skill::query()
-        ->published()
-        ->orderByDesc('level')
-        ->get()
-        ->map(fn (Skill $skill): array => [
-            'id' => $skill->skill_id,
-            'name' => $skill->name,
-            'level' => $skill->level,
-            'years' => $skill->years,
-            'description' => $skill->description,
-            'category' => $skill->category,
-        ])
-        ->values()
-        ->all();
-
-    $testimonials = Testimonial::query()
-        ->where('is_active', true)
-        ->orderBy('sort_order')
-        ->get()
-        ->map(fn (Testimonial $testimonial): array => [
-            'quote' => $testimonial->quote,
-            'author' => $testimonial->author,
-            'role' => $testimonial->role,
-            'avatar' => $testimonial->avatar_url,
-        ])
-        ->values()
-        ->all();
-
-    $siteSettings = [
-        'hero_name' => SiteSetting::get('hero_name', 'Dawud Muhammed'),
-        'hero_title' => SiteSetting::get('hero_title', 'Laravel Developer'),
-        'hero_cv_url' => SiteSetting::get('hero_cv_url', url('/')),
-        'hero_background' => ImageAsset::resolve(
-            SiteSetting::get('hero_background'),
-            (string) config('seo.default_image', '')
-        ),
-        'about_bio' => SiteSetting::get('about_bio', 'I design and ship Laravel products focused on reliability, maintainability, and user trust. From architecture to implementation, I prioritize clear communication, measurable outcomes, and long-term scalability.'),
-        'about_profile_image' => ImageAsset::resolve(
-            SiteSetting::get('about_profile_image'),
-            '/storage/images/photo-1542831371-29b0f74f9713.jpg'
-        ),
-    ];
-
-    return view('welcome', [
-        'projects' => $projects,
-        'projectCategories' => $projectCategories,
-        'skills' => $skills,
-        'testimonials' => $testimonials,
-        'siteSettings' => $siteSettings,
-    ]);
-})->name('home');
+Route::get('/about', static fn () => $redirectToHomeSection('about'))->name('home.about');
+Route::get('/skills', static fn () => $redirectToHomeSection('skills'))->name('home.skills');
+Route::get('/testimonials', static fn () => $redirectToHomeSection('testimonials'))->name('home.testimonials');
+Route::get('/contact', static fn () => $redirectToHomeSection('contact'))->name('home.contact');
 
 Route::get('/projects', function () {
     return redirect()->to(route('home').'#projects');

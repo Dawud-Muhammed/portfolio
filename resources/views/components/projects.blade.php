@@ -1,4 +1,4 @@
-@props(['projects' => [], 'categories' => []])
+@props(['projects' => [], 'categories' => [], 'kicker' => 'Featured Work', 'heading' => 'Crafted products with performance and polish.'])
 
 @php
     use App\Support\ImageAsset;
@@ -16,10 +16,10 @@
     <div class="mb-10 flex flex-col items-center justify-between gap-6 text-center lg:flex-row lg:text-left">
         <div class="max-w-2xl">
             <p class="mb-3 inline-flex rounded-full border border-orange-300/45 bg-orange-400/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-orange-700">
-                Featured Work
+                {{ $kicker }}
             </p>
             <h2 id="projects-heading" class="text-3xl font-semibold tracking-tight text-slate-1000 md:text-4xl" style="font-family: var(--font-display);">
-                Crafted products with performance and polish.
+                {{ $heading }}
             </h2>
         </div>
 

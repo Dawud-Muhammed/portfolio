@@ -27,6 +27,9 @@
 
     $maxExperience = (int) ($skills->max('years') ?? 0);
     $averageProficiency = (int) round((float) ($skills->avg('level') ?? 0));
+    $kicker = (string) ($kicker ?? 'Core Skills');
+    $heading = (string) ($heading ?? 'Precision engineering with a product-first mindset.');
+    $subheading = (string) ($subheading ?? 'Skill levels and counters animate on scroll, with category grouping powered by Laravel enums.');
 @endphp
 
 <section
@@ -39,13 +42,13 @@
     <div class="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div class="max-w-2xl text-center lg:text-left">
             <p class="skills-kicker mb-3 inline-flex rounded-full border  border-orange-300/45 bg-orange-400/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-orange-700">
-                Core Skills
+                {{ $kicker }}
             </p>
             <h2 id="skills-heading" class="text-3xl font-semibold tracking-tight text-slate-100 md:text-4xl" style="font-family: var(--font-display);">
-                Precision engineering with a product-first mindset.
+                {{ $heading }}
             </h2>
             <p class="mt-4 text-sm leading-relaxed text-slate-300 md:text-base" style="font-family: var(--font-body);">
-                Skill levels and counters animate on scroll, with category grouping powered by Laravel enums.
+                {{ $subheading }}
             </p>
         </div>
 

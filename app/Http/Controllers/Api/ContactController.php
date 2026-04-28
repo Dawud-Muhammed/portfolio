@@ -7,13 +7,28 @@ use App\Mail\ContactReceivedMail;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(['data' => [], 'message' => 'List of contacts']);
+        $contacts = Contact::query()
+            ->latest()
+            ->paginate((int) $request->integer('per_page', 20));
+
+        $payload = $contacts->through(static fn (Contact $contact): array => [
+            'id' => $contact->id,
+            'name' => $contact->name,
+            'email' => $contact->email,
+            'subject' => $contact->subject,
+            'message' => $contact->message,
+            'read_at' => optional($contact->read_at)?->toIso8601String(),
+            'created_at' => optional($contact->created_at)?->toIso8601String(),
+        ]);
+
+        return response()->json($payload);
     }
 
     public function store(StoreContactRequest $request): JsonResponse
@@ -34,8 +49,18 @@ class ContactController extends Controller
         ], 202);
     }
 
-    public function show(string $contact): JsonResponse
+    public function show(Contact $contact): JsonResponse
     {
-        return response()->json(['data' => ['id' => $contact], 'message' => 'Contact details']);
+        return response()->json([
+            'data' => [
+                'id' => $contact->id,
+                'name' => $contact->name,
+                'email' => $contact->email,
+                'subject' => $contact->subject,
+                'message' => $contact->message,
+                'read_at' => optional($contact->read_at)?->toIso8601String(),
+                'created_at' => optional($contact->created_at)?->toIso8601String(),
+            ],
+        ]);
     }
 }

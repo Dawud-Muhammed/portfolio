@@ -2,16 +2,19 @@
     use App\Models\SiteSetting;
     use Illuminate\Support\Str;
 
+    $copyrightName = (string) SiteSetting::get('footer_copyright_name', SiteSetting::get('hero_name', config('app.name', 'Portfolio')));
+    $blogLabel = (string) SiteSetting::get('footer_blog_label', 'Blog');
+
     $links = $socialLinks ?? [
-        ['key' => 'home', 'label' => 'Home', 'url' => route('home')],
-        ['key' => 'github', 'label' => 'GitHub', 'url' => SiteSetting::get('footer_github', 'https://github.com/your-username')],
-        ['key' => 'linkedin', 'label' => 'LinkedIn', 'url' => SiteSetting::get('footer_linkedin', 'https://www.linkedin.com/in/your-username')],
-        ['key' => 'x', 'label' => 'X', 'url' => SiteSetting::get('footer_x', 'https://x.com/your-username')],
-        ['key' => 'tiktok', 'label' => 'TikTok', 'url' => SiteSetting::get('footer_tiktok', 'https://www.tiktok.com/@your-username')],
-        ['key' => 'telegram', 'label' => 'Telegram', 'url' => SiteSetting::get('footer_telegram', 'https://t.me/your-username')],
-        ['key' => 'instagram', 'label' => 'Instagram', 'url' => SiteSetting::get('footer_instagram', 'https://www.instagram.com/your-username')],
-        ['key' => 'facebook', 'label' => 'Facebook', 'url' => SiteSetting::get('footer_facebook', 'https://www.facebook.com/your-username')],
-        ['key' => 'whatsapp', 'label' => 'WhatsApp', 'url' => SiteSetting::get('footer_whatsapp', 'https://wa.me/2340000000000')],
+        ['key' => 'home', 'label' => SiteSetting::get('footer_home_label', 'Home'), 'url' => route('home')],
+        ['key' => 'github', 'label' => SiteSetting::get('footer_github_label', 'GitHub'), 'url' => SiteSetting::get('footer_github', 'https://github.com/your-username')],
+        ['key' => 'linkedin', 'label' => SiteSetting::get('footer_linkedin_label', 'LinkedIn'), 'url' => SiteSetting::get('footer_linkedin', 'https://www.linkedin.com/in/your-username')],
+        ['key' => 'x', 'label' => SiteSetting::get('footer_x_label', 'X'), 'url' => SiteSetting::get('footer_x', 'https://x.com/your-username')],
+        ['key' => 'tiktok', 'label' => SiteSetting::get('footer_tiktok_label', 'TikTok'), 'url' => SiteSetting::get('footer_tiktok', 'https://www.tiktok.com/@your-username')],
+        ['key' => 'telegram', 'label' => SiteSetting::get('footer_telegram_label', 'Telegram'), 'url' => SiteSetting::get('footer_telegram', 'https://t.me/your-username')],
+        ['key' => 'instagram', 'label' => SiteSetting::get('footer_instagram_label', 'Instagram'), 'url' => SiteSetting::get('footer_instagram', 'https://www.instagram.com/your-username')],
+        ['key' => 'facebook', 'label' => SiteSetting::get('footer_facebook_label', 'Facebook'), 'url' => SiteSetting::get('footer_facebook', 'https://www.facebook.com/your-username')],
+        ['key' => 'whatsapp', 'label' => SiteSetting::get('footer_whatsapp_label', 'WhatsApp'), 'url' => SiteSetting::get('footer_whatsapp', 'https://wa.me/2340000000000')],
     ];
 
     $links = array_values(array_filter($links, static fn (array $link): bool => filled((string) ($link['url'] ?? ''))));
@@ -20,7 +23,7 @@
 <footer class="mx-auto mt-16 w-full max-w-7xl border-t border-slate-200/80 px-6 py-8">
     <div class="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
         <p class="text-sm text-slate-600" style="font-family: var(--font-body);">
-            Copyright {{ date('Y') }} Dawud Muhammed. All rights reserved.
+            Copyright {{ date('Y') }} {{ $copyrightName }}. All rights reserved.
         </p>
 
         <nav aria-label="Social links" class="mr-14 flex flex-wrap items-center justify-start gap-3 pr-24 text-sm font-medium text-slate-600 sm:mr-16 sm:pr-28 md:mr-24 md:pr-32 lg:pr-36" style="font-family: var(--font-body);">
@@ -85,7 +88,7 @@
             @endforeach
 
             <a href="{{ route('blog.index') }}" class="text-xs font-semibold uppercase tracking-[0.12em] transition hover:text-orange-600">
-                Blog
+                {{ $blogLabel }}
             </a>
         </nav>
     </div>

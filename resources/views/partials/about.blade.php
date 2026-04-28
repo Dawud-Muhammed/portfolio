@@ -8,6 +8,7 @@
         '/storage/images/photo-1542831371-29b0f74f9713.jpg'
     );
     $aboutImageWebp = ImageAsset::webpVariant($aboutImage);
+    $aboutSkills = collect($aboutSkills ?? $skills ?? [])->map(fn ($skill) => is_array($skill) ? (string) ($skill['name'] ?? '') : (string) $skill)->filter()->take(6);
 @endphp
 
 <section
@@ -42,11 +43,11 @@
 
         <div class="space-y-6 text-center lg:text-left">
             <p class="inline-flex items-center rounded-full border border-cyan-300/50 bg-cyan-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700 dark:border-cyan-700/50 dark:text-cyan-400">
-                About Me
+                {{ trim($__env->yieldContent('about_badge', SiteSetting::get('about_badge', 'About Me'))) }}
             </p>
 
             <h2 id="about-heading" class="text-balance text-3xl font-semibold text-slate-900 dark:text-slate-100 md:text-4xl" style="font-family: var(--font-display);">
-                Building dependable systems with clean engineering principles.
+                {{ trim($__env->yieldContent('about_heading', SiteSetting::get('about_heading', 'Building dependable systems with clean engineering principles.'))) }}
             </h2>
 
             <p class="text-base leading-relaxed text-slate-700 dark:text-slate-300 md:text-lg" style="font-family: var(--font-body);">
@@ -54,7 +55,7 @@
             </p>
 
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3" aria-label="Core skills">
-                @foreach (['Laravel', 'PHP', 'MySQL','Tailwind CSS'] as $skill)
+                @foreach ($aboutSkills as $skill)
                     <span class="rounded-xl border border-emerald-300/60 bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-800 dark:border-emerald-700/50 dark:text-emerald-300">
                         {{ $skill }}
                     </span>

@@ -17,7 +17,12 @@
         $defaultHeroName = (string) SiteSetting::get('hero_name', 'Dawud Muhammed');
         $defaultHeroTitle = (string) SiteSetting::get('hero_title', 'Laravel Developer');
         $defaultHeroCvUrl = (string) SiteSetting::get('hero_cv_url', url('/'));
+        $defaultHeroCtaLabel = (string) SiteSetting::get('hero_cta_label', 'Download CV');
+        $defaultHeroPrimaryCtaLabel = (string) SiteSetting::get('hero_primary_cta_label', 'View Projects');
+        $defaultHeroAvailabilityText = (string) SiteSetting::get('hero_availability_text', 'Available for freelance and full-time roles');
+        $defaultHeroDescription = (string) SiteSetting::get('hero_description', 'I build robust, scalable backend systems powered by Laravel and polished interfaces using Tailwind CSS.');
         $defaultHeroBackground = (string) SiteSetting::get('hero_background', Storage::url('images/photo-1518770660439-4636190af475.jpg'));
+        $defaultHeroBackgroundAlt = (string) SiteSetting::get('hero_background_alt', 'Futuristic coding workstation with glowing monitors in a dark studio');
 
         $ogTitle = trim($__env->yieldContent('og_title', $pageTitle));
         $ogDescription = trim($__env->yieldContent('og_description', $pageDescription));
@@ -106,8 +111,12 @@
                 :name="trim($__env->yieldContent('hero_name', $defaultHeroName))"
                 :title="trim($__env->yieldContent('hero_title', $defaultHeroTitle))"
                 :cv-url="trim($__env->yieldContent('hero_cv_url', $defaultHeroCvUrl))"
-                :cta-label="trim($__env->yieldContent('hero_cta_label', 'Download CV'))"
+                :cta-label="trim($__env->yieldContent('hero_cta_label', $defaultHeroCtaLabel))"
+                :primary-cta-label="trim($__env->yieldContent('hero_primary_cta_label', $defaultHeroPrimaryCtaLabel))"
+                :availability-text="trim($__env->yieldContent('hero_availability_text', $defaultHeroAvailabilityText))"
+                :description="trim($__env->yieldContent('hero_description', $defaultHeroDescription))"
                 :background-image="trim($__env->yieldContent('hero_background', $defaultHeroBackground))"
+                :background-alt="trim($__env->yieldContent('hero_background_alt', $defaultHeroBackgroundAlt))"
             />
         @endif
 
