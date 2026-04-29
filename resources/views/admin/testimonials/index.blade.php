@@ -43,6 +43,7 @@
 
             <table class="min-w-full divide-y divide-slate-200 text-sm">
                 <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+            <table class="min-w-full divide-y divide-slate-200 text-sm">    
                     <tr>
                         <th class="px-5 py-4">Sort</th>
                         <th class="px-5 py-4">Quote</th>
@@ -65,8 +66,8 @@
                             <td class="px-5 py-4 text-slate-500">
                                 <span class="inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em]">#{{ $testimonial->sort_order }}</span>
                             </td>
-                            <td class="px-5 py-4 text-slate-700">
-                                <p class="max-w-2xl overflow-hidden" style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;">
+                            <td class="px-5 py-4 text-slate-700 break-all">                             
+                                <p class="max-w-2xl overflow-hidden" style="display: -webkit-box; -webkit-box-orient: vertical -webkit-line-clamp: 2;">
                                     {{ $testimonial->quote }}
                                 </p>
                             </td>

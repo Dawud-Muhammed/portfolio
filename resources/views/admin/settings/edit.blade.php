@@ -8,11 +8,22 @@
         <p class="mt-2 text-sm text-slate-600">Manage all homepage copy, media, contact form labels, and footer links.</p>
     </div>
 
+    <nav class="sticky top-0 z-40 mb-8 rounded-3xl border border-slate-200 bg-white/90 p-4 shadow-premium backdrop-blur-sm" aria-label="Site settings sections">
+        <div class="flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.14em]">
+            <a href="#seo-branding" class="rounded-full border border-slate-200 px-4 py-2 text-slate-600 transition hover:border-orange-300 hover:text-orange-700">SEO and Branding</a>
+            <a href="#hero-settings" class="rounded-full border border-slate-200 px-4 py-2 text-slate-600 transition hover:border-orange-300 hover:text-orange-700">Hero</a>
+            <a href="#about-settings" class="rounded-full border border-slate-200 px-4 py-2 text-slate-600 transition hover:border-orange-300 hover:text-orange-700">About</a>
+            <a href="#section-copy" class="rounded-full border border-slate-200 px-4 py-2 text-slate-600 transition hover:border-orange-300 hover:text-orange-700">Section Copy</a>
+            <a href="#contact-settings" class="rounded-full border border-slate-200 px-4 py-2 text-slate-600 transition hover:border-orange-300 hover:text-orange-700">Contact</a>
+            <a href="#footer-settings" class="rounded-full border border-slate-200 px-4 py-2 text-slate-600 transition hover:border-orange-300 hover:text-orange-700">Footer</a>
+        </div>
+    </nav>
+
     <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data" class="space-y-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-premium md:p-8">
         @csrf
         @method('PUT')
 
-        <section class="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+        <section id="seo-branding" class="scroll-mt-28 space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
             <h2 class="text-lg font-semibold text-slate-900" style="font-family: var(--font-display);">SEO and Branding</h2>
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -39,7 +50,7 @@
             </div>
         </section>
 
-        <section class="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+        <section id="hero-settings" class="scroll-mt-28 space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
             <h2 class="text-lg font-semibold text-slate-900" style="font-family: var(--font-display);">Hero</h2>
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -132,7 +143,7 @@
             </div>
         </section>
 
-        <section class="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+        <section id="about-settings" class="scroll-mt-28 space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
             <h2 class="text-lg font-semibold text-slate-900" style="font-family: var(--font-display);">About</h2>
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -186,7 +197,7 @@
             </div>
         </section>
 
-        <section class="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+        <section id="section-copy" class="scroll-mt-28 space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
             <h2 class="text-lg font-semibold text-slate-900" style="font-family: var(--font-display);">Section Copy</h2>
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -318,7 +329,7 @@
             </div>
         </section>
 
-        <section class="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+        <section id="contact-settings" class="scroll-mt-28 space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
             <h2 class="text-lg font-semibold text-slate-900" style="font-family: var(--font-display);">Contact Section and Form Messages</h2>
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -415,7 +426,7 @@
             </div>
         </section>
 
-        <section class="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+        <section id="footer-settings" class="scroll-mt-28 space-y-5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
             <h2 class="text-lg font-semibold text-slate-900" style="font-family: var(--font-display);">Footer</h2>
 
             <div class="grid grid-cols-1 gap-5 md:grid-cols-2">

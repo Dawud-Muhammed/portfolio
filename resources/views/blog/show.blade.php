@@ -1,9 +1,23 @@
 @extends('layouts.app')
 
-@section('page_title', $post->title.' | Blog')
-@section('meta_description', $post->excerpt)
+@php
+    use App\Models\SiteSetting;
+
+    $blogLabel = (string) SiteSetting::get('footer_blog_label', 'Blog');
+    $brandName = (string) SiteSetting::get('brand_name', SiteSetting::get('hero_name', config('seo.default_name', 'Portfolio')));
+    $heroName = (string) SiteSetting::get('hero_name', $brandName);
+    $heroTitle = (string) SiteSetting::get('hero_title', 'Laravel Developer');
+    $aboutBio = (string) SiteSetting::get('about_bio', 'Building thoughtful Laravel products with a focus on clarity, performance, and maintainability.');
+    $authorAvatar = (string) SiteSetting::get('about_profile_image', config('seo.default_image', '/storage/images/photo-1518770660439-4636190af475.jpg'));
+    $authorAlt = (string) SiteSetting::get('about_profile_alt', 'Portrait of '.$heroName);
+    $canonicalUrl = route('blog.show', $post->slug);
+@endphp
+
+@section('page_title', $post->title.' | '.$blogLabel.' | '.$brandName)
+@section('meta_description', $post->excerpt.' Written by '.$heroName.', '.$heroTitle.'.')
 @section('show_hero', false)
 @section('og_image', $post->og_image)
+@section('canonical_url', $canonicalUrl)
 @section('schema')
     <script type="application/ld+json">
         {!! json_encode([
@@ -34,12 +48,10 @@
 @endphp
 
 @php
-    $canonicalUrl = route('blog.show', $post->slug);
     $shareTitle = $post->title;
-    $authorName = config('seo.default_name', config('app.name', 'Portfolio'));
-    $authorJobTitle = config('seo.job_title', 'Laravel Developer');
-    $authorBio = 'Building thoughtful Laravel products with a focus on clarity, performance, and maintainability.';
-    $authorAvatar = config('seo.default_image', '/storage/images/photo-1518770660439-4636190af475.jpg');
+    $authorName = $heroName;
+    $authorJobTitle = $heroTitle;
+    $authorBio = $aboutBio;
     $githubUrl = config('seo.social.github');
     $linkedinUrl = config('seo.social.linkedin');
 @endphp
@@ -105,7 +117,7 @@
                             <div class="shrink-0">
                                 <img
                                     src="{{ $authorAvatar }}"
-                                    alt="Portrait of {{ $authorName }}"
+                                    alt="{{ $authorAlt }}"
                                     class="h-16 w-16 rounded-full border-2 border-orange-300 object-cover"
                                     width="64"
                                     height="64"
