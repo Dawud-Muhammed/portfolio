@@ -14,7 +14,7 @@ class AdminUserSeeder extends Seeder
             ['email' => 'dawud2147@gmail.com'],  // Check by email
             [
                 'name' => 'Dawud Muhammed',
-                'password' => Hash::make('your-secure-password'),  // Keep or update password
+                'password' => Hash::make('muslim318#'),  // Keep or update password
                 'is_admin' => true,
             ]
         );
