@@ -2,7 +2,7 @@
     frankenphp
 }
 
-:{env.PORT} {
+:{$PORT} {
     root * /app/public
     encode gzip
     php_server
