@@ -1,4 +1,4 @@
-Dawud Muhammed - Portfolio
+Portfolio SaaS Platform
 Laravel Alpine.js Tailwind CSS License
 
 A modern, responsive portfolio platform for showcasing projects, skills, and testimonials. Built with Laravel 13 for scalable backend management and dynamic content.
@@ -43,10 +43,10 @@ portfolio/
 ├── database/        # Migrations
 ├── public/          # Static files
 └── vite.config.js   # Build config
-🌐 Deployment Deploy on Railway, Heroku, or Nginx. Enable queues for mail and configure SSL.
+🌐 Deployment Deploy on Vercel, Heroku, or Nginx. Enable queues for mail and configure SSL.
 
 📝 License MIT License.
 
-📧 Contact Email: dawud2147@gmail.com GitHub: @Dawud-Muhammed
+📧 Contact Email: your-email@example.com GitHub: @Dawud-Muhammed
 
 ⭐ Star this repo if you like it!
