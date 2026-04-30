@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS in production to fix Mixed Content errors
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+
         $this->cleanupStaleViteHotFile();
     }
 
@@ -37,7 +43,6 @@ class AppServiceProvider extends ServiceProvider
         $hotUrl = trim((string) @file_get_contents($hotFile));
         if ($hotUrl === '') {
             @unlink($hotFile);
-
             return;
         }
 
@@ -47,7 +52,6 @@ class AppServiceProvider extends ServiceProvider
 
         if ($host === '') {
             @unlink($hotFile);
-
             return;
         }
 
@@ -55,7 +59,6 @@ class AppServiceProvider extends ServiceProvider
 
         if (is_resource($connection)) {
             fclose($connection);
-
             return;
         }
 
