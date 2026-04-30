@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(SiteSettingSeeder::class);
-        $this->call(ProjectSeeder::class);
-        $this->call(SkillSeeder::class);
-        $this->call(PostSeeder::class);
-        $this->call(TestimonialSeeder::class);
+        // Only keep the essential Admin user
         $this->call(AdminUserSeeder::class);
+        
+        // Add any NEW seeders for your new databases below:
+        // $this->call(YourNewSeeder::class);
     }
 }
