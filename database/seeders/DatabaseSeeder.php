@@ -21,15 +21,5 @@ class DatabaseSeeder extends Seeder
         $this->call(PostSeeder::class);
         $this->call(TestimonialSeeder::class);
         $this->call(AdminUserSeeder::class);
-
-        // User::factory(10)->create();
-
-        User::query()->updateOrCreate([
-            'email' => 'test@example.com',
-        ], [
-            'name' => 'Test User',
-            'password' => bcrypt('password'),
-            'is_admin' => true,
-        ]);
     }
 }
