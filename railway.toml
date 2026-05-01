@@ -1,4 +1,4 @@
-[build]
+[[build]]
 builder = "railpack"
 
 [phases.install]
@@ -16,4 +16,5 @@ cmds = [
 ]
 
 [deploy]
-startCommand = "php artisan migrate --force && php artisan storage:link && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT"
+# Updated to run the worker in the background
+startCommand = "php artisan migrate --force && php artisan storage:link && (php artisan queue:work --tries=3 --timeout=90 & php artisan serve --host=0.0.0.0 --port=$PORT)"
