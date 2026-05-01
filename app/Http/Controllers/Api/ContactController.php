@@ -37,7 +37,7 @@ class ContactController extends Controller
 
         $contact = Contact::query()->create([
             'name' => (string) $validated['name'],
-            'email' => (string) $validated['email:'],
+            'email' => (string) $validated['email'],
             'subject' => (string) ($validated['subject'] ?? ''),
             'message' => (string) $validated['message'],
         ]);
