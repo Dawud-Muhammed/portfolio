@@ -37,7 +37,7 @@ class ContactController extends Controller
 
         $contact = Contact::query()->create([
             'name' => (string) $validated['name'],
-            'email' => (string) $validated['email'],
+            'email' => (string) $validated['email:rfc,dns'],
             'subject' => (string) ($validated['subject'] ?? ''),
             'message' => (string) $validated['message'],
         ]);
@@ -45,9 +45,9 @@ class ContactController extends Controller
         // Temporary fix to bypass the 403 error
 Mail::to('bdu1601268@bdu.edu.et')->queue(new ContactReceivedMail($contact));
 
-        return response()->json([
-            'message' => 'Thanks, your message has been queued successfully.',
-        ], 202);
+    return response()->json([
+         'message' => 'Message received! I will get back to you shortly, ' . $contact->name . '.',
+    ], 202);
     }
 
     public function show(Contact $contact): JsonResponse

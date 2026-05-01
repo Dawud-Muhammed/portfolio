@@ -31,6 +31,7 @@ class ContactReceivedMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
+            markdown: 'emails.contacts.received',
             view: 'emails.contact-message',
             with: [
                 'name' => (string) $this->contact->name,
@@ -39,5 +40,6 @@ class ContactReceivedMail extends Mailable implements ShouldQueue
                 'messageBody' => (string) $this->contact->message,
             ],
         );
+
     }
 }
