@@ -1,18 +1,25 @@
 @component('mail::message')
-# New Connection Request
+# 📨 New Project Inquiry
 
-You have received a new message from your portfolio website.
+A new message has been captured from your portfolio contact system.
 
-**From:** {{ $contact->name }} ({{ $contact->email }})  
+---
+
+### Contact Details
+**Name:** {{ $contact->name }}  
+**Email:** {{ $contact->email }}  
 **Subject:** {{ $contact->subject }}
 
-**Message:**  
+### Message Content
+@component('mail::panel')
 {{ $contact->message }}
-
-@component('mail::button', ['url' => config('app.url') . '/admin/contacts'])
-View in Dashboard
 @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
+@component('mail::button', ['url' => config('app.url') . '/admin/contacts', 'color' => 'success'])
+Review in Admin Panel
+@endcomponent
+
+---
+Sent via **{{ config('app.name') }}**  
+*System automated notification.*
 @endcomponent
