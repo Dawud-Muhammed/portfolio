@@ -42,7 +42,8 @@ class ContactController extends Controller
             'message' => (string) $validated['message'],
         ]);
 
-        Mail::to((string) config('contact.recipient_email'))->queue(new ContactReceivedMail($contact));
+        // Temporary fix to bypass the 403 error
+Mail::to('bdu1601268@bdu.edu.et')->queue(new ContactReceivedMail($contact));
 
         return response()->json([
             'message' => 'Thanks, your message has been queued successfully.',
