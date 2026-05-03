@@ -14,5 +14,6 @@ cmds = [
 ]
 
 [deploy]
-# All caching happens here AT RUNTIME so environment variables are fresh
-startCommand = "php artisan config:clear && php artisan route:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && (php artisan queue:work --tries=3 --timeout=90 & frankenphp php-server --listen :$PORT)"
+[deploy]
+# We chain them so the server only starts AFTER everything is 100% ready
+startCommand = "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && (php artisan queue:work --tries=3 --timeout=90 & frankenphp php-server --listen :$PORT)"
