@@ -17,4 +17,4 @@ cmds = [
 
 [deploy]
 # Updated to run the worker in the background
-startCommand = "php artisan migrate --force && php artisan storage:link && (php artisan queue:work --tries=3 --timeout=90 & php artisan serve --host=0.0.0.0 --port=$PORT)"
+startCommand = "php artisan config:clear && php artisan config:cache && php artisan migrate --force && (php artisan queue:work --tries=3 --timeout=90 & frankenphp php-server --listen :$PORT)"
