@@ -23,6 +23,7 @@ class ContactReceivedMail extends Mailable implements ShouldQueue
         $subject = trim((string) ($this->contact->subject ?? ''));
 
         return new Envelope(
+            from: new Address(config('mail.from.address'), config('mail.from.name')),
             subject: $subject !== '' ? "New Contact: {$subject}" : 'New Portfolio Contact Message',
             replyTo: [new Address((string) $this->contact->email)],
         );
