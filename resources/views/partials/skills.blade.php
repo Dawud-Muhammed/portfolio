@@ -121,7 +121,7 @@
                         <p class="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400" x-text="skill.categoryLabel"></p>
                     </div>
                     <div class="rounded-full border border-orange-300/40 bg-orange-400/10 px-3 py-1 text-xs font-semibold text-orange-200">
-                        <span x-text="displayYears[skill.id] ?? 0"></span>months+
+                        <span x-text="displayYears[skill.id] ?? 0"></span> months+
                     </div>
                 </div>
 

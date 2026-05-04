@@ -78,7 +78,7 @@
             </div>
 
             <div>
-                <label for="years" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Years</label>
+                <label for="years" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Months</label>
                 <input id="years" name="years" type="number" min="0" max="50" value="{{ old('years', $skill->years ?? 0) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
                 @error('years') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
