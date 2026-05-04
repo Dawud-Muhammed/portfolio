@@ -4,9 +4,14 @@
 @section('meta_description', $project->description)
 @section('hero_name', 'Selected Work')
 @section('hero_title', $project->title)
-@section('hero_cv_url', route('home').'#projects')
-@section('hero_cta_label', 'Back to Projects')
+@section('hero_description', $project->description)
+@section('hero_availability_text', filled($project->stack) ? implode(' · ', array_slice($project->stack, 0, 3)) : 'Project case study')
+@section('hero_cv_url', filled($project->demo_url) ? $project->demo_url : (filled($project->github_url) ? $project->github_url : route('home').'#projects'))
+@section('hero_cta_label', filled($project->demo_url) ? 'Open Live Demo' : (filled($project->github_url) ? 'View GitHub' : 'Back to Projects'))
+@section('hero_primary_cta_url', route('home').'#projects')
+@section('hero_primary_cta_label', 'Back to Projects')
 @section('hero_background', $project->image_url)
+@section('hero_background_alt', 'Case study preview image for '.$project->title)
 @section('og_image', $project->og_image)
 @section('schema')
     <script type="application/ld+json">
@@ -37,41 +42,7 @@
             :class="isVisible ? 'is-visible' : ''"
             class="about-reveal space-y-8"
         >
-            <a
-                href="{{ route('home') }}#projects"
-                class="portal-link-button"
-            >
-                Back to Projects
-            </a>
-
             <article class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.55)] backdrop-blur-sm">
-                <div class="relative overflow-hidden">
-                    <picture>
-                        @if (!empty($projectHeroWebp))
-                            <source srcset="{{ $projectHeroWebp }}" type="image/webp">
-                        @endif
-                        <img
-                            src="{{ $projectImage }}"
-                            alt="Hero image for {{ $project->title }}"
-                            class="h-64 w-full object-cover md:h-80"
-                            width="1600"
-                            height="900"
-                            loading="eager"
-                            fetchpriority="high"
-                            decoding="async"
-                        >
-                    </picture>
-                    <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-900/20 to-transparent"></div>
-                    <div class="absolute bottom-6 left-6 right-6">
-                        <h1 id="project-title" class="text-3xl font-semibold tracking-tight text-white md:text-4xl" style="font-family: var(--font-display);">
-                            {{ $project->title }}
-                        </h1>
-                        <p class="mt-3 max-w-3xl text-sm text-orange-100 md:text-base" style="font-family: var(--font-body);">
-                            {{ $project->description }}
-                        </p>
-                    </div>
-                </div>
-
                 <div class="space-y-8 p-6 md:p-8">
                     <section aria-labelledby="stack-heading" class="space-y-3">
                         <h2 id="stack-heading" class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500" style="font-family: var(--font-body);">

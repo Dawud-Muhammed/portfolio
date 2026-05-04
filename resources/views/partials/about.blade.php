@@ -1,4 +1,5 @@
 @php
+    use App\Models\Skill;
     use App\Models\SiteSetting;
     use App\Support\ImageAsset;
     use Illuminate\Support\Facades\Storage;
@@ -8,7 +9,27 @@
         '/storage/images/photo-1542831371-29b0f74f9713.jpg'
     );
     $aboutImageWebp = ImageAsset::webpVariant($aboutImage);
-    $aboutSkills = collect($aboutSkills ?? $skills ?? [])->map(fn ($skill) => is_array($skill) ? (string) ($skill['name'] ?? '') : (string) $skill)->filter()->take(6);
+    $aboutSkills = collect($aboutSkills ?? []);
+
+    if ($aboutSkills->isEmpty()) {
+        $aboutSkills = collect($skills ?? []);
+    }
+
+    if ($aboutSkills->isEmpty()) {
+        $aboutSkills = Skill::query()
+            ->published()
+            ->orderByDesc('level')
+            ->orderByDesc('years')
+            ->limit(6)
+            ->get();
+    }
+
+    $aboutSkills = $aboutSkills
+        ->map(fn (mixed $skill): string => is_string($skill)
+            ? trim($skill)
+            : trim((string) data_get($skill, 'name', '')))
+        ->filter()
+        ->take(6);
 @endphp
 
 <section

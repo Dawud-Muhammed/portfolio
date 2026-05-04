@@ -78,7 +78,7 @@ class HomeController extends Controller
 
         $skills = $publishedSkills
             ->map(static fn (Skill $skill): array => [
-                'id' => $skill->skill_id,
+                'id' => $skill->id,
                 'name' => $skill->name,
                 'level' => $skill->level,
                 'years' => $skill->years,

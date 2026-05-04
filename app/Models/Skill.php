@@ -32,12 +32,6 @@ class Skill extends Model
 
     public function scopePublished(Builder $query): Builder
     {
-        return $query
-            ->where('is_published', true)
-            ->where(static function (Builder $subQuery): void {
-                $subQuery
-                    ->whereNull('published_at')
-                    ->orWhere('published_at', '<=', now());
-            });
+        return $query->where('is_published', true);
     }
 }

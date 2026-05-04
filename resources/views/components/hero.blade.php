@@ -4,6 +4,7 @@
     'cvUrl' => '#',
     'ctaLabel' => 'Download CV',
     'primaryCtaLabel' => 'View Projects',
+    'primaryCtaUrl' => null,
     'availabilityText' => 'Available for freelance and full-time roles',
     'description' => 'I build robust, scalable backend systems powered by Laravel and polished interfaces using Tailwind CSS.',
     'backgroundImage' => '/storage/images/photo-1542831371-29b0f74f9713.jpg',
@@ -16,6 +17,7 @@
     $backgroundImage = ImageAsset::resolve((string) $backgroundImage, (string) config('seo.default_image', ''));
     $backgroundImageWebp = ImageAsset::webpVariant($backgroundImage);
     $ctaUrl = filter_var(trim((string) $cvUrl), FILTER_VALIDATE_URL) ? trim((string) $cvUrl) : null;
+    $primaryCtaUrl = filter_var(trim((string) $primaryCtaUrl), FILTER_VALIDATE_URL) ? trim((string) $primaryCtaUrl) : (filled((string) $primaryCtaUrl) ? trim((string) $primaryCtaUrl) : null);
     $ctaPath = (string) parse_url($ctaUrl ?? '', PHP_URL_PATH);
     $ctaShouldDownload = $ctaUrl !== null && (
         str_starts_with($ctaUrl, url('/storage/')) || preg_match('/\.(pdf|docx?|zip)$/i', $ctaPath) === 1
@@ -64,14 +66,24 @@
             </p>
 
             <div class="animate-fade-up flex w-full flex-col items-center justify-center gap-4 pt-2 [animation-delay:320ms] sm:flex-row lg:justify-start">
-                <button
-                    type="button"
-                    @click="scrollToProjects"
-                    class="portal-button hero-button-glow w-full sm:w-auto"
-                    aria-label="Scroll to the projects section"
-                >
-                    {{ $primaryCtaLabel }}
-                </button>
+                @if ($primaryCtaUrl)
+                    <a
+                        href="{{ $primaryCtaUrl }}"
+                        class="portal-button hero-button-glow w-full sm:w-auto inline-flex items-center justify-center"
+                        aria-label="{{ $primaryCtaLabel }}"
+                    >
+                        {{ $primaryCtaLabel }}
+                    </a>
+                @else
+                    <button
+                        type="button"
+                        @click="scrollToProjects"
+                        class="portal-button hero-button-glow w-full sm:w-auto"
+                        aria-label="Scroll to the projects section"
+                    >
+                        {{ $primaryCtaLabel }}
+                    </button>
+                @endif
                     @if ($ctaUrl)
                         <a
                             href="{{ $ctaUrl }}"

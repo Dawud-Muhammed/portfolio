@@ -1,7 +1,16 @@
 @php
     use App\Enums\SkillCategory;
+    use App\Models\Skill;
 
     $skills = collect($skills ?? []);
+
+    if ($skills->isEmpty()) {
+        $skills = Skill::query()
+            ->published()
+            ->orderByDesc('level')
+            ->orderByDesc('years')
+            ->get();
+    }
 
     $categories = collect(SkillCategory::cases())
         ->map(fn (SkillCategory $category) => [
@@ -12,17 +21,26 @@
         ->values();
 
     $skillPayload = $skills
-        ->map(fn (array $skill) => [
-            'id' => $skill['id'],
-            'name' => $skill['name'],
-            'level' => $skill['level'],
-            'years' => $skill['years'],
-            'description' => $skill['description'],
-            'category' => $skill['category'] instanceof SkillCategory ? $skill['category']->value : (string) $skill['category'],
-            'categoryLabel' => ($skill['category'] instanceof SkillCategory
-                ? $skill['category']
-                : SkillCategory::tryFrom((string) $skill['category']))?->label() ?? SkillCategory::Backend->label(),
-        ])
+        ->map(function (mixed $skill): array {
+            $id = data_get($skill, 'id');
+            $name = (string) data_get($skill, 'name', '');
+            $level = (int) data_get($skill, 'level', 0);
+            $years = (int) data_get($skill, 'years', 0);
+            $description = (string) data_get($skill, 'description', '');
+            $rawCategory = data_get($skill, 'category');
+            $category = $rawCategory instanceof SkillCategory ? $rawCategory : SkillCategory::tryFrom((string) $rawCategory);
+
+            return [
+                'id' => $id,
+                'name' => $name,
+                'level' => $level,
+                'years' => $years,
+                'description' => $description,
+                'category' => $category?->value ?? SkillCategory::Backend->value,
+                'categoryLabel' => $category?->label() ?? SkillCategory::Backend->label(),
+            ];
+        })
+        ->filter(fn (array $skill): bool => $skill['id'] !== null && $skill['name'] !== '')
         ->values();
 
     $maxExperience = (int) ($skills->max('years') ?? 0);
@@ -103,11 +121,11 @@
                         <p class="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400" x-text="skill.categoryLabel"></p>
                     </div>
                     <div class="rounded-full border border-orange-300/40 bg-orange-400/10 px-3 py-1 text-xs font-semibold text-orange-200">
-                        <span x-text="displayYears[skill.id] ?? 0"></span>y
+                        <span x-text="displayYears[skill.id] ?? 0"></span>months+
                     </div>
                 </div>
 
-                <p class="mb-4 text-sm leading-relaxed text-slate-300" style="font-family: var(--font-body);" x-text="skill.description"></p>
+                <p class="mb-4 text-sm leading-relaxed text-slate-300 break-all" style="font-family: var(--font-body);" x-text="skill.description"></p>
 
                 <div>
                     <div class="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-400">

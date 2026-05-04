@@ -10,7 +10,6 @@ class ProjectController extends Controller
     public function show(string $slug): View
     {
         $projectRecord = Project::query()
-            ->published()
             ->where('slug', $slug)
             ->firstOrFail();
 
