@@ -20,13 +20,13 @@
     $links = array_values(array_filter($links, static fn (array $link): bool => filled((string) ($link['url'] ?? ''))));
 @endphp
 
-<footer class="mx-auto mt-16 w-full max-w-7xl border-t border-slate-200/80 px-6 py-8">
+<footer class="mx-auto mt-16 w-full max-w-7xl border-t border-slate-200/80 px-6 py-8 dark:border-slate-700/60">
     <div class="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
-        <p class="text-sm text-slate-600" style="font-family: var(--font-body);">
+        <p class="text-sm text-slate-600 dark:text-slate-300" style="font-family: var(--font-body);">
             Copyright {{ date('Y') }} {{ $copyrightName }}. All rights reserved.
         </p>
 
-        <nav aria-label="Social links" class="mr-14 flex flex-wrap items-center justify-start gap-3 pr-24 text-sm font-medium text-slate-600 sm:mr-16 sm:pr-28 md:mr-24 md:pr-32 lg:pr-36" style="font-family: var(--font-body);">
+        <nav aria-label="Social links" class="mr-14 flex flex-wrap items-center justify-start gap-3 pr-24 text-sm font-medium text-slate-600 dark:text-slate-300 sm:mr-16 sm:pr-28 md:mr-24 md:pr-32 lg:pr-36" style="font-family: var(--font-body);">
             @foreach ($links as $link)
                 @php
                     $url = (string) ($link['url'] ?? '');
@@ -38,7 +38,7 @@
                 <a
                     href="{{ $url }}"
                     @if ($isExternal) target="_blank" rel="noopener noreferrer" @endif
-                    class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/90 bg-white/90 text-slate-600 transition hover:border-orange-300 hover:text-orange-700"
+                    class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/90 bg-white/90 text-slate-600 transition hover:border-orange-300 hover:text-orange-700 dark:border-slate-700/80 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:text-orange-300"
                     aria-label="{{ $label }}"
                     title="{{ $label }}"
                 >
@@ -87,7 +87,7 @@
                 </a>
             @endforeach
 
-            <a href="{{ route('blog.index') }}" class="text-xs font-semibold uppercase tracking-[0.12em] transition hover:text-orange-600">
+            <a href="{{ route('blog.index') }}" class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-600 transition hover:text-orange-600 dark:text-slate-300 dark:hover:text-orange-300">
                 {{ $blogLabel }}
             </a>
         </nav>

@@ -52,8 +52,8 @@
     $authorName = $heroName;
     $authorJobTitle = $heroTitle;
     $authorBio = $aboutBio;
-    $githubUrl = config('seo.social.github');
-    $linkedinUrl = config('seo.social.linkedin');
+    $githubUrl = (string) SiteSetting::get('footer_github', config('seo.social.github'));
+    $linkedinUrl = (string) SiteSetting::get('footer_linkedin', config('seo.social.linkedin'));
 @endphp
 
 @section('content')
@@ -68,7 +68,7 @@
             x-data="slideInOnScroll()"
             x-init="observe($el)"
             :class="isVisible ? 'is-visible' : ''"
-            class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-premium backdrop-blur-sm"
+            class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-premium backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/85"
         >
             <picture>
                 @if (!empty($postCoverWebp))
@@ -102,17 +102,17 @@
                         {{ $post->title }}
                     </h1>
 
-                    <p class="text-base leading-relaxed text-slate-600" style="font-family: var(--font-body);">
+                    <p class="text-base leading-relaxed text-slate-600 dark:text-slate-300" style="font-family: var(--font-body);">
                         {{ $post->excerpt }}
                     </p>
                 </header>
 
-                <section class="prose prose-slate max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:text-slate-700 prose-a:text-orange-600 prose-a:decoration-orange-300 prose-a:underline-offset-4 prose-a:transition hover:prose-a:text-orange-700 prose-blockquote:border-orange-300 prose-blockquote:text-slate-600 prose-code:rounded-md prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none prose-img:rounded-2xl prose-pre:rounded-2xl prose-pre:bg-slate-900 prose-pre:text-slate-100" style="font-family: var(--font-body);">
+                    <section class="prose prose-slate max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:text-slate-700 prose-a:text-orange-600 prose-a:decoration-orange-300 prose-a:underline-offset-4 prose-a:transition hover:prose-a:text-orange-700 prose-blockquote:border-orange-300 prose-blockquote:text-slate-600 prose-code:rounded-md prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none prose-img:rounded-2xl prose-pre:rounded-2xl prose-pre:bg-slate-900 prose-pre:text-slate-100 dark:prose-invert dark:prose-headings:text-slate-100 dark:prose-p:text-slate-300 dark:prose-a:text-orange-300 dark:prose-a:decoration-orange-400 dark:hover:prose-a:text-orange-200 dark:prose-blockquote:text-slate-300 dark:prose-code:bg-slate-800 dark:prose-code:text-slate-100 dark:prose-pre:bg-slate-950 dark:prose-pre:text-slate-100" style="font-family: var(--font-body);">
                     {!! $post->rendered_body !!}
                 </section>
 
                 <section class="space-y-5 border-t border-slate-200 pt-8">
-                    <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5 md:p-6">
+                        <div class="rounded-3xl border border-slate-200 bg-slate-50 p-5 md:p-6 dark:border-slate-700/60 dark:bg-slate-950/50">
                         <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
                             <div class="shrink-0">
                                 <img
@@ -127,12 +127,12 @@
                             </div>
 
                             <div class="min-w-0 flex-1">
-                                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-orange-600">About the author</p>
-                                <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900" style="font-family: var(--font-display);">
+                                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-orange-600 dark:text-orange-300">About the author</p>
+                                <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100" style="font-family: var(--font-display);">
                                     {{ $authorName }}
                                 </h2>
-                                <p class="mt-1 text-sm font-medium text-slate-600">{{ $authorJobTitle }}</p>
-                                <p class="mt-3 text-sm leading-relaxed text-slate-700">
+                                <p class="mt-1 text-sm font-medium text-slate-600 dark:text-slate-300">{{ $authorJobTitle }}</p>
+                                <p class="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
                                     {{ $authorBio }}
                                 </p>
 
@@ -172,9 +172,9 @@
                                 }
                             },
                         }"
-                        class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6"
+                        class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 dark:border-slate-700/60 dark:bg-slate-950/50"
                     >
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Share this article</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Share this article</p>
 
                         <div class="mt-4 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.16em]">
                             <a
@@ -209,8 +209,8 @@
                                     href="{{ route('blog.show', $previousPost->slug) }}"
                                     class="portal-link-button flex h-full flex-col justify-center items-start text-left"
                                 >
-                                    <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">← Previous</span>
-                                    <span class="mt-1 line-clamp-2 text-sm font-semibold text-slate-800">{{ $previousPost->title }}</span>
+                                    <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">← Previous</span>
+                                    <span class="mt-1 line-clamp-2 text-sm font-semibold text-slate-800 dark:text-slate-100">{{ $previousPost->title }}</span>
                                 </a>
                             @endif
                         </div>
@@ -221,8 +221,8 @@
                                     href="{{ route('blog.show', $nextPost->slug) }}"
                                     class="portal-link-button flex h-full flex-col justify-center items-start text-left sm:items-end sm:text-right"
                                 >
-                                    <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Next →</span>
-                                    <span class="mt-1 line-clamp-2 text-sm font-semibold text-slate-800">{{ $nextPost->title }}</span>
+                                    <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Next →</span>
+                                    <span class="mt-1 line-clamp-2 text-sm font-semibold text-slate-800 dark:text-slate-100">{{ $nextPost->title }}</span>
                                 </a>
                             @endif
                         </div>

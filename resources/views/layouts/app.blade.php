@@ -44,8 +44,8 @@
                 'jobTitle' => (string) config('seo.job_title', 'Laravel Developer'),
                 'url' => $defaultUrl,
                 'sameAs' => array_values(array_filter([
-                    config('seo.social.github'),
-                    config('seo.social.linkedin'),
+                    SiteSetting::get('footer_github', config('seo.social.github')),
+                    SiteSetting::get('footer_linkedin', config('seo.social.linkedin')),
                 ])),
             ]
             : [

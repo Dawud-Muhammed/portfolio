@@ -16,10 +16,10 @@
         <p class="mx-auto inline-flex rounded-full border border border-orange-300 bg-orange-500/10 px-4 py-2 text-orange-700 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] lg:mx-0">
             {{ $kicker }}
         </p>
-        <h2 id="testimonials-heading" class="text-3xl font-semibold tracking-tight text-slate-600 md:text-4xl" style="font-family: var(--font-display);">
+        <h2 id="testimonials-heading" class="text-3xl font-semibold tracking-tight text-slate-100 md:text-4xl" style="font-family: var(--font-display);">
             {{ $heading }}
         </h2>
-        <p class="mx-auto max-w-3xl text-sm leading-relaxed text-slate-1000 lg:mx-0" style="font-family: var(--font-body);">
+        <p class="mx-auto max-w-3xl text-sm leading-relaxed text-slate-300 lg:mx-0" style="font-family: var(--font-body);">
             {{ $subheading }}
         </p>
     </div>

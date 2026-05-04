@@ -42,16 +42,16 @@
             :class="isVisible ? 'is-visible' : ''"
             class="about-reveal space-y-8"
         >
-            <article class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.55)] backdrop-blur-sm">
+            <article class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/85 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.55)] backdrop-blur-sm dark:border-slate-700/60 dark:bg-slate-900/85 dark:shadow-[0_24px_60px_-32px_rgba(2,6,23,0.75)]">
                 <div class="space-y-8 p-6 md:p-8">
                     <section aria-labelledby="stack-heading" class="space-y-3">
-                        <h2 id="stack-heading" class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500" style="font-family: var(--font-body);">
+                        <h2 id="stack-heading" class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400" style="font-family: var(--font-body);">
                             Tech Stack
                         </h2>
 
                         <div class="flex flex-wrap gap-2" aria-label="Project tech stack">
                             @foreach ($project->stack as $tech)
-                                <span class="rounded-full border border-orange-300/70 bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-800">
+                                <span class="rounded-full border border-orange-300/70 bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-800 dark:border-orange-400/40 dark:bg-orange-500/15 dark:text-orange-200">
                                     {{ $tech }}
                                 </span>
                             @endforeach
@@ -59,11 +59,11 @@
                     </section>
 
                     <section aria-labelledby="case-study-heading" class="space-y-4">
-                        <h2 id="case-study-heading" class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500" style="font-family: var(--font-body);">
+                        <h2 id="case-study-heading" class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400" style="font-family: var(--font-body);">
                             Case Study
                         </h2>
 
-                        <div class="space-y-4 text-sm leading-relaxed text-slate-700 md:text-base" style="font-family: var(--font-body);">
+                        <div class="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300 md:text-base" style="font-family: var(--font-body);">
                             @foreach (preg_split('/\r\n|\r|\n/', $project->details) as $paragraph)
                                 @if (trim($paragraph) !== '')
                                     <p>{{ $paragraph }}</p>
@@ -72,7 +72,7 @@
                         </div>
                     </section>
 
-                    <section class="flex flex-wrap items-center gap-3 border-t border-slate-200/80 pt-6 text-xs font-semibold uppercase tracking-[0.16em]">
+                    <section class="flex flex-wrap items-center gap-3 border-t border-slate-200/80 pt-6 text-xs font-semibold uppercase tracking-[0.16em] dark:border-slate-700/60">
                         @if (!empty($project->github_url))
                             <a href="{{ $project->github_url }}" target="_blank" rel="noopener noreferrer" class="portal-link-button">
                                 GitHub
