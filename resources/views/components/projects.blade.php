@@ -49,7 +49,7 @@
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         @forelse ($projects as $index => $project)
             <article
-                class="project-card group overflow-hidden rounded-3xl border border-slate-200/80 bg-white/80 shadow-[0_16px_45px_-28px_rgba(15,23,42,0.45)] backdrop-blur-sm"
+                class="project-card group overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-white/85 shadow-[0_20px_55px_-34px_rgba(15,23,42,0.45)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_65px_-36px_rgba(15,23,42,0.55)] dark:border-slate-700/60 dark:bg-slate-900/85"
                 x-data="{ projectCategories: @js($project['categories'] ?? []) }"
                 x-show="activeCategory === 'all' || projectCategories.includes(activeCategory)"
                 x-transition.opacity.duration.350ms
@@ -75,7 +75,20 @@
                             decoding="async"
                         >
                     </picture>
-                    <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-60"></div>
+                    <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/65 via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute left-4 top-4 flex flex-wrap gap-2">
+                        @if (!empty($project['is_featured']))
+                            <span class="rounded-full border border-orange-300/60 bg-orange-500/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white shadow-lg">
+                                Featured
+                            </span>
+                        @endif
+
+                        @if (!empty($project['published_at']))
+                            <span class="rounded-full border border-white/15 bg-slate-950/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-100 backdrop-blur">
+                                {{ $project['published_at'] }}
+                            </span>
+                        @endif
+                    </div>
                 </div>
 
                 <div class="space-y-4 p-6">
@@ -88,15 +101,17 @@
                         </p>
                     </div>
 
-                    <div class="flex flex-wrap gap-2" aria-label="Tech stack badges">
-                        @foreach ($project['stack'] as $tech)
-                            <span class="rounded-full border border-emerald-300/70 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-800">
-                                {{ $tech }}
-                            </span>
-                        @endforeach
-                    </div>
+                    @if (!empty($project['stack']))
+                        <div class="flex flex-wrap gap-2" aria-label="Tech stack badges">
+                            @foreach ($project['stack'] as $tech)
+                                <span class="rounded-full border border-emerald-300/70 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-800 dark:border-emerald-400/30 dark:text-emerald-200">
+                                    {{ $tech }}
+                                </span>
+                            @endforeach
+                        </div>
+                    @endif
 
-                    <div class="project-reveal max-h-0 overflow-hidden text-sm text-slate-600 transition-all duration-300 group-hover:max-h-24">
+                    <div class="project-reveal max-h-0 overflow-hidden text-sm text-slate-600 transition-all duration-300 group-hover:max-h-24 dark:text-slate-300">
                         <p class="pt-1">{{ $project['details'] }}</p>
                     </div>
 
@@ -109,13 +124,18 @@
                         </a>
                     @endif
 
-                    <div class="flex items-center gap-3 pt-1 text-xs font-semibold uppercase tracking-[0.16em]">
-                        <a href="{{ $project['github'] }}" target="_blank" rel="noopener noreferrer" class="portal-link-button">
-                            GitHub
-                        </a>
-                        <a href="{{ $project['demo'] }}" target="_blank" rel="noopener noreferrer" class="portal-link-button portal-link-button-accent">
-                            Live Demo
-                        </a>
+                    <div class="flex flex-wrap items-center gap-3 pt-1 text-xs font-semibold uppercase tracking-[0.16em]">
+                        @if (!empty($project['github']))
+                            <a href="{{ $project['github'] }}" target="_blank" rel="noopener noreferrer" class="portal-link-button">
+                                GitHub
+                            </a>
+                        @endif
+
+                        @if (!empty($project['demo']))
+                            <a href="{{ $project['demo'] }}" target="_blank" rel="noopener noreferrer" class="portal-link-button portal-link-button-accent">
+                                Live Demo
+                            </a>
+                        @endif
                     </div>
                 </div>
             </article>

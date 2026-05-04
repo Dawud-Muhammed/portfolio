@@ -13,7 +13,7 @@
     aria-labelledby="testimonials-heading"
 >
     <div class="mb-10 flex flex-col gap-4 text-center lg:text-left">
-        <p class="mx-auto inline-flex rounded-full border border border-orange-300 bg-orange-500/10 px-4 py-2 text-orange-700 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] lg:mx-0">
+        <p class="mx-auto inline-flex rounded-full border border-orange-300 bg-orange-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-orange-700 lg:mx-0">
             {{ $kicker }}
         </p>
         <h2 id="testimonials-heading" class="text-3xl font-semibold tracking-tight text-slate-100 md:text-4xl" style="font-family: var(--font-display);">
@@ -24,9 +24,9 @@
         </p>
     </div>
 
-    <div class="relative overflow-hidden rounded-3xl border border-slate-700 bg-slate-900 px-6 py-10 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.95)] sm:px-8 sm:py-12 lg:px-12">
-        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.2),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.04),transparent_36%)]">
-        </div>
+    <div class="relative overflow-hidden rounded-[2rem] border border-slate-700 bg-slate-900 px-6 py-10 shadow-[0_28px_70px_-38px_rgba(15,23,42,0.95)] sm:px-8 sm:py-12 lg:px-12">
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.2),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.05),transparent_36%)]"></div>
+        <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-300/70 to-transparent"></div>
 
         <div class="relative mx-auto flex w-full max-w-3xl flex-col items-center">
             <div class="w-full min-h-[310px] sm:min-h-[280px]">
@@ -39,9 +39,9 @@
                         x-transition:leave="transition-opacity duration-200"
                         x-transition:leave-start="opacity-100"
                         x-transition:leave-end="opacity-0"
-                        class="rounded-2xl border border-slate-700/80 bg-slate-950/55 px-6 py-8 text-center sm:px-10 sm:py-10"
+                        class="rounded-[1.75rem] border border-slate-700/80 bg-slate-950/55 px-6 py-8 text-center shadow-[0_18px_40px_-26px_rgba(2,6,23,0.9)] sm:px-10 sm:py-10"
                     >
-                        <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border-2 border-orange-300/70 bg-orange-400/10 text-sm font-semibold uppercase text-orange-200">
+                        <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border-2 border-orange-300/70 bg-orange-400/10 text-sm font-semibold uppercase text-orange-200 shadow-lg shadow-orange-950/20">
                             <template x-if="testimonial.avatar">
                                 <img
                                     :src="testimonial.avatar"
@@ -76,7 +76,7 @@
                 </template>
 
                 <template x-if="!testimonials.length">
-                    <article class="rounded-2xl border border-slate-700/80 bg-slate-950/50 px-6 py-10 text-center">
+                    <article class="rounded-[1.75rem] border border-slate-700/80 bg-slate-950/50 px-6 py-10 text-center">
                         <p class="text-lg text-slate-200">No testimonials are available yet.</p>
                     </article>
                 </template>
@@ -119,8 +119,13 @@
                         </svg>
                     </button>
                 </div>
+
+                <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                    <span x-text="currentIndex + 1"></span>
+                    <span aria-hidden="true">/</span>
+                    <span x-text="testimonials.length"></span>
+                </p>
             </div>
-            
         </div>
     </div>
 </section>

@@ -14,14 +14,11 @@ class HomeController extends Controller
 {
     public function __invoke(): View
     {
-        $publishedProjects = Project::query()
-            ->published()
+        $projectsCollection = Project::query()
+            ->orderByDesc('is_featured')
             ->orderByDesc('published_at')
+            ->orderByDesc('created_at')
             ->get();
-
-        $projectsCollection = $publishedProjects->isNotEmpty()
-            ? $publishedProjects
-            : Project::query()->latest()->get();
 
         $projectCategoryNames = static function (Project $project): array {
             $source = is_array($project->filters) && ! empty($project->filters)
@@ -57,6 +54,8 @@ class HomeController extends Controller
                     'description' => $project->description,
                     'image' => $project->image_url,
                     'stack' => $project->stack,
+                    'is_featured' => $project->is_featured,
+                    'published_at' => $project->published_at?->format('M Y'),
                     'categories' => collect($categoryNames)
                         ->map(static fn (string $name): string => Str::slug($name))
                         ->filter()

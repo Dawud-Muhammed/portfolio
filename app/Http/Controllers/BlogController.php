@@ -32,6 +32,27 @@ class BlogController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        $relatedPosts = Post::query()
+            ->published()
+            ->with('categories')
+            ->whereKeyNot($post->getKey())
+            ->whereHas('categories', static function ($query) use ($post): void {
+                $query->whereIn('categories.id', $post->categories->pluck('id'));
+            })
+            ->orderByDesc('published_at')
+            ->limit(3)
+            ->get();
+
+        if ($relatedPosts->isEmpty()) {
+            $relatedPosts = Post::query()
+                ->published()
+                ->with('categories')
+                ->whereKeyNot($post->getKey())
+                ->orderByDesc('published_at')
+                ->limit(3)
+                ->get();
+        }
+
         $previousPost = Post::query()
             ->published()
             ->where('published_at', '<', $post->published_at)
@@ -48,6 +69,7 @@ class BlogController extends Controller
             'post' => $post,
             'previousPost' => $previousPost,
             'nextPost' => $nextPost,
+            'relatedPosts' => $relatedPosts,
         ]);
     }
 }
