@@ -13,5 +13,6 @@ cmds = [
 ]
 
 [deploy]
-# Chained commands ensure fresh environment variables are cached at startup
-startCommand = "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && (php artisan queue:work --tries=3 --timeout=90 & frankenphp php-server --listen :$PORT)"
+# Cache commands run at deploy-time so all Railway env vars (APP_URL, RESEND_API_KEY, etc.) are read correctly.
+# storage:link --force re-creates the public/storage → storage/app/public symlink on every boot (required with a Railway Volume).
+startCommand = "php artisan config:clear && php artisan route:clear && php artisan view:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan storage:link --force && php artisan migrate --force && (php artisan queue:work --tries=3 --timeout=90 & frankenphp php-server --root public --listen 0.0.0.0:$PORT)"
