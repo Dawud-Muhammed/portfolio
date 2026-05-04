@@ -14,10 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Only keep the essential Admin user
         $this->call(AdminUserSeeder::class);
-        
-        // Add any NEW seeders for your new databases below:
-        // $this->call(YourNewSeeder::class);
     }
 }
