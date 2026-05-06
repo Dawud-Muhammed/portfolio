@@ -213,16 +213,12 @@ window.skillsShowcase = (skills, categories, maxExperience) => ({
 		return this.skills.filter((skill) => skill.category === this.activeCategory);
 	},
 	observe(element) {
-			this.isVisible = true;
-			this.startCounters();
-			return;
-		}
-
 		const observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						this.isVisible = true;
+						this.startCounters();  // Assuming this method exists elsewhere
 						observer.unobserve(entry.target);
 					}
 				});
