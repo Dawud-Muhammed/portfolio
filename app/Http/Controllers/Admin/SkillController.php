@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\SkillCategory;
+use App\Enums\SkillProficiency;
 use App\Http\Controllers\Controller;
 use App\Models\Skill;
 use Illuminate\Contracts\Database\Query\Builder;
@@ -24,7 +25,7 @@ class SkillController extends Controller
                 SkillCategory::Data->value,
                 SkillCategory::Tooling->value,
             ])
-            ->orderByDesc('level')
+            ->orderByRaw("CASE WHEN proficiency = 'proficient' THEN 3 WHEN proficiency = 'intermediate' THEN 2 ELSE 1 END DESC")
             ->orderBy('name')
             ->get();
 
@@ -141,7 +142,7 @@ class SkillController extends Controller
             'skill_id' => $skillIdRules,
             'name' => ['required', 'string', 'max:255'],
             'category' => ['required', Rule::enum(SkillCategory::class)],
-            'level' => ['required', 'integer', 'min:0', 'max:100'],
+            'proficiency' => ['required', Rule::in(array_map(fn($c) => $c->value, SkillProficiency::cases()))],
             'years' => ['required', 'integer', 'min:0', 'max:50'],
             'description' => ['nullable', 'string'],
             'published_at' => ['nullable', 'date'],

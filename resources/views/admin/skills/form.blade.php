@@ -69,12 +69,24 @@
 
         <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div>
-                <label for="level" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Level</label>
-                <div x-data="{ level: Number(@js(old('level', $skill->level ?? 0))) }">
-                    <input id="level" name="level" type="range" min="0" max="100" x-model.number="level" class="w-full accent-orange-500">
-                    <div class="mt-2 text-xs uppercase tracking-[0.14em] text-slate-500">Current: <span x-text="`${level}%`"></span></div>
-                </div>
-                @error('level') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
+                <label for="proficiency" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">Proficiency</label>
+                @php
+                    $initialProficiency = old('proficiency', $skill->proficiency ?? null);
+                        if ($initialProficiency instanceof \App\Enums\SkillProficiency) {
+                            $initialProficiency = $initialProficiency->value;
+                        }
+                    if ($initialProficiency === null && isset($skill->level)) {
+                        $lvl = (int) $skill->level;
+                        $initialProficiency = $lvl <= 40 ? 'beginner' : ($lvl <= 70 ? 'intermediate' : 'proficient');
+                    }
+                @endphp
+
+                <select id="proficiency" name="proficiency" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200">
+                    <option value="beginner" @selected($initialProficiency === 'beginner')>Beginner</option>
+                    <option value="intermediate" @selected($initialProficiency === 'intermediate')>Intermediate</option>
+                    <option value="proficient" @selected($initialProficiency === 'proficient')>Proficient</option>
+                </select>
+                @error('proficiency') <p class="mt-2 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
 
             <div>

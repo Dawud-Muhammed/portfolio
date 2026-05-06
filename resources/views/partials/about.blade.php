@@ -18,7 +18,7 @@
     if ($aboutSkills->isEmpty()) {
         $aboutSkills = Skill::query()
             ->published()
-            ->orderByDesc('level')
+            ->orderByRaw("CASE WHEN proficiency = 'proficient' THEN 3 WHEN proficiency = 'intermediate' THEN 2 ELSE 1 END DESC")
             ->orderByDesc('years')
             ->limit(6)
             ->get();

@@ -42,8 +42,8 @@
                     <tr>
                         <th class="px-5 py-4">Name</th>
                         <th class="px-5 py-4">Category</th>
-                        <th class="px-5 py-4">Level (%)</th>
-                        <th class="px-5 py-4">Years</th>
+                        <th class="px-5 py-4">Proficiency</th>
+                        <th class="px-5 py-4">Months</th>
                         <th class="px-5 py-4">Published</th>
                         <th class="px-5 py-4 text-right">Actions</th>
                     </tr>
@@ -65,7 +65,13 @@
                             <tr x-data="{ title: @js(mb_strtolower($skill->name ?? $skill->title ?? '')) }" x-show="query === '' || title.includes(query.toLowerCase())" x-cloak>
                                 <td class="px-5 py-4 font-medium text-slate-900">{{ $skill->name }}</td>
                                 <td class="px-5 py-4 text-slate-600">{{ $skill->category?->label() ?? $skill->category?->value ?? '—' }}</td>
-                                <td class="px-5 py-4 text-slate-600">{{ $skill->level }}%</td>
+                                <td class="px-5 py-4 text-slate-600">
+                                    @if ($skill->proficiency instanceof \App\Enums\SkillProficiency)
+                                        {{ ucfirst($skill->proficiency->value) }}
+                                    @else
+                                        {{ ucfirst((string) $skill->proficiency) }}
+                                    @endif
+                                </td>
                                 <td class="px-5 py-4 text-slate-600">{{ $skill->years }}</td>
                                 <td class="px-5 py-4">
                                     <div

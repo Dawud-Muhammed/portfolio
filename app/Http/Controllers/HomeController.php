@@ -71,7 +71,7 @@ class HomeController extends Controller
 
         $publishedSkills = Skill::query()
             ->published()
-            ->orderByDesc('level')
+            ->orderByRaw("CASE WHEN proficiency = 'proficient' THEN 3 WHEN proficiency = 'intermediate' THEN 2 ELSE 1 END DESC")
             ->orderByDesc('years')
             ->get();
 
@@ -79,7 +79,7 @@ class HomeController extends Controller
             ->map(static fn (Skill $skill): array => [
                 'id' => $skill->id,
                 'name' => $skill->name,
-                'level' => $skill->level,
+                'proficiency' => $skill->proficiency instanceof \App\Enums\SkillProficiency ? $skill->proficiency->value : (isset($skill->level) ? (int) $skill->level : null),
                 'years' => $skill->years,
                 'description' => $skill->description,
                 'category' => $skill->category,

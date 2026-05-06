@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('skill_id')->unique();
             $table->string('name');
-            $table->unsignedTinyInteger('level');
+            $table->enum('proficiency', ['beginner', 'intermediate', 'proficient'])->default('beginner');
             $table->unsignedTinyInteger('years');
             $table->text('description');
             $table->string('category');

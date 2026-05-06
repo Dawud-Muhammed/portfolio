@@ -195,18 +195,15 @@ window.projectsShowcase = (categories) => ({
 	},
 });
 
-window.skillsShowcase = (skills, categories, maxExperience, avgProficiency) => ({
+window.skillsShowcase = (skills, categories, maxExperience) => ({
 	skills,
 	categories,
 	maxExperience,
-	avgProficiency,
 	activeCategory: 'all',
 	isVisible: false,
-	displayLevels: {},
-	displayYears: {},
 	stats: {
 		categories: 0,
-		avgProficiency: 0,
+		// avgProficiency removed
 	},
 	filteredSkills() {
 		if (this.activeCategory === 'all') {
@@ -216,7 +213,6 @@ window.skillsShowcase = (skills, categories, maxExperience, avgProficiency) => (
 		return this.skills.filter((skill) => skill.category === this.activeCategory);
 	},
 	observe(element) {
-		if (!('IntersectionObserver' in window)) {
 			this.isVisible = true;
 			this.startCounters();
 			return;
@@ -227,7 +223,6 @@ window.skillsShowcase = (skills, categories, maxExperience, avgProficiency) => (
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						this.isVisible = true;
-						this.startCounters();
 						observer.unobserve(entry.target);
 					}
 				});
@@ -237,50 +232,7 @@ window.skillsShowcase = (skills, categories, maxExperience, avgProficiency) => (
 
 		observer.observe(element);
 	},
-	startCounters() {
-		this.animateValue('categories', this.categories.length, 850);
-		this.animateValue('avgProficiency', this.avgProficiency, 950);
-
-		this.skills.forEach((skill, index) => {
-			window.setTimeout(() => {
-				this.animateSkill(skill.id, skill.level, skill.years);
-			}, index * 90);
-		});
-	},
-	animateSkill(id, levelTarget, yearsTarget) {
-		this.animateMapValue(this.displayLevels, id, levelTarget, 820);
-		this.animateMapValue(this.displayYears, id, yearsTarget, 760);
-	},
-	animateMapValue(targetMap, key, endValue, duration) {
-		const startTime = performance.now();
-
-		const tick = (now) => {
-			const progress = Math.min((now - startTime) / duration, 1);
-			const eased = 1 - Math.pow(1 - progress, 3);
-			targetMap[key] = Math.round(endValue * eased);
-
-			if (progress < 1) {
-				window.requestAnimationFrame(tick);
-			}
-		};
-
-		window.requestAnimationFrame(tick);
-	},
-	animateValue(statKey, endValue, duration) {
-		const startTime = performance.now();
-
-		const tick = (now) => {
-			const progress = Math.min((now - startTime) / duration, 1);
-			const eased = 1 - Math.pow(1 - progress, 3);
-			this.stats[statKey] = Math.round(endValue * eased);
-
-			if (progress < 1) {
-				window.requestAnimationFrame(tick);
-			}
-		};
-
-		window.requestAnimationFrame(tick);
-	},
+	// Intentionally lightweight: skills are rendered with qualitative proficiencies.
 });
 
 window.contactForm = (options = {}) => ({

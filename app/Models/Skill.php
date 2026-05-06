@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SkillCategory;
+use App\Enums\SkillProficiency;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ class Skill extends Model
     protected $fillable = [
         'skill_id',
         'name',
-        'level',
+        'proficiency',
         'years',
         'description',
         'category',
@@ -23,7 +24,7 @@ class Skill extends Model
     ];
 
     protected $casts = [
-        'level' => 'integer',
+        'proficiency' => SkillProficiency::class,
         'years' => 'integer',
         'category' => SkillCategory::class,
         'is_published' => 'boolean',

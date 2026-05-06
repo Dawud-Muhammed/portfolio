@@ -7,7 +7,7 @@
     if ($skills->isEmpty()) {
         $skills = Skill::query()
             ->published()
-            ->orderByDesc('level')
+            ->orderByRaw("CASE WHEN proficiency = 'proficient' THEN 3 WHEN proficiency = 'intermediate' THEN 2 ELSE 1 END DESC")
             ->orderByDesc('years')
             ->get();
     }
@@ -24,16 +24,42 @@
         ->map(function (mixed $skill): array {
             $id = data_get($skill, 'id');
             $name = (string) data_get($skill, 'name', '');
-            $level = (int) data_get($skill, 'level', 0);
+            $rawProficiency = data_get($skill, 'proficiency', null);
+            $numericLevel = data_get($skill, 'level', null);
             $years = (int) data_get($skill, 'years', 0);
             $description = (string) data_get($skill, 'description', '');
             $rawCategory = data_get($skill, 'category');
             $category = $rawCategory instanceof SkillCategory ? $rawCategory : SkillCategory::tryFrom((string) $rawCategory);
 
+            // Backwards-compatibility: if numeric level exists, map to qualitative
+            if ($rawProficiency === null && is_numeric($numericLevel)) {
+                $levelInt = (int) $numericLevel;
+                if ($levelInt <= 40) {
+                    $proficiency = 'beginner';
+                } elseif ($levelInt <= 70) {
+                    $proficiency = 'intermediate';
+                } else {
+                    $proficiency = 'proficient';
+                }
+            } else {
+                if ($rawProficiency instanceof \App\Enums\SkillProficiency) {
+                    $proficiency = $rawProficiency->value;
+                } else {
+                    $proficiency = (string) ($rawProficiency ?? 'beginner');
+                }
+            }
+
+            $proficiencyLabel = match ($proficiency) {
+                'proficient' => 'Proficient',
+                'intermediate' => 'Intermediate',
+                default => 'Beginner',
+            };
+
             return [
                 'id' => $id,
                 'name' => $name,
-                'level' => $level,
+                'proficiency' => $proficiency,
+                'proficiencyLabel' => $proficiencyLabel,
                 'years' => $years,
                 'description' => $description,
                 'category' => $category?->value ?? SkillCategory::Backend->value,
@@ -44,7 +70,21 @@
         ->values();
 
     $maxExperience = (int) ($skills->max('years') ?? 0);
-    $averageProficiency = (int) round((float) ($skills->avg('level') ?? 0));
+
+    // Compute an average proficiency label for display (backwards-compatible)
+    $averageNumeric = (int) round((float) ($skills->map(function ($s) {
+        if (($p = data_get($s, 'proficiency')) !== null) {
+            return match ($p) {
+                'proficient' => 85,
+                'intermediate' => 55,
+                default => 30,
+            };
+        }
+
+        return (int) data_get($s, 'level', 0);
+    })->avg() ?? 0));
+
+    $averageProficiency = $averageNumeric <= 40 ? 'Beginner' : ($averageNumeric <= 70 ? 'Intermediate' : 'Proficient');
     $kicker = (string) ($kicker ?? 'Core Skills');
     $heading = (string) ($heading ?? 'Precision engineering with a product-first mindset.');
     $subheading = (string) ($subheading ?? 'Skill levels and counters animate on scroll, with category grouping powered by Laravel enums.');
@@ -53,7 +93,7 @@
 <section
     id="skills"
     class="skills-shell mx-auto w-full max-w-7xl px-6 py-20"
-    x-data="skillsShowcase(@js($skillPayload), @js($categories), @js($maxExperience), @js($averageProficiency))"
+    x-data="skillsShowcase(@js($skillPayload), @js($categories), @js($maxExperience))"
     x-init="observe($el)"
     aria-labelledby="skills-heading"
 >
@@ -77,7 +117,7 @@
             </div>
             <div class="skills-stat rounded-2xl border p-4">
                 <p class="text-xs uppercase tracking-[0.18em] text-slate-400">Avg Proficiency</p>
-                <p class="mt-2 text-2xl font-semibold text-slate-100"><span x-text="stats.avgProficiency"></span>%</p>
+                <p class="mt-2 text-2xl font-semibold text-slate-100">{{ $averageProficiency }}</p>
             </div>
         </div>
     </div>
@@ -125,24 +165,24 @@
                     </div>
                 </div>
 
-                <p class="mb-4 text-sm leading-relaxed text-slate-300 break-all" style="font-family: var(--font-body);" x-text="skill.description"></p>
+                
 
-                <div>
-                    <div class="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-400">
-                        <span>Proficiency</span>
-                        <span><span x-text="displayLevels[skill.id] ?? 0"></span>%</span>
+                    <div>
+                        <div class="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-400">
+                            <span>Proficiency</span>
+                            <span>
+                                <span
+                                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
+                                    :class="{
+                                        'bg-emerald-600 text-white':  'proficient',
+                                        'bg-emerald-600 text-white':  'intermediate',
+                                        'bg-emerald-600 text-white':  'beginner',
+                                    }" 
+                                     x-text="skill.proficiencyLabel"
+                                ></span>
+                            </span>
+                        </div>
                     </div>
-                    <svg viewBox="0 0 100 10" class="h-3 w-full" role="img" :aria-label="`${skill.name} proficiency`">
-                        <rect x="0" y="0" width="100" height="10" rx="5" fill="var(--skills-track)" />
-                        <rect x="0" y="0" :width="displayLevels[skill.id] ?? 0" height="10" rx="5" :fill="`url(#skillsProgressGradient-${skill.id})`" />
-                        <defs>
-                            <linearGradient :id="`skillsProgressGradient-${skill.id}`" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="var(--skills-accent-start)" />
-                                <stop offset="100%" stop-color="var(--skills-accent-end)" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
             </article>
         </template>
     </div>
