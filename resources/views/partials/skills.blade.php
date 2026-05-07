@@ -110,14 +110,10 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 text-center lg:min-w-[320px]">
-            <div class="skills-stat rounded-2xl border p-4">
+        <div class="grid text-center lg:min-w-[320px]">
+            <div class="skills-stat rounded-2xl border p-8">
                 <p class="text-xs uppercase tracking-[0.18em] text-slate-400">Skill Areas</p>
                 <p class="mt-2 text-2xl font-semibold text-slate-100"><span x-text="stats.categories"></span></p>
-            </div>
-            <div class="skills-stat rounded-2xl border p-4">
-                <p class="text-xs uppercase tracking-[0.18em] text-slate-400">Avg Proficiency</p>
-                <p class="mt-2 text-2xl font-semibold text-slate-100">{{ $averageProficiency }}</p>
             </div>
         </div>
     </div>
@@ -160,29 +156,9 @@
                         <h3 class="text-lg font-semibold text-slate-100" style="font-family: var(--font-display);" x-text="skill.name"></h3>
                         <p class="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400" x-text="skill.categoryLabel"></p>
                     </div>
-                    <div class="rounded-full border border-orange-300/40 bg-orange-400/10 px-3 py-1 text-xs font-semibold text-orange-200">
-                        <span x-text="displayYears[skill.id] ?? 0"></span> months+
-                    </div>
+
                 </div>
-
-                
-
-                    <div>
-                        <div class="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.16em] text-slate-400">
-                            <span>Proficiency</span>
-                            <span>
-                                <span
-                                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
-                                    :class="{
-                                        'bg-emerald-600 text-white':  'proficient',
-                                        'bg-emerald-600 text-white':  'intermediate',
-                                        'bg-emerald-600 text-white':  'beginner',
-                                    }" 
-                                     x-text="skill.proficiencyLabel"
-                                ></span>
-                            </span>
-                        </div>
-                    </div>
+                <p class="text-sm text-slate-300 break-all" x-text="skill.description"></p>
             </article>
         </template>
     </div>
