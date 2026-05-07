@@ -202,8 +202,7 @@ window.skillsShowcase = (skills, categories, maxExperience) => ({
 	activeCategory: 'all',
 	isVisible: false,
 	stats: {
-		categories: 0,
-		// avgProficiency removed
+		categories: categories.length,
 	},
 	filteredSkills() {
 		if (this.activeCategory === 'all') {
