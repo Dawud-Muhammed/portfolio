@@ -2,15 +2,23 @@
 
 namespace Tests\Unit;
 
+use App\Models\Post;
+use Illuminate\Support\HtmlString;
 use PHPUnit\Framework\TestCase;
 
-class ExampleTest extends TestCase
+class PostTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_that_true_is_true(): void
+    public function test_rendered_body_returns_html_string()
     {
-        $this->assertTrue(true);
+        $post = new Post([
+            'title' => 'Hello',
+            'slug' => 'hello',
+            'body' => '# Heading',
+        ]);
+
+        $rendered = $post->rendered_body;
+
+        $this->assertIsString($rendered);
+        $this->assertStringContainsString('<h1', $rendered);
     }
 }
