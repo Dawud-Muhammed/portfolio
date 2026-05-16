@@ -239,7 +239,12 @@ improve content scheduling/publishing workflows
 add CI/CD validation
 add multi-user admin roles/permissions
 add richer case study storytelling sections per project
-Contact
+```
+
+---
+
+## Contact
+
 Dawud Muhammed
 GitHub: @Dawud-Muhammed
 LinkedIn:in/dawud-muhammed-811088338
