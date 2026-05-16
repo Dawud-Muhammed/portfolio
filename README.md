@@ -245,9 +245,9 @@ add richer case study storytelling sections per project
 
 ## Contact
 
-Dawud Muhammed
-GitHub: @Dawud-Muhammed
-LinkedIn:in/dawud-muhammed-811088338
-Portfolio live URL:dawud-muhammed.me
-Email:dawud2147@gmail.com
-This project is licensed under the MIT License.
+- Dawud Muhammed
+- GitHub: @Dawud-Muhammed
+- LinkedIn:in/dawud-muhammed-811088338
+- Portfolio live URL:dawud-muhammed.me
+- Email:dawud2147@gmail.com
+- This project is licensed under the MIT License.
