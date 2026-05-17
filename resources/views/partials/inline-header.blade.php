@@ -4,6 +4,7 @@
 
     $isHomeRoute = request()->routeIs('home');
     $brandName = trim($__env->yieldContent('brand_name', SiteSetting::get('brand_name', SiteSetting::get('hero_name', config('app.name', 'Portfolio')))));
+    $blogLabel = (string) SiteSetting::get('footer_blog_label', 'Blog');
 
     $navigationLinks = collect($navigationLinks ?? [
         ['key' => 'about', 'label' => SiteSetting::get('nav_about_label', 'About'), 'url' => route('home.about')],
@@ -92,6 +93,9 @@
                     {{ $link['label'] }}
                 </a>
             @endforeach
+                <a href="{{ route('blog.index') }}":aria-current="isActive(@js($link['key'])) ? 'page' : null" :class="isActive(@js($link['key'])) ? 'is-active text-orange-600 dark:text-orange-300' : ''" class="inline-nav-link rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:text-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 dark:text-slate-200 dark:hover:text-orange-300">
+                {{ $blogLabel }}
+            </a>
         </nav>
     </div>
 </section>
