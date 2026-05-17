@@ -1,16 +1,5 @@
 [build]
-builder = "railpack"
-
-[phases.install]
-cmds = [
-  "composer install --no-dev --optimize-autoloader",
-  "npm ci"
-]
-
-[phases.build]
-cmds = [
-  "npm run build"
-]
+builder = "RAILPACK"
 
 [deploy]
 # All cache commands run at deploy-time so Railway env vars
