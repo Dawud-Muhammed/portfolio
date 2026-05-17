@@ -61,6 +61,7 @@ COPY . .
 COPY --from=frontend /app/public/build ./public/build
 
 RUN mkdir -p storage/app/public storage/framework/cache storage/framework/sessions storage/framework/testing storage/framework/views bootstrap/cache \
+    && php artisan package:discover --ansi \
     && chown -R www-data:www-data /var/www/html
 
 USER www-data
@@ -73,7 +74,6 @@ php artisan key:generate --force && \
 (php artisan storage:link || true) && \
 php artisan config:clear && \
 php artisan cache:clear && \
-php artisan package:discover --ansi && \
 until php artisan migrate --force; do \
   echo 'MySQL is unavailable - waiting 5s...' && sleep 5; \
 done && \
