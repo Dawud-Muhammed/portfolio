@@ -16,34 +16,49 @@ use Illuminate\Support\Str;
 
 class SkillController extends Controller
 {
-    public function index(): View
-    {
-        $skills = Skill::query()
-            ->orderByRaw('FIELD(category, ?, ?, ?, ?)', [
-                SkillCategory::Backend->value,
-                SkillCategory::Frontend->value,
-                SkillCategory::Data->value,
-                SkillCategory::Tooling->value,
-            ])
-            ->orderByRaw("CASE WHEN proficiency = 'proficient' THEN 3 WHEN proficiency = 'intermediate' THEN 2 ELSE 1 END DESC")
-            ->orderBy('name')
-            ->get();
+public function index(): View
+{
+    $skills = Skill::query()
+        ->orderByRaw("
+            CASE category
+                WHEN ? THEN 1
+                WHEN ? THEN 2
+                WHEN ? THEN 3
+                WHEN ? THEN 4
+                ELSE 5
+            END
+        ", [
+            SkillCategory::Backend->value,
+            SkillCategory::Frontend->value,
+            SkillCategory::Data->value,
+            SkillCategory::Tooling->value,
+        ])
+        ->orderByRaw("
+            CASE
+                WHEN proficiency = 'proficient' THEN 3
+                WHEN proficiency = 'intermediate' THEN 2
+                ELSE 1
+            END DESC
+        ")
+        ->orderBy('name')
+        ->get();
 
-        return view('admin.skills.index', [
-            'skillCategories' => collect(SkillCategory::cases())->map(fn (SkillCategory $category): array => [
-                'value' => $category->value,
-                'label' => $category->label(),
-            ])->all(),
-            'skillGroups' => collect(SkillCategory::cases())->map(function (SkillCategory $category) use ($skills): array {
-                return [
-                    'category' => $category,
-                    'skills' => $skills
-                        ->filter(fn (Skill $skill): bool => ($skill->category?->value ?? $skill->category) === $category->value)
-                        ->values(),
-                ];
-            })->all(),
-        ]);
-    }
+    return view('admin.skills.index', [
+        'skillCategories' => collect(SkillCategory::cases())->map(fn (SkillCategory $category): array => [
+            'value' => $category->value,
+            'label' => $category->label(),
+        ])->all(),
+
+        'skillGroups' => collect(SkillCategory::cases())->map(function (SkillCategory $category) use ($skills): array {
+            return [
+                'category' => $category,
+                'skills' => $skills
+                    ->filter(fn (Skill $skill): bool => ($skill->category?->value ?? $skill->category) === $category->value)
+                    ->values(),
+            ];
+        })->all(),
+    ]);
+}
 
     public function create(): View
     {
