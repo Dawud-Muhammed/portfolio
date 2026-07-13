@@ -1,43 +1,37 @@
 FROM php:8.4-apache
 
-# 1. Install system dependencies, PostgreSQL drivers, and Node.js
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 1) System deps + PostgreSQL extension + Node
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    curl \
-    zip \
-    unzip \
-    libpq-dev \
-    nodejs \
-    npm \
-    && docker-php-ext-install pdo pdo_pgsql \
+    git curl zip unzip libpq-dev nodejs npm \
+    && docker-php-ext-install pdo_pgsql \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Enable Apache mod_rewrite
+# 2) Apache rewrite
 RUN a2enmod rewrite
 
-# 3. Install Composer
+# 3) Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 4. Set working directory
+# 4) App files
 WORKDIR /var/www/html
-
-# 5. Copy your application files
 COPY . .
 
-# 6. Install PHP/Node dependencies
-RUN composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader && \
-    npm install && npm run build
+# 5) Install deps + build frontend
+RUN composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader \
+    && npm install \
+    && npm run build
 
-# 7. Set permissions
+# 6) Permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# 8. Point Apache to /public
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# 7) Apache public dir
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# 9. Expose Port 80
 EXPOSE 80
 
-# 10. Run migrations and start Apache
-CMD php artisan migrate --force && apache2-foreground
+# IMPORTANT: only start web server here
+CMD ["apache2-foreground"]
