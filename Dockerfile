@@ -35,3 +35,4 @@ EXPOSE 80
 
 # IMPORTANT: only start web server here
 CMD ["apache2-foreground"]
+CMD ["sh", "-lc", "php artisan optimize:clear || true; apache2-foreground"]
