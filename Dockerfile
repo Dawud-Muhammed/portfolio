@@ -35,4 +35,4 @@ EXPOSE 80
 
 # IMPORTANT: only start web server here
 CMD ["apache2-foreground"]
-CMD ["sh", "-lc", "php artisan optimize:clear || true; apache2-foreground"]
+CMD ["sh", "-lc", "php artisan optimize:clear || true; php artisan config:clear || true; php artisan cache:clear || true; php artisan route:clear || true; php artisan view:clear || true; php -m | grep -E 'pdo|pgsql' || true; apache2-foreground"]
