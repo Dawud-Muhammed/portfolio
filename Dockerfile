@@ -27,11 +27,13 @@ RUN composer install --no-interaction --prefer-dist --no-dev --optimize-autoload
 RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# 7) Apache public dir (safe edits)
+# 7) Apache public dir
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf \
     && sed -ri 's!<Directory /var/www/>!<Directory ${APACHE_DOCUMENT_ROOT}/>!g' /etc/apache2/apache2.conf
 
 EXPOSE 80
 
-CMD ["sh","-lc","apache2ctl -t && exec apache2-foreground"]
+# Fixed CMD - simpler and more reliable
+CMD ["apache2-foreground"]
+RUN php artisan migrate --force
