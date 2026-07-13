@@ -1,0 +1,39 @@
+{
+  "_rolldown-runtime-DGRvghAS.js": {
+    "file": "assets/rolldown-runtime-DGRvghAS.js",
+    "name": "rolldown-runtime"
+  },
+  "_vendor-Crx2y3Ht.js": {
+    "file": "assets/vendor-Crx2y3Ht.js",
+    "name": "vendor",
+    "imports": [
+      "_rolldown-runtime-DGRvghAS.js"
+    ],
+    "css": [
+      "assets/vendor-nVDmVVfX.css"
+    ]
+  },
+  "_vendor-nVDmVVfX.css": {
+    "file": "assets/vendor-nVDmVVfX.css",
+    "src": "_vendor-nVDmVVfX.css"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-DKUk9lW_.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-TdNhk-S6.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-DGRvghAS.js",
+      "_vendor-Crx2y3Ht.js"
+    ]
+  }
+}
