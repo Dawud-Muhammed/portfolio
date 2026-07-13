@@ -35,10 +35,13 @@ RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-avail
 # 8) Run migrations
 RUN php artisan migrate --force
 
-# 9) Debug Apache config
+# 9) Validate Apache config
 RUN apache2ctl -t
 
-# 10) Remove the custom CMD and let the base image handle it
-# (Don't specify CMD - the base image already has it)
+# 10) Set ServerName to suppress warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 EXPOSE 80
+
+# CRITICAL: This MUST be the last line - keeps Apache running in foreground
+CMD ["apache2-foreground"]
