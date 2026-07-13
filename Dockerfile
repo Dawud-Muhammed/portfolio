@@ -32,16 +32,10 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf \
     && sed -ri 's!<Directory /var/www/>!<Directory ${APACHE_DOCUMENT_ROOT}/>!g' /etc/apache2/apache2.conf
 
-# 8) Run migrations
-RUN php artisan migrate --force
-
-# 9) Validate Apache config
-RUN apache2ctl -t
-
-# 10) Set ServerName to suppress warning
+# 8) Set ServerName
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 EXPOSE 80
 
-# CRITICAL: This MUST be the last line - keeps Apache running in foreground
-CMD ["apache2-foreground"]
+# 9) Run migrations on container start, then start Apache
+CMD ["sh", "-c", "php artisan migrate --force && apache2-foreground"]
